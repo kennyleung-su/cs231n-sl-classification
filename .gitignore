@@ -3,6 +3,9 @@
 
 # Exclude (large!) datasets
 data/
+test/
+train/
+valid/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
