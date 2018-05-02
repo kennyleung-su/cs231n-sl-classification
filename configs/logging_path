@@ -1,0 +1,6 @@
+INFO:root:Initializing configuration for experiment <basic_resnet_lstm_classifier> : For the milestone.
+Apply a simple pretrained ConvNet architecture to a small sample of
+training data (from 10 gesture classes) and use an LSTM network
+to process these frame embeddings and feed them into a final softmax
+classification output layer.
+
