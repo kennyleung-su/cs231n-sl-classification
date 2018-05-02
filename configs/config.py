@@ -38,10 +38,9 @@ VALID_DATA_DIR = os.path.join(ROOT_DIR, 'valid')
 #########################
 experiment_name = 'basic_resnet_lstm_model'
 experiment_description = """
-Apply a simple pretrained ConvNet architecture to a small sample of
-training data (from 10 gesture classes) and use an LSTM network
-to process these frame embeddings and feed them into a final softmax
-classification output layer.
+Applies a pretrained ConvNet architecture to a small sample of
+training data (from 10 gesture classes) and uses an LSTM network
+to process these frame embeddings as input to a softmax classifier.
 """
 
 # Either 'train' or 'test'.
@@ -59,6 +58,63 @@ checkpoint_to_load = None
 # File in which to log output.
 # Just import logging, config in a library to log to the same location.
 logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(experiment_name, time.time()))
+
+# How many training iterations after which to log training and validation results.
+log_interval = 100
+
+########################
+# Dataset Configuration
+########################
+
+gesture_labels = [
+	5,		# peace sign (851 samples)
+	19,		# 'F' (492 samples)
+	38,		# number 1 (459 samples)
+	37,		# number 5 (377 samples)
+	8,		# Index pointing to head (375 samples)
+	29,		# Thumbs down (285 samples)
+	213, 	# Timeout (257 samples)
+	241, 	# Circular motion (256 samples)
+	18, 	# "C" (349 samples)
+	92 		# Thumbs up (349 samples)
+]
+
+# Threshold for how many frames a video is allowed to have.
+max_frames_per_sample = 75
+
+# TODO: Add a configuration for the sampling scheme.
+
+########################
+# Model Hyperparameters
+########################
+
+# https://pytorch.org/docs/master/torchvision/models.html
+# 
+# All pre-trained models expect input images normalized in the same way,
+# i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where
+# H and W are expected to be at least 224. The images have to be loaded
+# in to a range of [0, 1] and then normalized using
+pretrained_cnn_model = models.resnet18
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+								 std=[0.229, 0.224, 0.225])
+
+minibatch_size = 50
+lstm_hidden_size = 256
+learning_rate = 1e-2
+epochs = 1e3
+optimizer_fn = torch.optim.SGD
+initializer_fn = torch.nn.init.xavier_normal_
+
+################
+# Miscellaneous
+################
+
+disabled_cuda = False
+seed = 1
+
+##################
+# Directory setup
+##################
 
 # Creates all prerequisite directories for our model.
 mkdir(MODEL_DIR)
@@ -90,50 +146,3 @@ fh.setFormatter(formatter)
 
 logger.addHandler(ch)
 logger.addHandler(fh)
-
-logging.info('Init config.py for experiment <{0}>.\n'
-	'Model description: {1}'.format(experiment_name, experiment_description))
-
-########################
-# Dataset Configuration
-########################
-
-gesture_labels = [
-	5,		# peace sign (851 samples)
-	19,		# 'F' (492 samples)
-	38,		# number 1 (459 samples)
-	37,		# number 5 (377 samples)
-	8,		# Index pointing to head (375 samples)
-	29,		# Thumbs down (285 samples)
-	213, 	# Timeout (257 samples)
-	241, 	# Circular motion (256 samples)
-	18, 	# "C" (349 samples)
-	92 		# Thumbs up (349 samples)
-]
-
-# Threshold for how many frames a video is allowed to have.
-max_frames_per_sample = 75
-
-# TODO: Add a configuration for the sampling scheme.
-# TODO: Consider including a randomization seed.
-
-########################
-# Model Hyperparameters
-########################
-
-# https://pytorch.org/docs/master/torchvision/models.html
-# 
-# All pre-trained models expect input images normalized in the same way,
-# i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where
-# H and W are expected to be at least 224. The images have to be loaded
-# in to a range of [0, 1] and then normalized using
-pretrained_cnn_model = models.resnet18
-normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-								 std=[0.229, 0.224, 0.225])
-
-minibatch_size = 50
-lstm_hidden_size = 256
-learning_rate = 1e-2
-optimizer_fn = torch.optim.SGD
-initializer_fn = torch.nn.init.xavier_normal_
-

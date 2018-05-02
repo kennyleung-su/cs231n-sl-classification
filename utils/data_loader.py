@@ -34,10 +34,10 @@ class GestureFramesDataset(Dataset):
         return self.len
 
 
-    def gestures(*args, textfile= "", type_data="kinect"):
+    def gestures(gesture_list, textfile= "", type_data="kinect"):
         """Returns dictionary with labels and the locations for the frames.
 
-        Example usage: gestures(5,19,38,37,8,29,213,241,18,92,
+        Example usage: gestures(gesture_list=[5,19,38,37,8,29,213,241,18,92],
                                 textfile = 'train_list_2.txt',
                                 type_data = "kinect")
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
@@ -48,7 +48,6 @@ class GestureFramesDataset(Dataset):
         
         for number in args:
             labels =[]
-            print(number)
             directory_labels = data.loc[data['label'] == number][type_data].tolist()
             for element in directory_labels:
                 labels.append(element[:-4])
