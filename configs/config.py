@@ -1,7 +1,10 @@
 import os
 import logging
 import time
-# import torchvision.models as models
+
+import torch
+import torchvision.models as models
+import torchvision.transforms as transforms
 
 ##############
 # Directories
@@ -124,14 +127,13 @@ max_frames_per_sample = 75
 # i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where
 # H and W are expected to be at least 224. The images have to be loaded
 # in to a range of [0, 1] and then normalized using
-# mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225].
-# pretrained_cnn_model = models.resnet18
-# normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-# 								 std=[0.229, 0.224, 0.225])
+pretrained_cnn_model = models.resnet18
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+								 std=[0.229, 0.224, 0.225])
 
 minibatch_size = 50
 lstm_hidden_size = 256
 learning_rate = 1e-2
-# optimizer_fn = torch.optim.SGD
-# initializer_fn = torch.nn.init.xavier_normal_
+optimizer_fn = torch.optim.SGD
+initializer_fn = torch.nn.init.xavier_normal_
 
