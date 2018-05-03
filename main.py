@@ -16,6 +16,8 @@ def main():
 	# Please log whenever possible! We can fine-tune the the logger down the
 	# road but for now as we are experimenting, verbosity is good.
 
+	dataloader = data_loader.GenerateGestureFramesDataLoader(config.gesture_labels,
+		config.max_frames_per_sample)
 	# Initialize the dataloader.
 	# Use: 
 	# 	- config.{TEST/TRAIN/VALID}_DIR

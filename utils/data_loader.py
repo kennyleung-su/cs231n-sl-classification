@@ -1,6 +1,8 @@
 # TODO: Implement data loading and preprocessing.
 
 import csv
+import glob
+import imageio
 import numpy as np
 import pandas as pd
 import os
@@ -17,12 +19,17 @@ class GestureFramesDataset(Dataset):
         transform: list of callable Classes, e.g. from torchvision.transforms,
             with which the video frames should be preprocessed
     """
-    def __init__(self, data_dir, transform):
+    def __init__(self, gesture_labels, data_dir, max_frames_per_sample, transform=None):
         # TODO(kenny): Read in and transform the video frames from the
         # given information into 4D frame tensors, keeping track of the
         # classification label along the way.
-        self.data = None
-        self.len = None
+
+        # self.data {
+        #     'label': int
+        #     'frames': np.ndarray of shape (frames, 3 (RGB), width, height)
+        # }
+        self.data = self.populate_gesture_frames_data(data_dir, gesture_labels, max_frames_per_sample)
+        self.len = len(self.data)
 
     def __getitem__(self, gesture_label):
         # TODO(kenny): Figure out how to sample randomly while keeping the
@@ -34,42 +41,49 @@ class GestureFramesDataset(Dataset):
         return self.len
 
 
-    def gestures(gesture_list, textfile= "", type_data="kinect"):
-        """Returns dictionary with labels and the locations for the frames.
+    @staticmethod
+    def read_frame_tensors_from_dir(directory):
+        filenames = glob.glob("{0}/*.txt".format(directory))
+        frames = [re.match('.*_(\d+)\.avi', name) for name in filenames]
+        sorted_filenames = filenames[np.argsort(frames)]
+        frame_arrays = []
+        for f in sorted_filenames:
+            frame_arrays.append(imageio.imread(f))
+        return np.vstack(frame_arrays)
+
+
+    def populate_gesture_frames_data(data_dir, gesture_labels, max_frames_per_sample, type_data="kinect"):
+        """Returns a list of ...
 
         Example usage: gestures(gesture_list=[5,19,38,37,8,29,213,241,18,92],
                                 textfile = 'train_list_2.txt',
                                 type_data = "kinect")
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
-        data = pd.read_csv(textfile, sep=" ", header=None)
+        labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir))
+        data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]
-        gesture_labels ={}
-        
-        for number in args:
-            labels =[]
-            directory_labels = data.loc[data['label'] == number][type_data].tolist()
-            for element in directory_labels:
-                labels.append(element[:-4])
-            gesture_labels[number] = labels
-        return gesture_labels
+        label_to_dirs = {}
+        for label in gesture_labels:
+            directory_labels = data.loc[data['label'] == label][type_data].tolist()
+            # strip .avi from the end of the filename
+            directories = [filename[:-4] for label in directory_labels]
+            label_to_dirs[label] = directories
+
+        data = []
+        for label, directories in label_to_dirs.items:
+            for directory in directories:
+                data.append({
+                    'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory))
+                    'label': label
+                })
 
 
-def GenerateGestureFramesDataLoader(config):
-    """Returns a configured DataLoader instance.
-
-    Args:
-        config: dict, defines the hyperparameters used when processing and
-            loading dataset information
-    """
+def GenerateGestureFramesDataLoader():
+    """Returns a configured DataLoader instance."""
 
     # Build a gesture frames dataset using the configuration information.
     # This is just dummy code to be replaced.
-    transformed_dataset = GestureFramesDataset(data_dir=None,
-                                               transform=transforms.Compose([
-                                                   Rescale(256),
-                                                   RandomCrop(224),
-                                                   ToTensor()
-                                               ]))
+    transformed_dataset = GestureFramesDataset(data_dir=None)
     return DataLoader(transformed_dataset, batch_size=4,
                       shuffle=True, num_workers=4)
