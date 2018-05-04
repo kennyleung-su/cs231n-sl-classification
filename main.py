@@ -17,7 +17,7 @@ def main():
 	# road but for now as we are experimenting, verbosity is good.
 
 	dataloader = data_loader.GenerateGestureFramesDataLoader(config.gesture_labels,
-		config.max_frames_per_sample)
+		config.TRAIN_DATA_DIR, config.max_frames_per_sample)
 	# Initialize the dataloader.
 	# Use: 
 	# 	- config.{TEST/TRAIN/VALID}_DIR

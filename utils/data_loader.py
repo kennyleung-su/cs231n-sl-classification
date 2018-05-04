@@ -28,8 +28,10 @@ class GestureFramesDataset(Dataset):
         #     'label': int
         #     'frames': np.ndarray of shape (frames, 3 (RGB), width, height)
         # }
-        self.data = self.populate_gesture_frames_data(data_dir, gesture_labels, max_frames_per_sample)
+        self.data = self.populate_gesture_frames_data(data_dir, gesture_labels,
+            max_frames_per_sample)
         self.len = len(self.data)
+        super(self).__init__()
 
     def __getitem__(self, gesture_label):
         # TODO(kenny): Figure out how to sample randomly while keeping the
@@ -52,6 +54,7 @@ class GestureFramesDataset(Dataset):
         return np.vstack(frame_arrays)
 
 
+    @staticmethod
     def populate_gesture_frames_data(data_dir, gesture_labels, max_frames_per_sample, type_data="kinect"):
         """Returns a list of ...
 
@@ -74,16 +77,16 @@ class GestureFramesDataset(Dataset):
         for label, directories in label_to_dirs.items:
             for directory in directories:
                 data.append({
-                    'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory))
+                    'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory)),
                     'label': label
                 })
 
 
-def GenerateGestureFramesDataLoader():
+def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample):
     """Returns a configured DataLoader instance."""
 
     # Build a gesture frames dataset using the configuration information.
     # This is just dummy code to be replaced.
-    transformed_dataset = GestureFramesDataset(data_dir=None)
+    transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, max_frames_per_sample)
     return DataLoader(transformed_dataset, batch_size=4,
                       shuffle=True, num_workers=4)
