@@ -79,6 +79,8 @@ gesture_labels = [
 	92 		# Thumbs up (349 samples)
 ]
 
+gesture_test = [18]
+
 # Threshold for how many frames a video is allowed to have.
 max_frames_per_sample = 75
 

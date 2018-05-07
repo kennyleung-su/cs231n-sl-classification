@@ -28,7 +28,7 @@ class GestureFramesDataset(Dataset):
         #     'label': int
         #     'frames': np.ndarray of shape (frames, 3 (RGB), width, height)
         # }
-        self.data = self.populate_gesture_frames_data(data_dir, gesture_labels,
+        self.data = self.populate_gesture_frames_data(self, data_dir, gesture_labels,
             max_frames_per_sample)
         self.len = len(self.data)
         super(self).__init__()
@@ -55,7 +55,7 @@ class GestureFramesDataset(Dataset):
 
 
     @staticmethod
-    def populate_gesture_frames_data(data_dir, gesture_labels, max_frames_per_sample, type_data="kinect"):
+    def populate_gesture_frames_data(self, data_dir, gesture_labels, max_frames_per_sample, type_data="kinect"):
         """Returns a list of ...
 
         Example usage: gestures(gesture_list=[5,19,38,37,8,29,213,241,18,92],
@@ -63,18 +63,24 @@ class GestureFramesDataset(Dataset):
                                 type_data = "kinect")
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
-        labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir))
+        labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
+        print(labels_file)
+        print(data_dir)
         data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]
         label_to_dirs = {}
         for label in gesture_labels:
+
             directory_labels = data.loc[data['label'] == label][type_data].tolist()
             # strip .avi from the end of the filename
-            directories = [filename[:-4] for label in directory_labels]
+            
+            directories = [label[:-4] for label in directory_labels]
             label_to_dirs[label] = directories
+            #self
+            print(label_to_dirs)
 
         data = []
-        for label, directories in label_to_dirs.items:
+        for label, directories in label_to_dirs.items():
             for directory in directories:
                 data.append({
                     'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory)),
