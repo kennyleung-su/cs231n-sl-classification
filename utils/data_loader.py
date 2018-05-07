@@ -45,8 +45,11 @@ class GestureFramesDataset(Dataset):
 
     @staticmethod
     def read_frame_tensors_from_dir(directory):
+        print(directory)
         filenames = glob.glob("{0}/*.txt".format(directory))
+        print(filenames)
         frames = [re.match('.*_(\d+)\.avi', name) for name in filenames]
+        print(frames)
         sorted_filenames = filenames[np.argsort(frames)]
         frame_arrays = []
         for f in sorted_filenames:
@@ -64,8 +67,8 @@ class GestureFramesDataset(Dataset):
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
         labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
-        print(labels_file)
-        print(data_dir)
+        #print(labels_file)
+        #print(data_dir)
         data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]
         label_to_dirs = {}
@@ -77,7 +80,7 @@ class GestureFramesDataset(Dataset):
             directories = [label[:-4] for label in directory_labels]
             label_to_dirs[label] = directories
             #self
-            print(label_to_dirs)
+            #print(label_to_dirs)
 
         data = []
         for label, directories in label_to_dirs.items():
