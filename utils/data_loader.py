@@ -6,6 +6,7 @@ import imageio
 import numpy as np
 import pandas as pd
 import os
+import re
 import torch
 
 from torch.utils.data import Dataset, DataLoader
@@ -31,7 +32,7 @@ class GestureFramesDataset(Dataset):
         self.data = self.populate_gesture_frames_data(self, data_dir, gesture_labels,
             max_frames_per_sample)
         self.len = len(self.data)
-        super(self).__init__()
+        super().__init__()
 
     def __getitem__(self, gesture_label):
         # TODO(kenny): Figure out how to sample randomly while keeping the
@@ -46,14 +47,15 @@ class GestureFramesDataset(Dataset):
     @staticmethod
     def read_frame_tensors_from_dir(directory):
         print(directory)
-        filenames = glob.glob("{0}/*.txt".format(directory))
+        filenames = glob.glob("{0}/*.png".format(directory))
         print(filenames)
-        frames = [re.match('.*_(\d+)\.avi', name) for name in filenames]
-        print(frames)
-        sorted_filenames = filenames[np.argsort(frames)]
+        matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
+        frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])  # sorted list of (frame_number, frame_path) tuples
+        sorted_filenames = [f[1] for f in frames] 
         frame_arrays = []
-        for f in sorted_filenames:
-            frame_arrays.append(imageio.imread(f))
+        print(sorted_filenames)
+        for frame_file in sorted_filenames:
+            frame_arrays.append(imageio.imread(frame_file))
         return np.vstack(frame_arrays)
 
 
@@ -89,6 +91,7 @@ class GestureFramesDataset(Dataset):
                     'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory)),
                     'label': label
                 })
+        return data
 
 
 def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample):

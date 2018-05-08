@@ -105,7 +105,7 @@ lstm_hidden_size = 256
 learning_rate = 1e-2
 epochs = 1e3
 optimizer_fn = torch.optim.SGD
-initializer_fn = torch.nn.init.xavier_normal_
+#initializer_fn = torch.nn.init.xavier_normal_
 
 ################
 # Miscellaneous

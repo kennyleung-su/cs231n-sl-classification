@@ -20,7 +20,7 @@ def main():
 	print(config.max_frames_per_sample)
 
 	dataloader = data_loader.GenerateGestureFramesDataLoader(config.gesture_test,
-		config.TRAIN_DATA_DIR, config.max_frames_per_sample)
+		config.VALID_DATA_DIR, config.max_frames_per_sample)
 	# Initialize the dataloader.
 	# Use: 
 	# 	- config.{TEST/TRAIN/VALID}_DIR
