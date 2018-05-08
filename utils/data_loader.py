@@ -56,7 +56,7 @@ class GestureFramesDataset(Dataset):
         print(sorted_filenames)
         for frame_file in sorted_filenames:
             frame_arrays.append(imageio.imread(frame_file))
-        return np.vstack(frame_arrays)
+        return np.stack(frame_arrays)
 
 
     @staticmethod
@@ -89,8 +89,15 @@ class GestureFramesDataset(Dataset):
             for directory in directories:
                 data.append({
                     'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory)),
-                    'label': label
+                    'label': label,
+                    'directory': directory
                 })
+	
+        ### Testing ###
+        print('First data element:', data[0])
+        print('Shape:', data[0]['frames'].shape)
+        imageio.mimwrite('{0}-{1}.avi'.format(label, 'test_video'), [np.array(a) for a in data[0]['frames'].tolist()])
+
         return data
 
 
