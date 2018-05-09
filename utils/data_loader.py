@@ -23,7 +23,6 @@ class GestureFramesDataset(Dataset):
     def __init__(self, gesture_labels, data_dir, max_frames_per_sample, transform=None):
         # TODO(kenny): Read in and transform the video frames from the
         # given information into 4D frame tensors, keeping track of the
-        # classification label along the way.
 
         # self.data {
         #     'label': int
@@ -46,14 +45,11 @@ class GestureFramesDataset(Dataset):
 
     @staticmethod
     def read_frame_tensors_from_dir(directory):
-        print(directory)
         filenames = glob.glob("{0}/*.png".format(directory))
-        print(filenames)
         matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
         frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])  # sorted list of (frame_number, frame_path) tuples
         sorted_filenames = [f[1] for f in frames] 
         frame_arrays = []
-        print(sorted_filenames)
         for frame_file in sorted_filenames:
             frame_arrays.append(imageio.imread(frame_file))
         return np.stack(frame_arrays)
@@ -69,8 +65,6 @@ class GestureFramesDataset(Dataset):
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
         labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
-        #print(labels_file)
-        #print(data_dir)
         data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]
         label_to_dirs = {}
@@ -78,11 +72,8 @@ class GestureFramesDataset(Dataset):
 
             directory_labels = data.loc[data['label'] == label][type_data].tolist()
             # strip .avi from the end of the filename
-            
-            directories = [label[:-4] for label in directory_labels]
+            directories = [''.join(label.split('.avi')[:-1]) for label in directory_labels]
             label_to_dirs[label] = directories
-            #self
-            #print(label_to_dirs)
 
         data = []
         for label, directories in label_to_dirs.items():
@@ -94,10 +85,7 @@ class GestureFramesDataset(Dataset):
                 })
 	
         ### Testing ###
-        print('First data element:', data[0])
-        print('Shape:', data[0]['frames'].shape)
-        imageio.mimwrite('{0}-{1}.avi'.format(label, 'test_video'), [np.array(a) for a in data[0]['frames'].tolist()])
-
+        imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
 
 

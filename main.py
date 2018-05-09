@@ -15,10 +15,6 @@ def main():
 	# in config to initialize our DataLoader, Model, training/testing modules.
 	# Please log whenever possible! We can fine-tune the the logger down the
 	# road but for now as we are experimenting, verbosity is good.
-	print(config.gesture_test)
-	print(config.TRAIN_DATA_DIR)
-	print(config.max_frames_per_sample)
-
 	dataloader = data_loader.GenerateGestureFramesDataLoader(config.gesture_test,
 		config.VALID_DATA_DIR, config.max_frames_per_sample)
 	# Initialize the dataloader.
