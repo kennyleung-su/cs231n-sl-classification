@@ -1,10 +1,44 @@
-import os
+import argparse
 import logging
+import os
 import time
+
+from collections import namedtuple
+from configobj import ConfigObj
+from validate import Validator
 
 import torch
 import torchvision.models as models
 import torchvision.transforms as transforms
+
+parser = argparse.ArgumentParser(description='Gesture classification task.')
+
+parser.add_argument('--experiment', type=str, default='basic',
+	help='Name of the experiment, as listed in config.cfg. Defaults to basic.')
+parser.add_argument('--mode', type=str, default='train',
+	help='Running mode: "train" or "test".')
+parser.add_argument('--minibatch_size', type=int)
+parser.add_argument('--epochs', type=int)
+parser.add_argument('--lstm_hidden_size', type=int)
+parser.add_argument('--learning_rate', type=float)
+parser.add_argument('--max_frames_per_sample', type=int,
+					help='Maximum temporal depth of video frames on which to train.')
+parser.add_argument('--debug', action='store_true')
+parser.add_argument('--log_interval', type=int)
+args = parser.parse_args()
+
+if args.debug:
+	args.experiment = 'debug'
+
+
+class ConfigObjFromDict:
+	"""Handy class for creating an object updated as a dict but accessed as an obj."""
+	def __init__(self, **entries):
+		self.__dict__.update(entries)
+
+	def __setattr__(self, name, value):
+		self.__dict__[name] = value
+
 
 ##############
 # Directories
@@ -23,6 +57,7 @@ def mkdir(path):
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))	# /home/shared
 PROJECT_DIR = os.path.join(ROOT_DIR, 'cs231n-sl-classification')		# cs231n-sl-classification
 
+CONFIGS_DIR = os.path.join(PROJECT_DIR, 'configs')
 EXPERIMENTS_DIR = os.path.join(PROJECT_DIR, 'experiments')
 MODEL_DIR = os.path.join(EXPERIMENTS_DIR, 'models')		# cs231n-sl-classification/experiments/models/{checkpoints, etc}
 LOG_DIR = os.path.join(EXPERIMENTS_DIR, 'logs')			# cs231n-sl-classification/experiments/logs/
@@ -33,56 +68,42 @@ TEST_DATA_DIR = os.path.join(ROOT_DIR, 'test')
 TRAIN_DATA_DIR = os.path.join(ROOT_DIR, 'train')
 VALID_DATA_DIR = os.path.join(ROOT_DIR, 'valid')
 
+#################
+# Configurations
+#################
+
+# Read the flag and configuration file values and validate them to cast them to their
+# specified data types.
+exp_config = ConfigObj(os.path.join(CONFIGS_DIR, '{0}.ini'.format(args.experiment)),
+	configspec=os.path.join(CONFIGS_DIR, 'configspec.ini'))
+exp_config.validate(Validator())
+
+# Merge the flag and configuration file values, overwriting exp_config values with flag values.
+for k, v in vars(args).items():
+	if v:
+		exp_config[k] = v
+MODEL_CONFIG = ConfigObjFromDict(**exp_config)
+
 #########################
 # Model Saving & Loading
 #########################
-experiment_name = 'basic_resnet_lstm_model'
-experiment_description = """
-Applies a pretrained ConvNet architecture to a small sample of
-training data (from 10 gesture classes) and uses an LSTM network
-to process these frame embeddings as input to a softmax classifier.
-"""
-
-# Either 'train' or 'test'.
-mode = 'train'
 
 # File to seralize our PyTorch model to. Existing checkpoint will be overwritten.
 # https://pytorch.org/docs/stable/torch.html#torch.save
 # Used for mode = 'training'.
-checkpoint = os.path.join(MODEL_DIR, '{0}-checkpoint.pkl'.format(experiment_name))
+MODEL_CONFIG.checkpoint = os.path.join(MODEL_DIR, '{0}-checkpoint.pkl'.format(args.experiment))
 
 # If this set to a file, then we will use that to initialize our model.
 # Can be used for all modes; required for testing.
-checkpoint_to_load = None
+MODEL_CONFIG.checkpoint_to_load = None
 
 # File in which to log output.
 # Just import logging, config in a library to log to the same location.
-logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(experiment_name, time.time()))
-
-# How many training iterations after which to log training and validation results.
-log_interval = 100
+logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(args.experiment, time.time()))
 
 ########################
 # Dataset Configuration
 ########################
-
-gesture_labels = [
-	5,		# peace sign (851 samples)
-	19,		# 'F' (492 samples)
-	38,		# number 1 (459 samples)
-	37,		# number 5 (377 samples)
-	8,		# Index pointing to head (375 samples)
-	29,		# Thumbs down (285 samples)
-	213, 	# Timeout (257 samples)
-	241, 	# Circular motion (256 samples)
-	18, 	# "C" (349 samples)
-	92 		# Thumbs up (349 samples)
-]
-
-gesture_test = [18]
-
-# Threshold for how many frames a video is allowed to have.
-max_frames_per_sample = 75
 
 # TODO: Add a configuration for the sampling scheme.
 
@@ -96,23 +117,18 @@ max_frames_per_sample = 75
 # i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where
 # H and W are expected to be at least 224. The images have to be loaded
 # in to a range of [0, 1] and then normalized using
-pretrained_cnn_model = models.resnet18
-normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+MODEL_CONFIG.pretrained_cnn_model = models.resnet18
+MODEL_CONFIG.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 								 std=[0.229, 0.224, 0.225])
-
-minibatch_size = 50
-lstm_hidden_size = 256
-learning_rate = 1e-2
-epochs = 1e3
-optimizer_fn = torch.optim.SGD
-#initializer_fn = torch.nn.init.xavier_normal_
+MODEL_CONFIG.optimizer_fn = torch.optim.SGD
+MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 
 ################
 # Miscellaneous
 ################
 
-disabled_cuda = False
-seed = 1
+MODEL_CONFIG.disabled_cuda = False
+MODEL_CONFIG.seed = 1
 
 ##################
 # Directory setup
@@ -122,17 +138,17 @@ seed = 1
 mkdir(MODEL_DIR)
 mkdir(LOG_DIR)
 
-train_output_dir = os.path.join(TRAIN_DIR, experiment_name)
+train_output_dir = os.path.join(TRAIN_DIR, args.experiment)
 mkdir(train_output_dir)
 
-test_output_dir = os.path.join(TEST_DIR, experiment_name)
+test_output_dir = os.path.join(TEST_DIR, args.experiment)
 mkdir(test_output_dir)
 
 # Set up logging.
 try:
-    file = open(logfile, 'r')
+	file = open(logfile, 'r')
 except IOError:
-    file = open(logfile, 'w')
+	file = open(logfile, 'w')
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(asctime)s] %(message)s')
