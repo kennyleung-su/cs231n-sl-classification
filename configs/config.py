@@ -25,6 +25,7 @@ parser.add_argument('--max_frames_per_sample', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--log_interval', type=int)
+parser.add_argument('--checkpoint_to_load', type=str)
 args = parser.parse_args()
 
 if args.debug:
@@ -91,11 +92,7 @@ MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 # File to seralize our PyTorch model to. Existing checkpoint will be overwritten.
 # https://pytorch.org/docs/stable/torch.html#torch.save
 # Used for mode = 'training'.
-MODEL_CONFIG.checkpoint = os.path.join(MODEL_DIR, '{0}-checkpoint.pkl'.format(args.experiment))
-
-# If this set to a file, then we will use that to initialize our model.
-# Can be used for all modes; required for testing.
-MODEL_CONFIG.checkpoint_to_load = None
+MODEL_CONFIG.checkpoint_path = os.path.join(MODEL_DIR, '{0}-checkpoint.pkl'.format(args.experiment))
 
 # File in which to log output.
 # Just import logging, config in a library to log to the same location.

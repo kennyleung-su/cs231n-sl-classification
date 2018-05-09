@@ -14,36 +14,31 @@ def main():
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
-	# TODO(everyone): Implement the rest! Use the values stored
-	# in config to initialize our DataLoader, Model, training/testing modules.
-	# Please log whenever possible! We can fine-tune the the logger down the
-	# road but for now as we are experimenting, verbosity is good.
+	# Convert the gesture video frames into data samples inside of a DataLoader.
+	# TODO: Support pickling to speed up the process. Perhaps we can hash the
+    # list of gesture labels to a checksum and check if a file with that name exists.
 	dataloader = data_loader.GenerateGestureFramesDataLoader(MODEL_CONFIG.gesture_labels,
 		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample)
-	# Initialize the dataloader.
-	# Use: 
-	# 	- config.{TEST/TRAIN/VALID}_DIR
-	# 	- MODEL_CONFIG.gesture_labels
-	#	- MODEL_CONFIG.max_frames_per_sample
-	# 	- etc
 
-	model = dev_models.DummyModel(MODEL_CONFIG)
-	# Initialize the model, using an existing checkpoint if applicable.
-	# Use:
-	#	- MODEL_CONFIG.checkpoint_to_load
-	# 	- MODEL_CONFIG.pretrained_cnn_model
-	# 	- MODEL_CONFIG.normalize
-	# 	- MODEL_CONFIG.minibatch_size
-	# 	- MODEL_CONFIG.lstm_hidden_size
-	# 	- MODEL_CONFIG.initializer_fn
+	# Initialize the model, or load a pretrained one.
+	if model_config.checkpoint_to_load:
+		model = torch.load(model_config.checkpoint_to_load)
+	elif model_config.mode == 'test':
+		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
+	else:
+		model = dev_models.DummyModel(model_config=MODEL_CONFIG)
 
-	# If in training mode:
-	# 	Initialize and run the optimizer/trainer.
-	# 	Use:
-	# 		- MODEL_CONFIG.mode
-	# 		- MODEL_CONFIG.learning_rate
-	# 		- MODEL_CONFIG.optimizer_fn
-	#		- MODEL_CONFIG.epochs
+	# Train the model.
+	if model_config.mode == 'train':
+		X = None
+		loss_fn = None
+		optimizer = None
+		train_utils.train_model(X,
+								model,
+								model_config.epochs,
+								loss_fn,
+								optimizer,
+								model_config.learning_rate)
 
 	# Run the model on the test set, using the dataloader.
 
@@ -53,9 +48,8 @@ def main():
 	# 	- config.TEST_DIR for aggregate testing results
 	# 	- config.MODEL_DIR for general model information
 
-	# Save model to a new checkpoint.
-	# Use:
-	# 	- config.checkpoint
+	# Save the final model to a checkpoint.
+	model.save_to_checkpoint(model_config.checkpoint_path)
 
 
 if __name__ == '__main__':

@@ -3,6 +3,7 @@
 import csv
 import glob
 import imageio
+import logging
 import numpy as np
 import pandas as pd
 import os
@@ -21,22 +22,15 @@ class GestureFramesDataset(Dataset):
             with which the video frames should be preprocessed
     """
     def __init__(self, gesture_labels, data_dir, max_frames_per_sample, transform=None):
-        # TODO(kenny): Read in and transform the video frames from the
-        # given information into 4D frame tensors, keeping track of the
-
-        # self.data {
-        #     'label': int
-        #     'frames': np.ndarray of shape (frames, 3 (RGB), width, height)
-        # }
+        # TODO: Clarify the shape of self.data.
         self.data = self.populate_gesture_frames_data(self, data_dir, gesture_labels,
             max_frames_per_sample)
         self.len = len(self.data)
+        logging.info('Initialized a GestureFramesDataset of size {0}.', self.len)
         super().__init__()
 
     def __getitem__(self, gesture_label):
-        # TODO(kenny): Figure out how to sample randomly while keeping the
-        # proportion of labels uniform, despite having a varying number of
-        # videos per label.
+        # TODO(kenny): Figure out how to sample with balanced labels.
         return self.data[gesture_label]
 
     def __len__(self):
@@ -64,17 +58,17 @@ class GestureFramesDataset(Dataset):
                                 type_data = "kinect")
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
+        logging.info('Populating frame tensors for {0} specified labels in data dir {1}.'.format(
+            len(gesture_labels), data_dir))
         labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
         data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]
         label_to_dirs = {}
         for label in gesture_labels:
-
             directory_labels = data.loc[data['label'] == label][type_data].tolist()
             # strip .avi from the end of the filename
             directories = [''.join(label.split('.avi')[:-1]) for label in directory_labels]
             label_to_dirs[label] = directories
-
         data = []
         for label, directories in label_to_dirs.items():
             for directory in directories:
@@ -85,6 +79,8 @@ class GestureFramesDataset(Dataset):
                 })
 	
         ### Testing ###
+        # TODO: Delete debugging code.
+        logging.debug('Writing out test_image.png for the first data frame.')
         imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
 

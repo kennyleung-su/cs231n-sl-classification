@@ -1,5 +1,6 @@
 """Base Pytorch models for visual gesture recognition."""
 
+from configs import config
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -11,6 +12,22 @@ class BaseModel(nn.Module):
 	def __init__(self, model_config):
 		super(BaseModel, self).__init__()
 		self._model_config = model_config
+		self._training_epoch = 0
+		self._best_accuracy = -1
+
+	def save_to_checkpoint(self, filename, is_best=False):
+		""""Saves information about the model to the checkpoint file.
+
+		If is_best = True, also copies this model information to a directory
+		containing the best-performing models.
+		"""
+		torch.save({
+			'epoch': self._training_epoch,
+			'state_dict': self.state_dict()
+		}, filename)
+		if is_best:
+			raise NotImplemented
 
 	def forward(self, input):
+		"""To be implemented by each derived class."""
 		raise NotImplemented
