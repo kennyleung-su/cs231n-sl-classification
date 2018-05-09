@@ -8,9 +8,9 @@ class BaseModel(nn.Module):
 	"""TODO: Implement the base model for the project, primarily for reading in
 	configurations and initializing the logger."""
 
-    def __init__(self):
-        super(BaseModel, self).__init__()
-        pass
+	def __init__(self, model_config):
+		super(BaseModel, self).__init__()
+		self._model_config = model_config
 
-    def forward(self, input):
-        raise NotImplemented
+	def forward(self, input):
+		raise NotImplemented

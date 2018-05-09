@@ -3,7 +3,6 @@
 
 # Exclude (large!) datasets
 data/
-models/
 experiments/
 
 # Byte-compiled / optimized / DLL files

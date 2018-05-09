@@ -4,7 +4,9 @@ according to config.py."""
 from configs import config
 from configs.config import MODEL_CONFIG
 from utils import data_loader
-from models import model
+from models import model, dev_models
+from trainer import train_utils
+
 import logging
 
 def main():
@@ -25,6 +27,7 @@ def main():
 	#	- MODEL_CONFIG.max_frames_per_sample
 	# 	- etc
 
+	model = dev_models.DummyModel(MODEL_CONFIG)
 	# Initialize the model, using an existing checkpoint if applicable.
 	# Use:
 	#	- MODEL_CONFIG.checkpoint_to_load
