@@ -156,7 +156,7 @@ try:
 except IOError:
 	file = open(logfile, 'w')
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 formatter = logging.Formatter('[%(asctime)s] %(message)s')
 
 # Set up a streaming logger.
@@ -165,7 +165,7 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 
 fh = logging.FileHandler(logfile)
-fh.setLevel(logging.DEBUG)
+fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 
 logger.addHandler(ch)

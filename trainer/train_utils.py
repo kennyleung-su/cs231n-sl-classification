@@ -1,16 +1,28 @@
+import logging
 import torch
 
 
 def train_model(X, y, model, epochs, loss_fn, optimizer, lr):
 	"""TODO: Implement model parameter updates."""
 
-	predictions = model(X)
+	# TODO: Iterate over the data in batches, perhaps taking in a dataloader
+	# object instead.
+	for epoch in range(1, epochs + 1):
+		# Compute and print loss
+		predictions = model(X)
+		loss = loss_fn(predictions, y)
+		logging.info('Train Epoch: {}\tLoss: {:.6f}'.format(epoch, loss.item()))
 
-	# Compute and print loss
-	loss = loss_fn(predictions, y)
-	logging.info('Loss:', loss.item())
+		# TODO: Update weights after the dummy model is differentiable. Otherwise,
+		# this will crash because there is nothing for the model to update.
+		# Zero gradients, perform a backward pass, and update the weights.
 
-	# Zero gradients, perform a backward pass, and update the weights.
-	optimizer.zero_grad()
-	loss.backward()
-	optimizer.step()
+		# optimizer.zero_grad()
+		# loss.backward()
+		# optimizer.step()
+
+		# TODO: Run on the validation set, with frequency depending on
+		# on the configuration.
+
+		# TODO: Pickle the best seen model. Use model._best_accuracy
+		# (change to model.best_val_accuracy?) to determine if this is the case.

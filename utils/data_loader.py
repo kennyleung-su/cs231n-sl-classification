@@ -26,7 +26,7 @@ class GestureFramesDataset(Dataset):
         self.data = self.populate_gesture_frames_data(self, data_dir, gesture_labels,
             max_frames_per_sample)
         self.len = len(self.data)
-        logging.info('Initialized a GestureFramesDataset of size {0}.', self.len)
+        logging.info('Initialized a GestureFramesDataset of size {0}.'.format(self.len))
         super(GestureFramesDataset, self).__init__()
 
     def __getitem__(self, gesture_label):
@@ -46,8 +46,8 @@ class GestureFramesDataset(Dataset):
         frame_arrays = []
         for frame_file in sorted_filenames:
             frame_arrays.append(imageio.imread(frame_file))
+        # TODO: Convert to torch tensor objects.
         return np.stack(frame_arrays)
-
 
     @staticmethod
     def populate_gesture_frames_data(self, data_dir, gesture_labels, max_frames_per_sample, type_data="kinect"):
@@ -80,9 +80,19 @@ class GestureFramesDataset(Dataset):
 	
         ### Testing ###
         # TODO: Delete debugging code.
-        # logging.debug('Writing out test_image.png for the first data frame.')
+        # logging.info('Writing out test_image.png for the first data frame.')
         # imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
+
+    def convert_label_to_one_hot(self, label):
+        """TODO: Convert between classes and one-hot label vectors. This may need to happen
+        in a separate module, perhaps the trainer module.
+
+        Suppose we have three gesture classes: 18, 43, and 100. We need to convert these
+        indices to three separate one hot vectors (or integers starting from zero) in order
+        to compute softmax CE-loss.
+        """
+        pass
 
 
 def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample):
