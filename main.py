@@ -23,7 +23,7 @@ def main():
 	# Convert the gesture video frames into data samples inside of a DataLoader.
 	# TODO: Support pickling to speed up the process. Perhaps we can hash the
 	# list of gesture labels to a checksum and check if a file with that name exists.
-	dataloader = data_loader.GenerateGestureFramesDataLoader(MODEL_CONFIG.gesture_labels,
+	train_dataloader = data_loader.GenerateGestureFramesDataLoader(MODEL_CONFIG.gesture_labels,
 		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample)
 
 	# Initialize the model, or load a pretrained one.
@@ -47,6 +47,7 @@ def main():
 			'frames': np.random.rand(num_samples, sample_dim)
 		}
 		optimizer = None
+		# TODO: Pass in the dataloader?
 		train_utils.train_model(X=torch.from_numpy(data['frames']),
 								y=torch.from_numpy(data['label']),
 								model=model,
@@ -55,7 +56,7 @@ def main():
 								optimizer=optim.SGD(model.parameters(), lr=0.01, momentum=0.9),
 								lr=MODEL_CONFIG.learning_rate)
 
-	# Run the model on the test set, using the dataloader.
+	# Run the model on the test set, using a new test dataloader.
 
 	# Save (and maybe visualize or analyze?) the results.
 	# Use:

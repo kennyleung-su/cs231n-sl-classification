@@ -46,7 +46,7 @@ class GestureFramesDataset(Dataset):
         frame_arrays = []
         for frame_file in sorted_filenames:
             frame_arrays.append(imageio.imread(frame_file))
-        # TODO: Convert to torch tensor objects.
+        # TODO: Convert to torch tensor objects?
         return np.stack(frame_arrays)
 
     @staticmethod
@@ -84,13 +84,11 @@ class GestureFramesDataset(Dataset):
         # imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
 
-    def convert_label_to_one_hot(self, label):
-        """TODO: Convert between classes and one-hot label vectors. This may need to happen
-        in a separate module, perhaps the trainer module.
+    def map_labels_to_class_indices(self, label):
+        """TODO: Convert between video labels and contiguous class values from [0, c) where
+        c represents the total number of possible output classes.
 
-        Suppose we have three gesture classes: 18, 43, and 100. We need to convert these
-        indices to three separate one hot vectors (or integers starting from zero) in order
-        to compute softmax CE-loss.
+        Store this mapping in the dataset object.
         """
         pass
 
