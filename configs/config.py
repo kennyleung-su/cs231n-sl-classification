@@ -90,9 +90,6 @@ for k, v in vars(args).items():
 		exp_config[k] = v
 MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 
-# Fix the gesture labels to be interpreted as a list of integers.
-MODEL_CONFIG.gesture_labels = [int(label) for label in MODEL_CONFIG.gesture_labels]
-
 #########################
 # Model Saving & Loading
 #########################

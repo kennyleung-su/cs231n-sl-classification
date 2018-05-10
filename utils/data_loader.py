@@ -80,8 +80,8 @@ class GestureFramesDataset(Dataset):
 	
         ### Testing ###
         # TODO: Delete debugging code.
-        logging.debug('Writing out test_image.png for the first data frame.')
-        imageio.imwrite('test_image.png', data[0]['frames'][0])
+        # logging.debug('Writing out test_image.png for the first data frame.')
+        # imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
 
 
