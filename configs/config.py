@@ -14,15 +14,17 @@ import torchvision.transforms as transforms
 parser = argparse.ArgumentParser(description='Gesture classification task.')
 
 parser.add_argument('--experiment', type=str, default='basic',
-	help='Name of the experiment, as listed in config.cfg. Defaults to basic.')
+	help='Name of the experiment. Defaults to basic.')
 parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test".')
+
 parser.add_argument('--minibatch_size', type=int)
 parser.add_argument('--epochs', type=int)
 parser.add_argument('--lstm_hidden_size', type=int)
 parser.add_argument('--learning_rate', type=float)
 parser.add_argument('--max_frames_per_sample', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
+
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--log_interval', type=int)
 parser.add_argument('--checkpoint_to_load', type=str)
@@ -126,6 +128,10 @@ MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 
 MODEL_CONFIG.disabled_cuda = False
 MODEL_CONFIG.seed = 1
+
+# TODO: Complete with other model types.
+if MODEL_CONFIG.experiment == 'debug':
+	MODEL_CONFIG.model = dev_models.DummyModel
 
 ##################
 # Directory setup

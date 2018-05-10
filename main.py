@@ -21,24 +21,24 @@ def main():
 		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample)
 
 	# Initialize the model, or load a pretrained one.
-	if model_config.checkpoint_to_load:
-		model = torch.load(model_config.checkpoint_to_load)
-	elif model_config.mode == 'test':
+	if MODEL_CONFIG.checkpoint_to_load:
+		model = torch.load(MODEL_CONFIG.checkpoint_to_load)
+	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
 	else:
 		model = dev_models.DummyModel(model_config=MODEL_CONFIG)
 
 	# Train the model.
-	if model_config.mode == 'train':
+	if MODEL_CONFIG.mode == 'train':
 		X = None
 		loss_fn = None
 		optimizer = None
 		train_utils.train_model(X,
 								model,
-								model_config.epochs,
+								MODEL_CONFIG.epochs,
 								loss_fn,
 								optimizer,
-								model_config.learning_rate)
+								MODEL_CONFIG.learning_rate)
 
 	# Run the model on the test set, using the dataloader.
 
@@ -49,7 +49,7 @@ def main():
 	# 	- config.MODEL_DIR for general model information
 
 	# Save the final model to a checkpoint.
-	model.save_to_checkpoint(model_config.checkpoint_path)
+	model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path)
 
 
 if __name__ == '__main__':

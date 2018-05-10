@@ -58,8 +58,8 @@ class GestureFramesDataset(Dataset):
                                 type_data = "kinect")
         TODO(kenny): Incorporate the following method into GestureFramesDataset.
         """
-        logging.info('Populating frame tensors for {0} specified labels in data dir {1}.'.format(
-            len(gesture_labels), data_dir))
+        logging.info('Populating frame tensors for {0} specified labels in data dir {1}: {2}'.format(
+            len(gesture_labels), data_dir, gesture_labels))
         labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
         data = pd.read_csv(labels_file, sep=" ", header=None)
         data.columns = ["rgb", "kinect", "label"]

@@ -10,7 +10,7 @@ class DummyModel(BaseModel):
 
 	def __init__(self, *args, **kwargs):
 		super(DummyModel, self).__init__(*args, **kwargs)
-		self._gesture_labels = model_config.gesture_labels
+		self._gesture_labels = self._model_config.gesture_labels
 		self._num_output_classes = len(self._model_config._gesture_labels)
 
 		# Image dimensions
