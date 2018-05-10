@@ -3,7 +3,7 @@
 import torch
 from base.base_model import BaseModel
 
-class Model(BaseModel):
+class PretrainedConvLSTMClassifier(BaseModel):
 	"""TODO: Implement a basic ConvNet model for gesture recognition."""
 
 	def __init__(self):

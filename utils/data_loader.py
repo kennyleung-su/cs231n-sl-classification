@@ -93,10 +93,10 @@ class GestureFramesDataset(Dataset):
         pass
 
 
-def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample):
+def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample, batch_size):
     """Returns a configured DataLoader instance."""
 
     # Build a gesture frames dataset using the configuration information.
     # This is just dummy code to be replaced.
     transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, max_frames_per_sample)
-    return DataLoader(transformed_dataset, batch_size=4, shuffle=True, num_workers=4)
+    return DataLoader(transformed_dataset, batch_size=batch_size, shuffle=True, num_workers=4)

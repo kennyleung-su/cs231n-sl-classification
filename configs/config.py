@@ -18,7 +18,7 @@ parser.add_argument('--experiment', type=str, default='basic',
 parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test".')
 
-parser.add_argument('--minibatch_size', type=int)
+parser.add_argument('--batch_size', type=int)
 parser.add_argument('--epochs', type=int)
 parser.add_argument('--lstm_hidden_size', type=int)
 parser.add_argument('--learning_rate', type=float)

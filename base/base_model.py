@@ -12,6 +12,7 @@ class BaseModel(nn.Module):
 	def __init__(self, model_config):
 		super(BaseModel, self).__init__()
 		self._model_config = model_config
+		self._num_output_classes = len(self._model_config.gesture_labels)
 		self._training_epoch = 0
 		self._best_accuracy = -1
 
