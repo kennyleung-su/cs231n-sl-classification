@@ -85,7 +85,7 @@ class GestureFramesDataset(Dataset):
                 })
 	
         ### Testing ###
-        imageio.imwrite('test_image.png', data[0]['frames'][0])
+       # imageio.imwrite('test_image.png', data[0]['frames'][0])
         return data
 
 
