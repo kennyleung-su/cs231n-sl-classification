@@ -27,7 +27,7 @@ class GestureFramesDataset(Dataset):
             max_frames_per_sample)
         self.len = len(self.data)
         logging.info('Initialized a GestureFramesDataset of size {0}.', self.len)
-        super().__init__()
+        super(GestureFramesDataset, self).__init__()
 
     def __getitem__(self, gesture_label):
         # TODO(kenny): Figure out how to sample with balanced labels.

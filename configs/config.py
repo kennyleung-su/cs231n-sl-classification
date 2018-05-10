@@ -34,13 +34,16 @@ if args.debug:
 	args.experiment = 'debug'
 
 
-class ConfigObjFromDict:
+class ConfigObjFromDict(object):
 	"""Handy class for creating an object updated as a dict but accessed as an obj."""
 	def __init__(self, **entries):
 		self.__dict__.update(entries)
 
 	def __setattr__(self, name, value):
 		self.__dict__[name] = value
+
+	def __getattr__(self, name):
+		return self.__dict__.get(name, None)
 
 
 ##############
@@ -87,6 +90,9 @@ for k, v in vars(args).items():
 		exp_config[k] = v
 MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 
+# Fix the gesture labels to be interpreted as a list of integers.
+MODEL_CONFIG.gesture_labels = [int(label) for label in MODEL_CONFIG.gesture_labels]
+
 #########################
 # Model Saving & Loading
 #########################
@@ -130,8 +136,8 @@ MODEL_CONFIG.disabled_cuda = False
 MODEL_CONFIG.seed = 1
 
 # TODO: Complete with other model types.
-if MODEL_CONFIG.experiment == 'debug':
-	MODEL_CONFIG.model = dev_models.DummyModel
+# if MODEL_CONFIG.experiment == 'debug':
+# 	MODEL_CONFIG.model = dev_models.DummyModel
 
 ##################
 # Directory setup

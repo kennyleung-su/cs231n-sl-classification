@@ -1,7 +1,9 @@
 """Dummy models for visual gesture recognition."""
 
 import logging
+import numpy as np
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from base.base_model import BaseModel
 
@@ -10,8 +12,7 @@ class DummyModel(BaseModel):
 
 	def __init__(self, *args, **kwargs):
 		super(DummyModel, self).__init__(*args, **kwargs)
-		self._gesture_labels = self._model_config.gesture_labels
-		self._num_output_classes = len(self._model_config._gesture_labels)
+		self._num_output_classes = len(self._model_config.gesture_labels)
 
 		# Image dimensions
 		self._H = 240
@@ -41,6 +42,10 @@ class DummyModel(BaseModel):
 		returns a Tensor of output classification labels (N,) by flattening the input
 		and returning a fully-connected layer for a single frame T=0.
 		"""
+		N = input.shape[0]
+		return np.random.randint(low=0, high=self._num_output_classes, size=N)
+
+		# TODO: Use some sort of feed forward neural network to train parameters.
 		N, T, H, W, C = input.shape
 		single_frames = input[:, 0, :, :, :].view(N, -1)
 		return F.softmax(self._fc(single_frames))

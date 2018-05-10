@@ -1,13 +1,15 @@
 """Runs the gesture classification model, either in train or testing mode
 according to config.py."""
 
+import logging
+import numpy as np
+
 from configs import config
 from configs.config import MODEL_CONFIG
 from utils import data_loader
 from models import model, dev_models
 from trainer import train_utils
 
-import logging
 
 def main():
 	logging.info('Running experiment <{0}> in {1} mode.\n'
@@ -30,15 +32,25 @@ def main():
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
-		X = None
+		model.train()
+
+		# Make a dummy dataset of scalars, for now.
+		num_samples = 100
+		num_classes = 10
+		sample_dim = 5
+		data = {
+			'label': np.random.randint(low=0, high=num_classes, size=num_samples),
+			'frames': np.random.rand(num_samples, sample_dim)
+		}
 		loss_fn = None
 		optimizer = None
-		train_utils.train_model(X,
-								model,
-								MODEL_CONFIG.epochs,
-								loss_fn,
-								optimizer,
-								MODEL_CONFIG.learning_rate)
+		train_utils.train_model(X=data['frames'],
+								y=data['label'],
+								model=model,
+								epochs=MODEL_CONFIG.epochs,
+								loss_fn=loss_fn,
+								optimizer=optimizer,
+								lr=MODEL_CONFIG.learning_rate)
 
 	# Run the model on the test set, using the dataloader.
 

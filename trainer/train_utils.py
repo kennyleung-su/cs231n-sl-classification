@@ -1,7 +1,7 @@
 import torch
 
 
-def train_model(X, y,model, epochs, loss_fn, optimizer, lr):
+def train_model(X, y, model, epochs, loss_fn, optimizer, lr):
 	"""TODO: Implement model parameter updates."""
 
 	predictions = model(X)
