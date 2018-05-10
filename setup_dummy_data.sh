@@ -40,10 +40,13 @@ do
 		for ((j=1;j<=NUM_VIDEOS;j++)); do
 			VIDEO_ID=$(printf "%05d\n" $j)
 
-			M_VIDEO_DIR="${mode}/${SIGNER_ID}/M_${VIDEO_ID}"
-			K_VIDEO_DIR="${mode}/${SIGNER_ID}/K_${VIDEO_ID}"
+			M_VIDEO_DIR="${DIR}/${mode}/${SIGNER_ID}/M_${VIDEO_ID}"
+			K_VIDEO_DIR="${DIR}/${mode}/${SIGNER_ID}/K_${VIDEO_ID}"
 			M_VIDEO_PATH="${M_VIDEO_DIR}.avi"
 			K_VIDEO_PATH="${K_VIDEO_DIR}.avi"
+
+			mkdir -p $M_VIDEO_DIR
+			mkdir -p $K_VIDEO_DIR
 
 			# Store a random label for the video frames (1 to 10).
 			LABEL=$(( ( RANDOM % 10 )  + 1 ))
@@ -56,6 +59,8 @@ do
 				K_VIDEO_FRAME_PNG="${K_VIDEO_DIR}/K_${VIDEO_ID}_${k}.png"
 
 				# Save randomly generated PNGs.
+				# echo "test" > $M_VIDEO_FRAME_PNG
+				# echo "test" > $K_VIDEO_FRAME_PNG
 				mx=320;my=240;head -c "$((3*mx*my))" /dev/urandom | convert -depth 8 -size "${mx}x${my}" RGB:- $M_VIDEO_FRAME_PNG
 				mx=320;my=240;head -c "$((3*mx*my))" /dev/urandom | convert -depth 8 -size "${mx}x${my}" RGB:- $K_VIDEO_FRAME_PNG
 			done
