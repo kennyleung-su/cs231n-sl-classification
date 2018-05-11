@@ -2,21 +2,17 @@ import logging
 import torch
 
 
-def train_model(model, dataloader, epochs, loss_fn, optimizer):
+def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch):
 	"""TODO: Implement model parameter updates."""
 
 	# TODO: Iterate over the data in batches, perhaps taking in a dataloader
 	# object instead.
-	for batch_index, samples in enumerate(dataloader):
-		print(i_batch, samples)
-
-		X = samples['frames']
-		y = samples['label']
-
+	for batch_idx, (X, y) in enumerate(dataloader):
 		# Compute and print loss
 		predictions = model(X)
 		loss = loss_fn(predictions, y)
-		logging.info('Train Epoch: {}\tLoss: {:.6f}'.format(epoch, loss.item()))
+		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, batch_idx * len(X), len(dataloader.dataset),
+                100. * batch_idx / len(dataloader), loss.item()))
 
 		# TODO: Update weights after the dummy model is differentiable. Otherwise,
 		# this will crash because there is nothing for the model to update.

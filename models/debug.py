@@ -17,7 +17,7 @@ class RandomClassifier(BaseModel):
 	def forward(self, input):
 		"""Returns a random probability distribution across all output classes."""
 		N = input.shape[0]
-		logits = torch.from_numpy(np.random.rand(N, self._num_output_classes))
+		logits = np.random.rand(N, self._num_output_classes)
 		return F.log_softmax(logits, dim=1)
 
 
@@ -39,6 +39,6 @@ class LinearClassifier(BaseModel):
 		"""Uses a single fully-connected layer to classify all videos based
 		only on the flattened RGB values for the first timeframe."""
 		N, T, H, W, C = input.shape
-		flattened_frames = torch.from_numpy(input[:, 0, :, :, :]).view(N, -1)
+		flattened_frames = input[:, 0, :, :, :].view(N, -1)
 		logits = self._fc(flattened_frames)
 		return F.log_softmax(logits, dim=1)

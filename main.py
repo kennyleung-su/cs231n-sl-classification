@@ -38,13 +38,17 @@ def main():
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
 		model.train()
-		train_utils.train_model(model=model,
-								dataloader=train_dataloader,
-								epochs=MODEL_CONFIG.epochs,
-								loss_fn=F.nll_loss,
-								optimizer=optim.SGD(model.parameters(),
-													lr=MODEL_CONFIG.learning_rate,
-													momentum=0.9))
+
+		# TODO: Extract out to train_utils.
+		for epoch in range(1, MODEL_CONFIG.epochs + 1):
+			train_utils.train_model(model=model,
+									dataloader=train_dataloader,
+									epochs=MODEL_CONFIG.epochs,
+									loss_fn=F.nll_loss,
+									optimizer=optim.SGD(model.parameters(),
+														lr=MODEL_CONFIG.learning_rate,
+														momentum=0.9),
+									epoch=epoch)
 
 	# Run the model on the test set, using a new test dataloader.
 
