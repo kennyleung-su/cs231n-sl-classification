@@ -16,6 +16,12 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 
+__EXP_MODELS__ = {
+	'debug': LinearClassifier,
+	'basic': PretrainedConvLSTMClassifier
+}
+
+
 def main():
 	logging.info('Running experiment <{0}> in {1} mode.\n'
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
@@ -33,7 +39,7 @@ def main():
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
 	else:
-		model = LinearClassifier(model_config=MODEL_CONFIG)
+		model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
