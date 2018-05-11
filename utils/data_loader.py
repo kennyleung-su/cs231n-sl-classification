@@ -107,3 +107,11 @@ def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sam
 		# num_workers=4,  -- uncomment to run in parallel
 		collate_fn=PadCollate(max_frames_per_sample, dim=1)  # dim=1 represents timesteps
 	)
+
+def GetGestureFramesDataLoaders(data_dirs, model_config):
+	"""Returns a tuple consisting of the train, valid, and test GestureFramesDataLoader objects."""
+	# TODO: Support pickling to speed up the process. Perhaps we can hash the
+	# list of gesture labels to a checksum and check if a file with that name exists.
+	return (GenerateGestureFramesDataLoader(model_config.gesture_labels,
+		d, model_config.max_frames_per_sample, model_config.batch_size,
+		model_config.transform) for d in data_dirs)

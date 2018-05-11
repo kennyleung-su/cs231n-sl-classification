@@ -21,18 +21,16 @@ __EXP_MODELS__ = {
 	'basic': PretrainedConvLSTMClassifier
 }
 
+DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
+
 
 def main():
 	logging.info('Running experiment <{0}> in {1} mode.\n'
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
-	# Convert the gesture video frames into data samples inside of a DataLoader.
-	# TODO: Support pickling to speed up the process. Perhaps we can hash the
-	# list of gesture labels to a checksum and check if a file with that name exists.
-	train_dataloader = data_loader.GenerateGestureFramesDataLoader(MODEL_CONFIG.gesture_labels,
-		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample, MODEL_CONFIG.batch_size,
-		MODEL_CONFIG.transform)
+	(train_dataloader, valid_dataloader,
+		test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Initialize the model, or load a pretrained one.
 	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
@@ -49,7 +47,9 @@ def main():
 		model.train()
 
 		# TODO: Extract out to train_utils.
-		for epoch in range(checkpoint_epoch or 0, MODEL_CONFIG.epochs + checkpoint_epoch):
+		if not MODEL_CONFIG.checkpoint_to_load:
+			checkpoint_epoch = 0
+		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
 			train_utils.train_model(model=model,
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
