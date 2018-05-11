@@ -40,6 +40,7 @@ def main():
 		# The checkpoint is a dictionary consisting of keys 'epoch', 'state_dict'
 		checkpoint = torch.load(MODEL_CONFIG.checkpoint_to_load)
 		model.load_state_dict(checkpoint.get('state_dict'))
+		checkpoint_epoch = checkpoint.get('epoch')
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
 
@@ -48,7 +49,7 @@ def main():
 		model.train()
 
 		# TODO: Extract out to train_utils.
-		for epoch in range(1, MODEL_CONFIG.epochs + 1):
+		for epoch in range(checkpoint_epoch or 0, MODEL_CONFIG.epochs + checkpoint_epoch):
 			train_utils.train_model(model=model,
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
@@ -57,6 +58,7 @@ def main():
 														lr=MODEL_CONFIG.learning_rate,
 														momentum=0.9),
 									epoch=epoch)
+			model.training_epoch += 1
 
 	# Run the model on the test set, using a new test dataloader.
 

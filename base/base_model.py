@@ -13,7 +13,7 @@ class BaseModel(nn.Module):
 		super(BaseModel, self).__init__()
 		self._model_config = model_config
 		self._num_output_classes = len(self._model_config.gesture_labels)
-		self._training_epoch = 0
+		self.training_epoch = 0
 		self._best_accuracy = -1
 
 	def save_to_checkpoint(self, filename, is_best=False):
@@ -23,7 +23,7 @@ class BaseModel(nn.Module):
 		containing the best-performing models.
 		"""
 		torch.save({
-			'epoch': self._training_epoch,
+			'epoch': self.training_epoch,
 			'state_dict': self.state_dict()
 		}, filename)
 		if is_best:
