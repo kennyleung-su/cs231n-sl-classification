@@ -1,4 +1,4 @@
-# TODO: Implement data loading and preprocessing.
+# Implements data loading and preprocessing.
 
 import csv
 import glob
@@ -60,7 +60,7 @@ class GestureFramesDataset(Dataset):
 		"""Returns a list of dicts with keys:
 			'frames': 4D tensor (T, H, W, C) representing the spatiotemporal frames for a video
 			'label': y (ground truth)
-			'directory': path to the associated video directory
+			'seq_len': number of frames in the video
 		"""
 		logging.info('Populating frame tensors for {0} specified labels in data dir {1}: {2}'.format(
 			len(gesture_labels), data_dir, gesture_labels))
@@ -79,11 +79,11 @@ class GestureFramesDataset(Dataset):
 		data = []
 		for label, directories in label_to_dirs.items():
 			for directory in directories:
+				frames = self.read_frame_tensors_from_dir(os.path.join(data_dir, directory))
 				data.append({
-					'frames': self.read_frame_tensors_from_dir(os.path.join(data_dir, directory)),
-					# TODO: Map the label to a value in range(num_classes)! Otherwise this makes no sense.
+					'frames': frames,
 					'label': self._labels_to_indices_dict[label],
-					'directory': directory
+					'seq_len': frames.size(1)
 				})
 
 		return data

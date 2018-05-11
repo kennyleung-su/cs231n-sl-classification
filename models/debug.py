@@ -25,7 +25,7 @@ class LinearClassifier(BaseModel):
 	def __init__(self, *args, **kwargs):
 		super(LinearClassifier, self).__init__(*args, **kwargs)
 
-		# Image dimensions
+		# Hardcoded image dimensions
 		# TODO: Infer this from the configurations or pass them into the model.
 		self._H = 224
 		self._W = 224

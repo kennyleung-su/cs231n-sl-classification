@@ -27,6 +27,6 @@ class PretrainedConvLSTMClassifier(BaseModel):
 		N, C, T, H, W = input.shape
 		example = torch.squeeze(input[:, :, 0, :, :])
 		# Sanity purposes.
-		print(self._resnet(example))
+		print(self._resnet(example).shape)
 		cnn_out = np.stack([self._resnet(torch.squeeze(input[:, :, t, :, :])) for t in range(T)], axis=1)
 		return cnn_out
