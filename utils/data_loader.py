@@ -22,8 +22,9 @@ class GestureFramesDataset(Dataset):
 		transform: list of callable Classes, e.g. from torchvision.transforms,
 			with which the video frames should be preprocessed
 	"""
-	def __init__(self, gesture_labels, data_dir, transform=None):
+	def __init__(self, gesture_labels, data_dir, transform):
 		self._labels_to_indices_dict = self.map_labels_to_indices(gesture_labels)
+		self._transform = transform
 		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
 		self.data = self.populate_gesture_frames_data(data_dir, gesture_labels)
 		self.len = len(self.data)
@@ -37,19 +38,23 @@ class GestureFramesDataset(Dataset):
 	def __len__(self):
 		return self.len
 
-	@staticmethod
-	def read_frame_tensors_from_dir(directory):
+	def read_frame_tensors_from_dir(self, directory):
 		filenames = glob.glob("{0}/*.png".format(directory))
 		matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
 
 		# sorted list of (frame_number, frame_path) tuples
 		frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
 		sorted_filenames = [f[1] for f in frames] 
-		frame_arrays = []
+		frames_list = []
 
 		for frame_file in sorted_filenames:
-			frame_arrays.append(imageio.imread(frame_file))
-		return torch.from_numpy(np.stack(frame_arrays)).float()
+			# Returns an (H, W, C) shaped tensor, so transpose it to (C, H, W)
+			frame_ndarray = imageio.imread(frame_file).transpose(2, 0, 1)
+			frame_ndarray = self._transform(frame_ndarray)
+			frames_list.append(frame_ndarray)
+
+		# Stacks up to a (C, T, H, W) tensor.
+		return torch.stack(frames_list, dim=1)
 
 	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="kinect"):
 		"""Returns a list of dicts with keys:
@@ -90,15 +95,15 @@ class GestureFramesDataset(Dataset):
 
 
 def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_frames_per_sample,
-									batch_size):
+									batch_size, transform):
 	"""Returns a configured DataLoader instance."""
 
 	# Build a gesture frames dataset using the configuration information.
 	# This is just dummy code to be replaced.
-	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir)
+	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, transform)
 	return DataLoader(transformed_dataset,
 		batch_size=batch_size,
 		shuffle=True,
-		# num_workers=4,
-		collate_fn=PadCollate(max_frames_per_sample, dim=0)  # dim=0 represents timesteps
+		# num_workers=4,  -- uncomment to run in parallel
+		collate_fn=PadCollate(max_frames_per_sample, dim=1)  # dim=1 represents timesteps
 	)

@@ -27,8 +27,8 @@ class LinearClassifier(BaseModel):
 
 		# Image dimensions
 		# TODO: Infer this from the configurations or pass them into the model.
-		self._H = 240
-		self._W = 360
+		self._H = 224
+		self._W = 224
 		self._C = 3
 
 		# Fully-connected layer with bias
@@ -38,7 +38,7 @@ class LinearClassifier(BaseModel):
 	def forward(self, input):
 		"""Uses a single fully-connected layer to classify all videos based
 		only on the flattened RGB values for the first timeframe."""
-		N, T, H, W, C = input.shape
-		flattened_frames = input[:, 0, :, :, :].view(N, -1)
+		N, C, T, H, W = input.shape
+		flattened_frames = input[:, :, 0, :, :].contiguous().view(N, -1)
 		logits = self._fc(flattened_frames)
 		return F.log_softmax(logits, dim=1)

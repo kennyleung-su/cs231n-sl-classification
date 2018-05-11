@@ -31,7 +31,8 @@ def main():
 	# TODO: Support pickling to speed up the process. Perhaps we can hash the
 	# list of gesture labels to a checksum and check if a file with that name exists.
 	train_dataloader = data_loader.GenerateGestureFramesDataLoader(MODEL_CONFIG.gesture_labels,
-		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample, MODEL_CONFIG.batch_size)
+		config.TRAIN_DATA_DIR, MODEL_CONFIG.max_frames_per_sample, MODEL_CONFIG.batch_size,
+		MODEL_CONFIG.transform)
 
 	# Initialize the model, or load a pretrained one.
 	if MODEL_CONFIG.checkpoint_to_load:

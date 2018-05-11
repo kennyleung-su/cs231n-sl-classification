@@ -31,8 +31,8 @@ parser.add_argument('--log_interval', type=int)
 parser.add_argument('--checkpoint_to_load', type=str)
 
 model_names = sorted(name for name in models.__dict__
-    if name.islower() and not name.startswith("__")
-    and callable(models.__dict__[name]))
+	if name.islower() and not name.startswith("__")
+	and callable(models.__dict__[name]))
 parser.add_argument('--arch', '-a', metavar='ARCH', default='resnet18',
 					choices=model_names,
 					help='model architecture: ' +
@@ -130,8 +130,16 @@ logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(args.experiment, time.
 # H and W are expected to be at least 224. The images have to be loaded
 # in to a range of [0, 1] and then normalized using
 MODEL_CONFIG.pretrained_cnn_model = models.__dict__[args.arch]
-MODEL_CONFIG.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-												std=[0.229, 0.224, 0.225])
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+								 std=[0.229, 0.224, 0.225])
+MODEL_CONFIG.transform = transforms.Compose([
+			transforms.ToPILImage(),
+			transforms.CenterCrop(224),
+			transforms.ToTensor(),
+			normalize,
+		])
+
 MODEL_CONFIG.optimizer_fn = torch.optim.SGD
 MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 
