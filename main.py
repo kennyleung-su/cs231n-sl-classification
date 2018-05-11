@@ -35,12 +35,13 @@ def main():
 		MODEL_CONFIG.transform)
 
 	# Initialize the model, or load a pretrained one.
+	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
 	if MODEL_CONFIG.checkpoint_to_load:
-		model = torch.load(MODEL_CONFIG.checkpoint_to_load)
+		# The checkpoint is a dictionary consisting of keys 'epoch', 'state_dict'
+		checkpoint = torch.load(MODEL_CONFIG.checkpoint_to_load)
+		model.load_state_dict(checkpoint.get('state_dict'))
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
-	else:
-		model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
