@@ -18,7 +18,8 @@ import torch.optim as optim
 
 __EXP_MODELS__ = {
 	'debug': LinearClassifier,
-	'basic': PretrainedConvLSTMClassifier
+	'basic': PretrainedConvLSTMClassifier,
+	'basic_dev': PretrainedConvLSTMClassifier
 }
 
 DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
