@@ -115,7 +115,6 @@ def GetGestureFramesDataLoaders(data_dirs, model_config):
 	"""Returns a tuple consisting of the train, valid, and test GestureFramesDataLoader objects."""
 	# TODO: Support pickling to speed up the process. Perhaps we can hash the
 	# list of gesture labels to a checksum and check if a file with that name exists.
-	print(model_config.num_workers)
 	return (GenerateGestureFramesDataLoader(model_config.gesture_labels,
 		d, model_config.max_seq_len, model_config.batch_size,
 		model_config.transform, model_config.num_workers or 0) for d in data_dirs)
