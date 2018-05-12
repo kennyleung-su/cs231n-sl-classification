@@ -33,7 +33,7 @@ def main():
 	(train_dataloader,) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
 
 	# (train_dataloader, valid_dataloader,
-	# 	test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
+	# 	test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG, nconfig.um_workers)
 
 	# Initialize the model, or load a pretrained one.
 	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)

@@ -28,6 +28,9 @@ parser.add_argument('--max_seq_len', type=int,
 
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--log_interval', type=int)
+parser.add_argument('--num_workers', type=int, default=0,
+					help='Number of separate processes with which to run the DataLoader. '
+					'Set to a value, e.g. 4, when running on a VM with high compute.')
 parser.add_argument('--checkpoint_to_load', type=str)
 
 model_names = sorted(name for name in models.__dict__
