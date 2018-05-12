@@ -25,7 +25,7 @@ class GestureFramesDataset(Dataset):
 		self._labels_to_indices_dict = self.map_labels_to_indices(gesture_labels)
 		self._transform = transform
 		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
-		self.data = self.populate_gesture_frames_data(data_dir, gesture_labels)
+		self.data, self.max_seq_len = self.populate_gesture_frames_data(data_dir, gesture_labels)
 		self.len = len(self.data)
 		logging.info('Initialized a GestureFramesDataset of size {0}.'.format(self.len))
 		super(GestureFramesDataset, self).__init__()
@@ -76,17 +76,20 @@ class GestureFramesDataset(Dataset):
 			label_to_dirs[label] = directories
 
 		data = []
+		max_seq_len = -1
 		for label, directories in label_to_dirs.items():
 			logging.info('Reading frame tensors for label {0} ({1} videos)'.format(label, len(directories)))
 			for directory in directories:
 				frames = self.read_frame_tensors_from_dir(os.path.join(data_dir, directory))
+				seq_len = frames.size(1)
+				max_seq_len = max(max_seq_len, seq_len)
 				data.append({
 					'frames': frames,
 					'label': self._labels_to_indices_dict[label],
-					'seq_len': frames.size(1)
+					'seq_len': seq_len
 				})
 
-		return data
+		return data, max_seq_len
 
 	@staticmethod
 	def map_labels_to_indices(gesture_labels):
@@ -105,7 +108,7 @@ def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_seq_len,
 		batch_size=batch_size,
 		shuffle=True,
 		# num_workers=4,  -- uncomment to run in parallel
-		collate_fn=PadCollate(max_seq_len, dim=1)  # dim=1 represents timesteps
+		collate_fn=PadCollate(transformed_dataset.max_seq_len, dim=1)  # dim=1 represents timesteps
 	)
 
 def GetGestureFramesDataLoaders(data_dirs, model_config):

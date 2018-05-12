@@ -16,7 +16,9 @@ def pad_tensor(tensor, padded_length, dim):
     """
     pad_size = list(tensor.shape)
     pad_size[dim] = padded_length - tensor.size(dim)
-    assert pad_size[dim] >= 0, 'This tensor exceeds the possible padding size.'
+    if padded_length == tensor.size(dim):
+        return tensor
+    assert pad_size[dim] > 0, 'This tensor exceeds the possible padding size.'
     return torch.cat([tensor, torch.zeros(*pad_size)], dim=dim)
 
 
