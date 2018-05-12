@@ -179,7 +179,7 @@ formatter = logging.Formatter('[%(asctime)s] %(message)s')
 
 # Set up a streaming logger.
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 
 fh = logging.FileHandler(logfile)

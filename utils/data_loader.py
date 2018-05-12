@@ -4,9 +4,8 @@ import csv
 import glob
 import imageio
 import logging
-import matplotlib.pyplot as plt  # for visualizations
 import numpy as np
-from pad_utils import PadCollate
+from utils.pad_utils import PadCollate
 import pandas as pd
 import os
 import re
@@ -39,7 +38,8 @@ class GestureFramesDataset(Dataset):
 		return self.len
 
 	def read_frame_tensors_from_dir(self, directory):
-		filenames = glob.glob("{0}/*.png".format(directory))
+		filenames = glob.glob(os.path.join(directory, "*.png"))
+		print(os.path.join(directory, "*.png"))
 		matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
 
 		# sorted list of (frame_number, frame_path) tuples
@@ -65,7 +65,7 @@ class GestureFramesDataset(Dataset):
 		logging.info('Populating frame tensors for {0} specified labels in data dir {1}: {2}'.format(
 			len(gesture_labels), data_dir, gesture_labels))
 
-		labels_file = os.path.join(data_dir, '{0}_list.txt'.format(data_dir.split('/')[-1]))
+		labels_file = os.path.join(data_dir, '{0}_list.txt'.format(os.path.split(data_dir)[-1]))
 		data = pd.read_csv(labels_file, sep=" ", header=None)
 		data.columns = ["rgb", "kinect", "label"]
 
@@ -112,6 +112,7 @@ def GetGestureFramesDataLoaders(data_dirs, model_config):
 	"""Returns a tuple consisting of the train, valid, and test GestureFramesDataLoader objects."""
 	# TODO: Support pickling to speed up the process. Perhaps we can hash the
 	# list of gesture labels to a checksum and check if a file with that name exists.
+	print(data_dirs)
 	return (GenerateGestureFramesDataLoader(model_config.gesture_labels,
 		d, model_config.max_seq_len, model_config.batch_size,
 		model_config.transform) for d in data_dirs)
