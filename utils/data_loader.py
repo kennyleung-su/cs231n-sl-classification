@@ -39,7 +39,6 @@ class GestureFramesDataset(Dataset):
 
 	def read_frame_tensors_from_dir(self, directory):
 		filenames = glob.glob(os.path.join(directory, "*.png"))
-		print(os.path.join(directory, "*.png"))
 		matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
 
 		# sorted list of (frame_number, frame_path) tuples
