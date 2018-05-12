@@ -36,7 +36,7 @@ def main():
 
 	# Initialize the model, or load a pretrained one.
 	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
-	if MODEL_CONFIG.use_cuda:
+	if torch.cuda.is_available() and MODEL_CONFIG.use_cuda:
 		model.cuda()
 
 	if MODEL_CONFIG.checkpoint_to_load:
