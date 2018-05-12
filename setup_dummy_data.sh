@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Initializes the project's structure with train, test, and valid dirs.
 # Each directory contains a file listing the video and its labels, as well as some dummy images.
 # Run this script to call `python main.py' locally (not from the VM).

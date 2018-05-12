@@ -4,6 +4,7 @@
 # Exclude (large!) datasets
 data/
 experiments/
+test_frames/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

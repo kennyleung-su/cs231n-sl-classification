@@ -13,9 +13,7 @@ from torchvision import transforms, utils, models
 
 
 class PretrainedConvLSTMClassifier(BaseModel):
-	"""TODO: Implement a basic ConvNet model for gesture recognition."""
-
-	# TODO: Set this in the configs.
+	""" A basic ConvNet model for gesture recognition."""
 	_RESNET_OUTPUT_SIZE = 1000
 
 	def __init__(self, *args, **kwargs):
