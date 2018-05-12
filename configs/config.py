@@ -27,6 +27,7 @@ parser.add_argument('--max_seq_len', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
 
 parser.add_argument('--debug', action='store_true')
+parser.add_argument('--use_cuda', action='store_true')
 parser.add_argument('--log_interval', type=int)
 parser.add_argument('--num_workers', type=int, default=0,
 					help='Number of separate processes with which to run the DataLoader. '
@@ -150,7 +151,6 @@ MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 # Miscellaneous
 ################
 
-MODEL_CONFIG.use_cuda = False
 MODEL_CONFIG.seed = 1
 
 # TODO: Complete with other model types.
