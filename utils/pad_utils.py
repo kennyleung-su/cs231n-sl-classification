@@ -1,5 +1,6 @@
 """Adapted from https://discuss.pytorch.org/t/dataloader-for-various-length-of-data/6418/7."""
 
+import numpy as np
 import torch
 
 
@@ -37,7 +38,7 @@ class PadCollate:
     def pad_collate(self, batch):
         """
         Args:
-            batch - a list of dicts with keys 'frames', 'label'
+            batch - a list of dicts with keys 'frames', 'label', 'seq_len'
 
         Returns:
             xs - a tensor of all examples in 'batch' after padding
@@ -46,10 +47,23 @@ class PadCollate:
         frames_and_labels = map(lambda x: (pad_tensor(
                                 x['frames'], padded_length=self.max_seq_len,
                                 dim=self.dim), x['label']), batch)
-        # stack all
-        xs = torch.stack(map(lambda x: x[0], frames_and_labels), dim=0)
-        ys = torch.LongTensor(map(lambda x: x[1], frames_and_labels))
-        return xs, ys
+
+        # Find an ordering of the sequences; LSTM requires that rows are
+        # given in descending order of time sequence length.
+        seq_lens = map(lambda x: x['seq_len'], batch)
+        seq_lens_indices = np.argsort(seq_lens)[::-1]
+
+        # Stack frames in batches. The result is a (N, T, H, W, C) tensor.
+        frames = map(lambda x: x[0], frames_and_labels)
+        frames = [frames[i] for i in seq_lens_indices]
+        frames = torch.stack(frames, dim=0)
+
+        # Rearrange all elements in order of decreasing sequence length
+        seq_lens = np.sort(seq_lens)[::-1]
+
+        labels = torch.LongTensor(map(lambda x: x[1], frames_and_labels))
+        seq_lens = torch.from_numpy(np.stack(seq_lens))
+        return {'X': frames, 'seq_lens': seq_lens}, labels
 
     def __call__(self, batch):
         return self.pad_collate(batch)

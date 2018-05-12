@@ -38,7 +38,8 @@ class LinearClassifier(BaseModel):
 	def forward(self, input):
 		"""Uses a single fully-connected layer to classify all videos based
 		only on the flattened RGB values for the first timeframe."""
-		N, C, T, H, W = input.shape
-		flattened_frames = input[:, :, 0, :, :].contiguous().view(N, -1)
+		X = input['X']
+		N, C, T, H, W = X.shape
+		flattened_frames = X[:, :, 0, :, :].contiguous().view(N, -1)
 		logits = self._fc(flattened_frames)
 		return F.log_softmax(logits, dim=1)

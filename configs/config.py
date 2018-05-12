@@ -23,7 +23,7 @@ parser.add_argument('--batch_size', type=int)
 parser.add_argument('--epochs', type=int)
 parser.add_argument('--lstm_hidden_size', type=int)
 parser.add_argument('--learning_rate', type=float)
-parser.add_argument('--max_frames_per_sample', type=int,
+parser.add_argument('--max_seq_len', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
 
 parser.add_argument('--debug', action='store_true')
@@ -147,7 +147,7 @@ MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 # Miscellaneous
 ################
 
-MODEL_CONFIG.disabled_cuda = False
+MODEL_CONFIG.use_cuda = False
 MODEL_CONFIG.seed = 1
 
 # TODO: Complete with other model types.
@@ -174,12 +174,12 @@ try:
 except IOError:
 	file = open(logfile, 'w')
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG if args.debug else logging.INFO)
 formatter = logging.Formatter('[%(asctime)s] %(message)s')
 
 # Set up a streaming logger.
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 ch.setFormatter(formatter)
 
 fh = logging.FileHandler(logfile)

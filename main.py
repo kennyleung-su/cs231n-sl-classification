@@ -29,11 +29,16 @@ def main():
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
-	(train_dataloader, valid_dataloader,
-		test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
+	(train_dataloader,) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
+
+	# (train_dataloader, valid_dataloader,
+	# 	test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Initialize the model, or load a pretrained one.
 	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
+	if MODEL_CONFIG.use_cuda:
+		model.cuda()
+
 	if MODEL_CONFIG.checkpoint_to_load:
 		# The checkpoint is a dictionary consisting of keys 'epoch', 'state_dict'
 		checkpoint = torch.load(MODEL_CONFIG.checkpoint_to_load)
@@ -45,7 +50,6 @@ def main():
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
 		model.train()
-
 		# TODO: Extract out to train_utils.
 		if not MODEL_CONFIG.checkpoint_to_load:
 			checkpoint_epoch = 0
@@ -54,9 +58,12 @@ def main():
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
 									loss_fn=F.nll_loss,
-									optimizer=optim.SGD(model.parameters(),
-														lr=MODEL_CONFIG.learning_rate,
-														momentum=0.9),
+									optimizer=optim.SGD(
+											filter(
+												lambda p: p.requires_grad,
+												model.parameters()),
+										lr=MODEL_CONFIG.learning_rate,
+										momentum=0.9),
 									epoch=epoch)
 			model.training_epoch += 1
 
