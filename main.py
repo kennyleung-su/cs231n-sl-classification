@@ -51,15 +51,14 @@ def main():
 			logging.info('Running the model using GPUs. (--use_cuda)')
 			# passing model into DataParallel allows for data to be
 			# computed in parallel through all the available GPUs
-			model = torch.nn.DataParallel(model)
+			parallel_model = torch.nn.DataParallel(model)
 			model.cuda()
 			loss_fn.cuda()
 			# set cuda seeds
 			torch.cuda.manual_seed_all(MODEL_CONFIG.seed)
 		else:
+			parallel_model = model
 			logging.info('Sorry, no GPUs are available. Running on CPU.')
-			# toggle use_cuda off
-			MODEL_CONFIG.use_cuda = False
 
 	if MODEL_CONFIG.checkpoint_to_load:
 		# The checkpoint is a dictionary consisting of keys 'epoch', 'state_dict'
@@ -75,39 +74,40 @@ def main():
 		if not MODEL_CONFIG.checkpoint_to_load:
 			checkpoint_epoch = 0
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
-			train_utils.train_model(model=model,
+			train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
 									loss_fn=loss_fn,
 									optimizer=optim.SGD(
 											filter(
 												lambda p: p.requires_grad,
-												model.parameters()),
+												parallel_model.parameters()),
 										lr=MODEL_CONFIG.learning_rate,
 										momentum=0.9),
 									epoch=epoch,
 									use_cuda=MODEL_CONFIG.use_cuda)
-			if MODEL_CONFIG.use_cuda:
-				model.module.training_epoch += 1
-			else:
-				model.training_epoch += 1
 
-			train_acc = validate_utils.validate_model(model=model,
+			train_acc = validate_utils.validate_model(model=parallel_model,
 									dataloader=train_dataloader,
 									loss_fn=loss_fn,
 									use_cuda=MODEL_CONFIG.use_cuda)
-			val_acc = validate_utils.validate_model(model=model,
+			val_acc = validate_utils.validate_model(model=parallel_model,
 									dataloader=valid_dataloader,
 									loss_fn=loss_fn,
 									use_cuda=MODEL_CONFIG.use_cuda)
 
-			logging.info('Train Epoch: {}\t Train Acc: {:.2f} \t% Val Acc: {:.2f}%'
+			logging.info('Train Epoch: {}\t\t Train Acc: {:.2f}%\t Val Acc: {:.2f}%'
 				.format(epoch, train_acc, val_acc))
 
-			# TODO: Pickle the best seen model. Use model._best_accuracy
-			# (change to model.best_val_accuracy?) to determine if this is the case.
+			# update model epoch number and accuracy
+			model.training_epoch += 1
 
-	# Run the model on the test set, using a new test dataloader.
+			# Check if current validation accuracy exceeds the best accuracy
+			if model.best_accuracy < val_acc:
+				model.best_accuracy = val_acc
+				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
+
+	# TODO Run the model on the test set, using a new test dataloader.
 
 	# Save (and maybe visualize or analyze?) the results.
 	# Use:

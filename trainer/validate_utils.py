@@ -13,9 +13,7 @@ def validate_model(model, dataloader, loss_fn, use_cuda=False):
 			y = y.cuda(async=True)
 		# compute output
 		predictions = model(X)
-
-		print(predictions)
-		print(y)
+        
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))
