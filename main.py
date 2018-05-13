@@ -10,7 +10,7 @@ from configs.config import MODEL_CONFIG
 from utils import data_loader
 from models.basic import PretrainedConvLSTMClassifier
 from models.debug import RandomClassifier, LinearClassifier
-from trainer import train_utils, validate_utils
+from trainer import train_utils
 
 import torch
 import torch.nn.functional as F
