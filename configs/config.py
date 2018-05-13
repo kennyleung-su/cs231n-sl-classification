@@ -44,9 +44,6 @@ parser.add_argument('--arch', '-a', metavar='ARCH', default='resnet18',
 						' (default: resnet18)')
 args = parser.parse_args()
 
-if args.debug:
-	args.experiment = 'debug'
-
 
 class ConfigObjFromDict(object):
 	"""Handy class for creating an object updated as a dict but accessed as an obj."""
@@ -152,6 +149,9 @@ MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 ################
 
 MODEL_CONFIG.seed = 1
+
+if args.debug:
+	MODEL_CONFIG.gesture_labels = [1, 2, 3]
 
 # TODO: Complete with other model types.
 # if MODEL_CONFIG.experiment == 'debug':

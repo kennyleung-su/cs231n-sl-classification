@@ -17,7 +17,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 
-__EXP_MODELS__ = {
+# TODO: This is unused, so we can run debug on the main model.
+PretrainedConvLSTMClassifier__EXP_MODELS__ = {
 	'debug': LinearClassifier,
 	'basic': PretrainedConvLSTMClassifier,
 	'basic_dev': PretrainedConvLSTMClassifier
@@ -31,13 +32,14 @@ def main():
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
-	#(train_dataloader,) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
-
-	(train_dataloader, valid_dataloader,
-		test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
+	if MODEL_CONFIG.debug:
+		# Just load the training test to get things running more quickly.
+		(train_dataloader,) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
+	else:
+		(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Initialize the model, or load a pretrained one.
-	model = __EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
+	model = PretrainedConvLSTMClassifier(model_config=MODEL_CONFIG)
 	# Set up the loss function
 	loss_fn = torch.nn.CrossEntropyLoss()
 	# Random seeds
