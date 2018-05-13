@@ -1,7 +1,7 @@
 import logging
 import torch
 
-def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda):
+def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=False):
 	# set model to train mode
 	model.train()
 

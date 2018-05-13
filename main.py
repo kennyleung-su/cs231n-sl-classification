@@ -10,7 +10,7 @@ from configs.config import MODEL_CONFIG
 from utils import data_loader
 from models.basic import PretrainedConvLSTMClassifier
 from models.debug import RandomClassifier, LinearClassifier
-from trainer import train_utils
+from trainer import train_utils, validate_utils
 
 import torch
 import torch.nn.functional as F
@@ -92,8 +92,17 @@ def main():
 			else:
 				model.training_epoch += 1
 
-			# TODO: Run on the validation set, with frequency depending on
-			# on the configuration.
+			train_acc = validate_utils.validate_model(model=model,
+									dataloader=train_dataloader,
+									loss_fn=loss_fn,
+									use_cuda=MODEL_CONFIG.use_cuda)
+			val_acc = validate_utils.validate_model(model=model,
+									dataloader=valid_dataloader,
+									loss_fn=loss_fn,
+									use_cuda=MODEL_CONFIG.use_cuda)
+
+			logging.info('Train Epoch: {}\t Train Acc: {:.2f} \t% Val Acc: {:.2f}%'
+				.format(epoch, train_acc, val_acc))
 
 			# TODO: Pickle the best seen model. Use model._best_accuracy
 			# (change to model.best_val_accuracy?) to determine if this is the case.
