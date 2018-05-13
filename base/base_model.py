@@ -19,6 +19,13 @@ class BaseModel(nn.Module):
 		self.training_epoch = 0
 		self.best_accuracy = -1
 
+	def load_checkpoint(self, filename):
+		# The checkpoint is a dictionary consisting of keys 'best_accuracy', 'epoch', 'state_dict'
+		checkpoint = torch.load(filename)
+		self.load_state_dict(checkpoint.get('state_dict'))
+		self.training_epoch = checkpoint.get('epoch')
+		self.best_accuracy = checkpoint.get('best_accuracy')
+
 	def save_to_checkpoint(self, filename, is_best=False):
 		""""Saves information about the model to the checkpoint file.
 
@@ -33,6 +40,7 @@ class BaseModel(nn.Module):
 
 		logging.info('Model saved to checkpoint: {}'.format(filename))
 		torch.save({
+			'best_accuracy': self.best_accuracy,
 			'epoch': self.training_epoch,
 			'state_dict': self.state_dict()
 		}, filename)

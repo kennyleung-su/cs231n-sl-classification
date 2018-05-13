@@ -5,7 +5,6 @@ def validate_model(model, dataloader, loss_fn, use_cuda=False):
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
-	top5 = AverageMeter()
 
 	for i, (X, y) in enumerate(dataloader):
 		if use_cuda:
@@ -13,7 +12,7 @@ def validate_model(model, dataloader, loss_fn, use_cuda=False):
 			y = y.cuda(async=True)
 		# compute output
 		predictions = model(X)
-        
+
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))

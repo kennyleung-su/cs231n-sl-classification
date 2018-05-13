@@ -61,18 +61,16 @@ def main():
 			logging.info('Sorry, no GPUs are available. Running on CPU.')
 
 	if MODEL_CONFIG.checkpoint_to_load:
-		# The checkpoint is a dictionary consisting of keys 'epoch', 'state_dict'
-		checkpoint = torch.load(MODEL_CONFIG.checkpoint_to_load)
-		model.load_state_dict(checkpoint.get('state_dict'))
-		checkpoint_epoch = checkpoint.get('epoch')
+		model.load_checkpoint(MODEL_CONFIG.checkpoint_to_load)
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires a --checkpoint_to_load argument.')
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
 		logging.info("Model will now begin training.")
-		if not MODEL_CONFIG.checkpoint_to_load:
-			checkpoint_epoch = 0
+		checkpoint_epoch = 0
+		if MODEL_CONFIG.checkpoint_to_load:
+			checkpoint_epoch = model.training_epoch
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
 			train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
@@ -99,7 +97,7 @@ def main():
 			logging.info('Train Epoch: {}\t\t Train Acc: {:.2f}%\t Val Acc: {:.2f}%'
 				.format(epoch, train_acc, val_acc))
 
-			# update model epoch number and accuracy
+			# Update model epoch number and accuracy
 			model.training_epoch += 1
 
 			# Check if current validation accuracy exceeds the best accuracy
@@ -107,9 +105,14 @@ def main():
 				model.best_accuracy = val_acc
 				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
-	# TODO Run the model on the test set, using a new test dataloader.
+	# Run the model on the test set, using a new test dataloader.
+	test_acc = validate_utils.validate_model(model=parallel_model,
+											dataloader=test_dataloader,
+											loss_fn=loss_fn,
+											use_cuda=MODEL_CONFIG.use_cuda)
+	logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 
-	# Save (and maybe visualize or analyze?) the results.
+	# TODO Save (and maybe visualize or analyze?) the results.
 	# Use:
 	# 	- config.TRAIN_DIR for aggregate training/validation results
 	# 	- config.TEST_DIR for aggregate testing results
