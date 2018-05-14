@@ -34,7 +34,8 @@ def main():
 
 	if MODEL_CONFIG.debug:
 		# Just load the training test to get things running more quickly.
-		(train_dataloader, valid_dataloader) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
+		(train_dataloader, valid_dataloader) = data_loader.GetGestureFramesDataLoaders(
+			[config.TRAIN_DATA_DIR, config.VALID_DATA_DIR], MODEL_CONFIG)
 	else:
 		(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
