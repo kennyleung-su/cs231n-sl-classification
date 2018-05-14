@@ -34,7 +34,7 @@ def main():
 
 	if MODEL_CONFIG.debug:
 		# Just load the training test to get things running more quickly.
-		(train_dataloader,) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
+		(train_dataloader, valid_dataloader) = data_loader.GetGestureFramesDataLoaders([config.TRAIN_DATA_DIR], MODEL_CONFIG)
 	else:
 		(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
@@ -45,7 +45,8 @@ def main():
 	# Random seeds
 	random.seed(MODEL_CONFIG.seed)
 
-	# activate cuda if available and enabled
+	# activate cuda if available and enable
+	parallel_model = model
 	if MODEL_CONFIG.use_cuda:
 		if torch.cuda.is_available():
 			logging.info('Running the model using GPUs. (--use_cuda)')
@@ -57,7 +58,6 @@ def main():
 			# set cuda seeds
 			torch.cuda.manual_seed_all(MODEL_CONFIG.seed)
 		else:
-			parallel_model = model
 			logging.info('Sorry, no GPUs are available. Running on CPU.')
 
 	if MODEL_CONFIG.checkpoint_to_load:
@@ -105,12 +105,13 @@ def main():
 				model.best_accuracy = val_acc
 				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
-	# Run the model on the test set, using a new test dataloader.
-	test_acc = validate_utils.validate_model(model=parallel_model,
-											dataloader=test_dataloader,
-											loss_fn=loss_fn,
-											use_cuda=MODEL_CONFIG.use_cuda)
-	logging.info('Test Acc: {:.2f}%.'.format(test_acc))
+	if not MODEL_CONFIG.debug:
+		# Run the model on the test set, using a new test dataloader.
+		test_acc = validate_utils.validate_model(model=parallel_model,
+												dataloader=test_dataloader,
+												loss_fn=loss_fn,
+												use_cuda=MODEL_CONFIG.use_cuda)
+		logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 
 	# TODO Save (and maybe visualize or analyze?) the results.
 	# Use:
