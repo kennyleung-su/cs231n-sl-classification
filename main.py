@@ -10,7 +10,7 @@ from configs.config import MODEL_CONFIG
 from utils import data_loader
 from models.basic import PretrainedConvLSTMClassifier
 from models.debug import RandomClassifier, LinearClassifier
-from trainer import train_utils, validate_utils
+from trainer import train_utils
 
 import torch
 import torch.nn.functional as F
@@ -33,7 +33,7 @@ def main():
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
 	if MODEL_CONFIG.debug:
-		# Just load the training test to get things running more quickly.
+		# Just load the training and validation to get things running more quickly.
 		(train_dataloader, valid_dataloader) = data_loader.GetGestureFramesDataLoaders(
 			[config.TRAIN_DATA_DIR, config.VALID_DATA_DIR], MODEL_CONFIG)
 	else:
@@ -85,18 +85,14 @@ def main():
 										momentum=0.9),
 									epoch=epoch,
 									use_cuda=MODEL_CONFIG.use_cuda)
-
-			train_acc = validate_utils.validate_model(model=parallel_model,
-									dataloader=train_dataloader,
-									loss_fn=loss_fn,
-									use_cuda=MODEL_CONFIG.use_cuda)
-			val_acc = validate_utils.validate_model(model=parallel_model,
+			
+			val_acc = train_utils.validate_model(model=parallel_model,
 									dataloader=valid_dataloader,
 									loss_fn=loss_fn,
 									use_cuda=MODEL_CONFIG.use_cuda)
 
-			logging.info('Train Epoch: {}\t\t Train Acc: {:.2f}%\t Val Acc: {:.2f}%'
-				.format(epoch, train_acc, val_acc))
+			logging.info('Train Epoch: {}\t Validation Acc: {:.2f}%'
+				.format(epoch, val_acc))
 
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
