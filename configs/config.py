@@ -151,6 +151,7 @@ MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
 MODEL_CONFIG.seed = 1
 
 if args.debug:
+	MODEL_CONFIG.pretrained_cnn_model = None  # do not use pretrained CNNs
 	MODEL_CONFIG.experiment = 'debug'
 	MODEL_CONFIG.gesture_labels = [1, 2, 3]
 
