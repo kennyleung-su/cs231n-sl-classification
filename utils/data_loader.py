@@ -157,6 +157,8 @@ def GetGestureFramesDataLoaders(data_dirs, model_config):
 	if model_config.pretrained_cnn_model:
 		logging.info('Initializing the pretrained_cnn_model: {0}'.format(model_config.pretrained_cnn_model))
 		pretrained_cnn = model_config.pretrained_cnn_model(pretrained=True)
+		for param in pretrained_cnn.parameters():
+			param.requires_grad = False
 	else:
 		pretrained_cnn = None
 	return (GenerateGestureFramesDataLoader(
