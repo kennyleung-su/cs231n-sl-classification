@@ -39,21 +39,31 @@ class GestureFramesDataset(Dataset):
 
 	def read_frame_tensors_from_dir(self, directory):
 		filenames = glob.glob(os.path.join(directory, "*.png"))
+		#print(filenames)
 		matches = [re.match('.*_(\d+)\.png', name) for name in filenames]
-
 		# sorted list of (frame_number, frame_path) tuples
 		frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
 		sorted_filenames = [f[1] for f in frames] 
 		frames_list = []
+		frame_tensors_dic = {} 
+		
+		
+		location = os.path.join(os.path.dirname(sorted_filenames[0]), os.path.dirname(sorted_filenames[0]).split('/')[-1] +'.pt')
 
-		for frame_file in sorted_filenames:
-			# Returns an (H, W, C) shaped tensor, so transpose it to (C, H, W)
-			frame_ndarray = imageio.imread(frame_file).transpose(2, 0, 1)
-			frame_ndarray = self._transform(frame_ndarray)
-			frames_list.append(frame_ndarray)
-
+		if os.path.isfile(location):
+			tensor = torch.load(location)
+		else:
+			for frame_file in sorted_filenames:
+				# Returns an (H, W, C) shaped tensor, so transpose it to (C, H, W)
+				frame_ndarray = imageio.imread(frame_file).transpose(2, 0, 1)
+				frame_ndarray = self._transform(frame_ndarray)
+				frames_list.append(frame_ndarray)
+				tensor = torch.stack(frames_list, dim=1)
+				torch.save(tensor, location)
+			#frame_tensors_dic[location] = torch.stack(frames_list, dim=1)
 		# Stacks up to a (C, T, H, W) tensor.
-		return torch.stack(frames_list, dim=1)
+		#return torch.stack(frames_list, dim=1)
+		return tensor
 
 	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="kinect"):
 		"""Returns a list of dicts with keys:
