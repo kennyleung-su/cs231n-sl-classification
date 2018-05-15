@@ -48,8 +48,9 @@ class GestureFramesDataset(Dataset):
 		frame_tensors_dic = {} 
 		
 		
-		location = os.path.join(os.path.dirname(sorted_filenames[0]), os.path.dirname(sorted_filenames[0]).split('/')[-1] +'.pt')
-
+		#location = os.path.join(os.path.dirname(sorted_filenames[0]), os.path.dirname(sorted_filenames[0]).split('/')[-1] +'.pt')
+		location = os.path.join(os.path.dirname(sorted_filenames[0]), 'original.pkl')
+		print(location)
 		if os.path.isfile(location):
 			tensor = torch.load(location)
 		else:
@@ -58,8 +59,8 @@ class GestureFramesDataset(Dataset):
 				frame_ndarray = imageio.imread(frame_file).transpose(2, 0, 1)
 				frame_ndarray = self._transform(frame_ndarray)
 				frames_list.append(frame_ndarray)
-				tensor = torch.stack(frames_list, dim=1)
-				torch.save(tensor, location)
+			tensor = torch.stack(frames_list, dim=1)
+			torch.save(tensor, location)	
 			#frame_tensors_dic[location] = torch.stack(frames_list, dim=1)
 		# Stacks up to a (C, T, H, W) tensor.
 		#return torch.stack(frames_list, dim=1)
