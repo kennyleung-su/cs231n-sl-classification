@@ -40,7 +40,7 @@ def main():
 		(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Initialize the model, or load a pretrained one.
-	model = PretrainedConvLSTMClassifier(model_config=MODEL_CONFIG)
+	model = PretrainedConvLSTMClassifier__EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
 	# Set up the loss function
 	loss_fn = torch.nn.CrossEntropyLoss()
 	# Random seeds

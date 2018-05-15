@@ -60,7 +60,7 @@ class GestureFramesDataset(Dataset):
 		# Stacks up to a (C, T, H, W) tensor.
 		tensor = torch.stack(frames_list, dim=1)
 
-		logging.info('Pickling a tensor to: {1}.'.format(location))
+		logging.info('Saving a pickled tensor to {0}.'.format(location))
 		torch.save(tensor, location)
 		return tensor
 
