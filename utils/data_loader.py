@@ -21,10 +21,11 @@ class GestureFramesDataset(Dataset):
 		transform: list of callable Classes, e.g. from torchvision.transforms,
 			with which the video frames should be preprocessed
 	"""
-	def __init__(self, gesture_labels, data_dir, transform, pretrained_cnn):
+	def __init__(self, gesture_labels, data_dir, transform, pretrained_cnn, max_example_per_label):
 		self._pretrained_cnn = pretrained_cnn
 		self._labels_to_indices_dict = self.map_labels_to_indices(gesture_labels)
 		self._transform = transform
+		self._max_example_per_label = max_example_per_label
 		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
 		self.data, self.max_seq_len = self.populate_gesture_frames_data(data_dir, gesture_labels)
 		self.len = len(self.data)
@@ -108,15 +109,23 @@ class GestureFramesDataset(Dataset):
 		data = pd.read_csv(labels_file, sep=" ", header=None)
 		data.columns = ["rgb", "kinect", "label"]
 
+		if self._max_example_per_label:
+			logging.info('Max example per label: {}'.format(self._max_example_per_label))
+
 		label_to_dirs = {}
 		for label in gesture_labels:
 			directory_labels = data.loc[data['label'] == label][type_data].tolist()
+			# cap the number of examples per label
+			if self._max_example_per_label:
+				directory_labels = directory_labels[:self._max_example_per_label]
 			# strip .avi from the end of the filename
 			directories = [''.join(dir_label.split('.avi')[:-1]) for dir_label in directory_labels]
 			label_to_dirs[label] = directories
 
 		data = []
 		max_seq_len = -1
+
+
 		for label, directories in label_to_dirs.items():
 			logging.info('Reading frame tensors for label {0} ({1} videos)'.format(label, len(directories)))
 			for directory in directories:
@@ -138,12 +147,12 @@ class GestureFramesDataset(Dataset):
 
 
 def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_seq_len,
-				batch_size, transform, num_workers, pretrained_cnn):
+				batch_size, transform, num_workers, pretrained_cnn, max_example_per_label):
 	"""Returns a configured DataLoader instance."""
 
 	# Build a gesture frames dataset using the configuration information.
 	# This is just dummy code to be replaced.
-	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, transform, pretrained_cnn)
+	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, transform, pretrained_cnn, max_example_per_label)
 	return DataLoader(transformed_dataset,
 		batch_size=batch_size,
 		shuffle=True,
@@ -169,5 +178,6 @@ def GetGestureFramesDataLoaders(data_dirs, model_config):
 		model_config.batch_size,
 		model_config.transform,
 		model_config.num_workers or 0,
-		pretrained_cnn
+		pretrained_cnn,
+		model_config.max_example_per_label,
 		) for data_directory in data_dirs)
