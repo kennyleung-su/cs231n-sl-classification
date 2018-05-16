@@ -35,6 +35,9 @@ parser.add_argument('--num_workers', type=int, default=0,
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
 parser.add_argument('--checkpoint_to_load', type=str)
 
+# Include this flag to overwrite pickled frames anew.
+parser.add_argument('--repickle_frames', action='store_true')
+
 model_names = sorted(name for name in models.__dict__
 	if name.islower() and not name.startswith("__")
 	and callable(models.__dict__[name]))

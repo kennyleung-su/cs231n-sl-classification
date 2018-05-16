@@ -21,11 +21,13 @@ class GestureFramesDataset(Dataset):
 		transform: list of callable Classes, e.g. from torchvision.transforms,
 			with which the video frames should be preprocessed
 	"""
-	def __init__(self, gesture_labels, data_dir, transform, pretrained_cnn, max_example_per_label):
+	def __init__(self, gesture_labels, data_dir, transform, pretrained_cnn, max_example_per_label,
+		repickle_frames=False):
 		self._pretrained_cnn = pretrained_cnn
 		self._labels_to_indices_dict = self.map_labels_to_indices(gesture_labels)
 		self._transform = transform
 		self._max_example_per_label = max_example_per_label
+		self._repickle_frames = repickle_frames
 		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
 		self.data, self.max_seq_len = self.populate_gesture_frames_data(data_dir, gesture_labels)
 		self.len = len(self.data)
@@ -62,7 +64,7 @@ class GestureFramesDataset(Dataset):
 		# TODO: Accommodate multiple types of pretrained CNNs. We might later want to
 		# try other pretrained models, so we need to differentiate the pickled names.
 		location = os.path.join(directory, '{0}-encoding.pkl'.format('resnet'))
-		if os.path.isfile(location):
+		if os.path.isfile(location) and not self._repickle_frames:
 			return torch.load(location)
 
 		tensor = self.get_stacked_tensor_from_dir(directory)
@@ -75,8 +77,9 @@ class GestureFramesDataset(Dataset):
 
 		# TODO: Figure out whether to rename this if we decide to use separate pretrained CNNs.
 		# This name `pretrained_cnn' is kept general from now (as opposed to simply ResNet).
-		logging.info('Pickling an encoded tensor of shape {0} to {1}.'.format(encoded_tensor.shape, location))
-		torch.save(encoded_tensor, location)
+		if self._repickle_frames:
+			logging.info('Pickling an encoded tensor of shape {0} to {1}.'.format(encoded_tensor.shape, location))
+			torch.save(encoded_tensor, location)
 		return encoded_tensor
 
 	def read_original_frame_tensors_from_dir(self, directory):
@@ -147,12 +150,14 @@ class GestureFramesDataset(Dataset):
 
 
 def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_seq_len,
-				batch_size, transform, num_workers, pretrained_cnn, max_example_per_label):
+				batch_size, transform, num_workers, pretrained_cnn, max_example_per_label,
+				repickle_frames):
 	"""Returns a configured DataLoader instance."""
 
 	# Build a gesture frames dataset using the configuration information.
 	# This is just dummy code to be replaced.
-	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, transform, pretrained_cnn, max_example_per_label)
+	transformed_dataset = GestureFramesDataset(gesture_labels, data_dir, transform,
+		pretrained_cnn, max_example_per_label, repickle_frames)
 	return DataLoader(transformed_dataset,
 		batch_size=batch_size,
 		shuffle=True,
@@ -180,4 +185,5 @@ def GetGestureFramesDataLoaders(data_dirs, model_config):
 		model_config.num_workers or 0,
 		pretrained_cnn,
 		model_config.max_example_per_label,
+		model_config.repickle_frames,
 		) for data_directory in data_dirs)
