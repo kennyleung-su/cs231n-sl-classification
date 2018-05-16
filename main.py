@@ -86,13 +86,16 @@ def main():
 									epoch=epoch,
 									use_cuda=MODEL_CONFIG.use_cuda)
 			
-			val_acc = train_utils.validate_model(model=parallel_model,
-									dataloader=valid_dataloader,
-									loss_fn=loss_fn,
+			train_acc = train_utils.validate_model(model=parallel_model,
+									dataloader=train_dataloader,
 									use_cuda=MODEL_CONFIG.use_cuda)
 
-			logging.info('Train Epoch: {}\t Validation Acc: {:.2f}%'
-				.format(epoch, val_acc))
+			val_acc = train_utils.validate_model(model=parallel_model,
+									dataloader=valid_dataloader,
+									use_cuda=MODEL_CONFIG.use_cuda)
+
+			logging.info('Train Epoch: {}\t Train Acc: {:.2f}% Validation Acc: {:.2f}%'
+				.format(epoch, train_acc, val_acc))
 
 			# Update model epoch number and accuracy
 			model.training_epoch += 1

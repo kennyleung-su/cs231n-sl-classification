@@ -42,4 +42,4 @@ class LinearClassifier(BaseModel):
 		N, C, T, H, W = X.shape
 		flattened_frames = X[:, :, 0, :, :].contiguous().view(N, -1)
 		logits = self._fc(flattened_frames)
-		return F.log_softmax(logits, dim=1)
+		return F.softmax(logits, dim=1)

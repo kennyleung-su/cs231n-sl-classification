@@ -21,17 +21,14 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))
 
-		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\t Train Acc: {:.2f}'.format(epoch, count, len(dataloader.dataset),
-				100. * batch_idx / len(dataloader), loss.item(), top1.avg))
+		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, count, len(dataloader.dataset),
+				100. * batch_idx / len(dataloader), loss.item()))
 
-		# Update weights after the dummy model is differentiable. Otherwise,
-		# this will crash because there is nothing for the model to update.
-		# Zero gradients, perform a backward pass, and update the weights.
 		optimizer.zero_grad()
 		loss.backward()
 		optimizer.step()
 
-def validate_model(model, dataloader, loss_fn, use_cuda=False):
+def validate_model(model, dataloader, use_cuda=False):
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()

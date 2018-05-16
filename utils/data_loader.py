@@ -48,8 +48,9 @@ class GestureFramesDataset(Dataset):
 		frames_list = []
 		
 		for frame_file in sorted_filenames:
-			# Returns an (H, W, C) shaped tensor, so transpose it to (C, H, W)
-			frame_ndarray = imageio.imread(frame_file).transpose(2, 0, 1)
+			# Read an (H, W, C) shaped tensor.
+			frame_ndarray = imageio.imread(frame_file)
+			# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
 			frame_ndarray = self._transform(frame_ndarray)
 			frames_list.append(frame_ndarray)
 		# Stacks up to a (C, T, H, W) tensor.
