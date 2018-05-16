@@ -6,6 +6,7 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 	model.train()
 
 	# loop through data batches
+	count = 0
 	for batch_idx, (X, y) in enumerate(dataloader):
 		# Utilize GPU if enabled
 		if use_cuda:
@@ -14,12 +15,13 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 
 		# Compute loss and accuracy
 		predictions = model(X)
+		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
 		top1 = AverageMeter()
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))
 
-		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\t Train Acc: {:.2f}'.format(epoch, batch_idx * len(X), len(dataloader.dataset),
+		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\t Train Acc: {:.2f}'.format(epoch, count, len(dataloader.dataset),
 				100. * batch_idx / len(dataloader), loss.item(), top1.avg))
 
 		# Update weights after the dummy model is differentiable. Otherwise,
