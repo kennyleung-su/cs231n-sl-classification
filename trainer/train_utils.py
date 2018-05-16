@@ -21,7 +21,7 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))
 
-		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\t Train Acc: {:.2f}'.format(epoch, count, len(dataloader.dataset),
+		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\t Train Acc: {:.2f}%'.format(epoch, count, len(dataloader.dataset),
 				100. * batch_idx / len(dataloader), loss.item(), top1.avg))
 
 		# Update weights after the dummy model is differentiable. Otherwise,

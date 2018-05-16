@@ -39,7 +39,7 @@ class PretrainedConvLSTMClassifier(BaseModel):
 		"""Feeds the pretrained ResNet-encoded input through a variable-length LSTM network
 		followed by a softmax classification layer."""
 		X, seq_lens = input['X'], input['seq_lens']
-		print(X.shape)
+		#print(X.shape)
 		N, D, T = X.shape
 
 		# Packing takes (N, T, *) if batch_first=True.
