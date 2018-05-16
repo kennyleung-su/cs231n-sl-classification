@@ -104,7 +104,7 @@ def main():
 
 	if not MODEL_CONFIG.debug:
 		# Run the model on the test set, using a new test dataloader.
-		test_acc = validate_utils.validate_model(model=parallel_model,
+		test_acc = train_utils.validate_model(model=parallel_model,
 												dataloader=test_dataloader,
 												loss_fn=loss_fn,
 												use_cuda=MODEL_CONFIG.use_cuda)
