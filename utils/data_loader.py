@@ -77,7 +77,7 @@ class GestureFramesDataset(Dataset):
 
 		# TODO: Figure out whether to rename this if we decide to use separate pretrained CNNs.
 		# This name `pretrained_cnn' is kept general from now (as opposed to simply ResNet).
-		if self._repickle_frames:
+		if not os.path.isfile(location) or self._repickle_frames:
 			logging.info('Pickling an encoded tensor of shape {0} to {1}.'.format(encoded_tensor.shape, location))
 			torch.save(encoded_tensor, location)
 		return encoded_tensor
@@ -99,7 +99,7 @@ class GestureFramesDataset(Dataset):
 			return self.read_pretrained_cnn_encoded_frame_tensors_from_dir(directory)
 		return self.read_original_frame_tensors_from_dir(directory)
 
-	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="kinect"):
+	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="rgb"):
 		"""Returns a list of dicts with keys:
 			'frames': 4D tensor (T, H, W, C) representing the spatiotemporal frames for a video
 			'label': y (ground truth)
@@ -160,7 +160,7 @@ def GenerateGestureFramesDataLoader(gesture_labels, data_dir, max_seq_len,
 		pretrained_cnn, max_example_per_label, repickle_frames)
 	return DataLoader(transformed_dataset,
 		batch_size=batch_size,
-		shuffle=True,
+		shuffle=False,
 		num_workers=num_workers,
 		collate_fn=PadCollate(transformed_dataset.max_seq_len, dim=1)
 	)

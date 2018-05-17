@@ -77,12 +77,10 @@ def main():
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
 									loss_fn=loss_fn,
-									optimizer=optim.SGD(
-											filter(
-												lambda p: p.requires_grad,
-												parallel_model.parameters()),
+									optimizer=optim.Adam(
+										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
-										momentum=0.9),
+									),
 									epoch=epoch,
 									use_cuda=MODEL_CONFIG.use_cuda)
 			
@@ -109,7 +107,6 @@ def main():
 		# Run the model on the test set, using a new test dataloader.
 		test_acc = train_utils.validate_model(model=parallel_model,
 												dataloader=test_dataloader,
-												loss_fn=loss_fn,
 												use_cuda=MODEL_CONFIG.use_cuda)
 		logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 

@@ -32,7 +32,11 @@ class LinearClassifier(BaseModel):
 		self._C = 3
 
 		# Fully-connected layer with bias
-		self._fc = nn.Linear(self._H * self._W * self._C, self._num_output_classes)
+		H = 256
+		self._fc = nn.Sequential(
+			nn.Linear(self._H * self._W * self._C, H),
+			nn.Linear(H, self._num_output_classes)
+		)
 
 
 	def forward(self, input):
@@ -40,6 +44,9 @@ class LinearClassifier(BaseModel):
 		only on the flattened RGB values for the first timeframe."""
 		X = input['X']
 		N, C, T, H, W = X.shape
+		# print(torch.sum(self._fc[0].weight))
+		# print(torch.sum(self._fc[1].weight))
 		flattened_frames = X[:, :, 0, :, :].contiguous().view(N, -1)
 		logits = self._fc(flattened_frames)
+		#print('logits:', logits)
 		return F.softmax(logits, dim=1)
