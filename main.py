@@ -93,7 +93,7 @@ def main():
 													dataloader=valid_dataloader,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
-				logging.info('Train Epoch: {}\t Train Acc: {:.2f}% Validation Acc: {:.2f}%'
+				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
 
 			# Update model epoch number and accuracy

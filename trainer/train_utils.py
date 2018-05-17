@@ -4,6 +4,7 @@ import torch
 def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=False):
 	# set model to train mode
 	model.train()
+	total_loss = 0
 
 	# loop through data batches
 	count = 0
@@ -17,16 +18,17 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 		predictions = model(X)
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
+		total_loss += loss.item()
 		top1 = AverageMeter()
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], X['X'].size(0))
 
-		logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, count, len(dataloader.dataset),
-				100. * batch_idx / len(dataloader), loss.item()))
-
 		optimizer.zero_grad()
 		loss.backward()
 		optimizer.step()
+
+	logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, count, len(dataloader.dataset),
+		100. * batch_idx / len(dataloader), total_loss))
 
 def validate_model(model, dataloader, use_cuda=False):
 	# set the model to evaluation mode
