@@ -28,6 +28,7 @@ parser.add_argument('--max_seq_len', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
 
 parser.add_argument('--debug', action='store_true')
+parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
 parser.add_argument('--log_interval', type=int, default=10)
 parser.add_argument('--num_workers', type=int, default=0,

@@ -1,7 +1,7 @@
 import logging
 import torch
 
-def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=False):
+def train_model(model, dataloader, loss_fn, optimizer, epoch, use_cuda=False, verbose=False):
 	# set model to train mode
 	model.train()
 	total_loss = 0
@@ -27,8 +27,12 @@ def train_model(model, dataloader, epochs, loss_fn, optimizer, epoch, use_cuda=F
 		loss.backward()
 		optimizer.step()
 
-	logging.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(epoch, count, len(dataloader.dataset),
-		100. * batch_idx / len(dataloader), total_loss))
+		if verbose:
+			print('Progress [{}/{} ({:.0f}%)]'.format(count, len(dataloader.dataset), 
+				100. * batch_idx / len(dataloader)))
+
+	total_loss /= count
+	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
 
 def validate_model(model, dataloader, use_cuda=False):
 	# set the model to evaluation mode

@@ -78,14 +78,14 @@ def main():
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
 			train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
-									epochs=MODEL_CONFIG.epochs,
 									loss_fn=loss_fn,
 									optimizer=optim.Adam(
 										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
 									),
 									epoch=epoch,
-									use_cuda=MODEL_CONFIG.use_cuda)
+									use_cuda=MODEL_CONFIG.use_cuda,
+									verbose=MODEL_CONFIG.verbose)
 			
 			if epoch % 10 == 0:
 				train_acc = train_utils.validate_model(model=parallel_model,
