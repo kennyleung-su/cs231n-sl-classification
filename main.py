@@ -4,6 +4,7 @@ according to config.py."""
 import logging
 import numpy as np
 import random
+import sys
 
 from configs import config
 from configs.config import MODEL_CONFIG
@@ -28,6 +29,8 @@ DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
 
 
 def main():
+	logging.info('Cmd: python {0}'.format(' '.join(sys.argv)))
+	logging.info('Config: {0}'.format(MODEL_CONFIG))
 	logging.info('Running experiment <{0}> in {1} mode.\n'
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))

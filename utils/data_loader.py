@@ -49,14 +49,15 @@ class GestureFramesDataset(Dataset):
 		frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
 		sorted_filenames = [f[1] for f in frames] 
 		frames_list = []
-		
+
 		for frame_file in sorted_filenames:
 			# Read an (H, W, C) shaped tensor.
 			frame_ndarray = imageio.imread(frame_file)
 			# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
+			# print('before:', frame_ndarray)
 			frame_ndarray = self._transform(frame_ndarray)
 			frames_list.append(frame_ndarray)
-		# Stacks up to a (C, T, H, W) tensor.
+	# Stacks up to a (C, T, H, W) tensor.
 		return torch.stack(frames_list, dim=1)
 
 	def read_pretrained_cnn_encoded_frame_tensors_from_dir(self, directory):
@@ -99,7 +100,7 @@ class GestureFramesDataset(Dataset):
 			return self.read_pretrained_cnn_encoded_frame_tensors_from_dir(directory)
 		return self.read_original_frame_tensors_from_dir(directory)
 
-	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="kinect"):
+	def populate_gesture_frames_data(self, data_dir, gesture_labels, type_data="rgb"):
 		"""Returns a list of dicts with keys:
 			'frames': 4D tensor (T, H, W, C) representing the spatiotemporal frames for a video
 			'label': y (ground truth)

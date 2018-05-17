@@ -29,7 +29,7 @@ parser.add_argument('--max_seq_len', type=int,
 
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
-parser.add_argument('--log_interval', type=int)
+parser.add_argument('--log_interval', type=int, default=10)
 parser.add_argument('--num_workers', type=int, default=0,
 					help='Number of separate processes with which to run the DataLoader. '
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
@@ -59,6 +59,9 @@ class ConfigObjFromDict(object):
 
 	def __getattr__(self, name):
 		return self.__dict__.get(name, None)
+
+	def __str__(self):
+		return ' '.join(['{0}: {1}\n'.format(k, v) for k, v in self.__dict__.items()])
 
 
 ##############

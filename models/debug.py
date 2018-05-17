@@ -33,6 +33,7 @@ class LinearClassifier(BaseModel):
 
 		# Fully-connected layer with bias
 		self._fc = nn.Linear(self._H * self._W * self._C, self._num_output_classes)
+		nn.init.xavier_uniform_(self._fc.weight)
 
 
 	def forward(self, input):
