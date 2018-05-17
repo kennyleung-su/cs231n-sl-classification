@@ -34,14 +34,15 @@ class PretrainedConvLSTMClassifier(BaseModel):
 			bidirectional=False
 		)
 		# TODO: Extract this to a configuration value.
-		H = 126
+		H = 512 
 		self._fc = nn.Sequential(
-          nn.Linear(self._model_config.lstm_hidden_size, H),
-          nn.ReLU(),
-          nn.Linear(H, H),
-          nn.ReLU(),
-          nn.Linear(H, self._num_output_classes),
-        )
+          		nn.Linear(self._model_config.lstm_hidden_size, H),
+			nn.ReLU(),
+			nn.Linear(H, H),
+			nn.ReLU(),
+			nn.Linear(H, self._num_output_classes),
+		)
+		self._fc_basic = nn.Linear(self._model_config.lstm_hidden_size, self._num_output_classes)
 
 	def forward(self, input):
 		"""Feeds the pretrained ResNet-encoded input through a variable-length LSTM network
@@ -62,4 +63,4 @@ class PretrainedConvLSTMClassifier(BaseModel):
 		# At this point, LSTM output yields a (max_seq_len, N, lstm_hidden_size) tensor.
 		# We extract the last frame from the LSTM as the sequence's final encoding.
 		logging.debug('Feeding input through fully-connected layer.')
-		return F.softmax(self._fc(packed_h_t.view(N, -1)), dim=1)
+		return F.softmax(self._fc_basic(packed_h_t.view(N, -1)), dim=1)

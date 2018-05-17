@@ -80,25 +80,24 @@ def main():
 									dataloader=train_dataloader,
 									epochs=MODEL_CONFIG.epochs,
 									loss_fn=loss_fn,
-									optimizer=optim.SGD(
-											filter(
-												lambda p: p.requires_grad,
-												parallel_model.parameters()),
+									optimizer=optim.Adam(
+										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
-										momentum=0.9),
+									),
 									epoch=epoch,
 									use_cuda=MODEL_CONFIG.use_cuda)
 			
-			train_acc = train_utils.validate_model(model=parallel_model,
-									dataloader=train_dataloader,
-									use_cuda=MODEL_CONFIG.use_cuda)
+			if epoch % 10 == 0:
+				train_acc = train_utils.validate_model(model=parallel_model,
+													dataloader=train_dataloader,
+													use_cuda=MODEL_CONFIG.use_cuda)
 
-			val_acc = train_utils.validate_model(model=parallel_model,
-									dataloader=valid_dataloader,
-									use_cuda=MODEL_CONFIG.use_cuda)
+				val_acc = train_utils.validate_model(model=parallel_model,
+													dataloader=valid_dataloader,
+													use_cuda=MODEL_CONFIG.use_cuda)
 
-			logging.info('Train Epoch: {}\t Train Acc: {:.2f}% Validation Acc: {:.2f}%'
-				.format(epoch, train_acc, val_acc))
+				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
+					.format(epoch, train_acc, val_acc))
 
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
@@ -112,7 +111,6 @@ def main():
 		# Run the model on the test set, using a new test dataloader.
 		test_acc = train_utils.validate_model(model=parallel_model,
 												dataloader=test_dataloader,
-												loss_fn=loss_fn,
 												use_cuda=MODEL_CONFIG.use_cuda)
 		logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 

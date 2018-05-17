@@ -41,6 +41,9 @@ class LinearClassifier(BaseModel):
 		only on the flattened RGB values for the first timeframe."""
 		X = input['X']
 		N, C, T, H, W = X.shape
+		# print(torch.sum(self._fc[0].weight))
+		# print(torch.sum(self._fc[1].weight))
 		flattened_frames = X[:, :, 0, :, :].contiguous().view(N, -1)
 		logits = self._fc(flattened_frames)
+		#print('logits:', logits)
 		return F.softmax(logits, dim=1)
