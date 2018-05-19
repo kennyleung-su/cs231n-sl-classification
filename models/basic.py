@@ -63,4 +63,4 @@ class PretrainedConvLSTMClassifier(BaseModel):
 		# At this point, LSTM output yields a (max_seq_len, N, lstm_hidden_size) tensor.
 		# We extract the last frame from the LSTM as the sequence's final encoding.
 		logging.debug('Feeding input through fully-connected layer.')
-		return F.softmax(self._fc_basic(packed_h_t.view(N, -1)), dim=1)
+		return self._fc_basic(packed_h_t.view(N, -1))
