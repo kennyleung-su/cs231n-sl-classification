@@ -15,7 +15,6 @@ from trainer import train_utils
 
 import torch
 import torch.nn.functional as F
-import torch.optim as optim
 
 
 # TODO: This is unused, so we can run debug on the main model.
@@ -79,7 +78,7 @@ def main():
 			train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
 									loss_fn=loss_fn,
-									optimizer=optim.Adam(
+									optimizer=MODEL_CONFIG.optimizer_fn(
 										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
 									),
