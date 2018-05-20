@@ -32,7 +32,7 @@ pip3 install -r requirements.txt
 
 ## Preparing the Dataset
 
-To train our model, we are using [Chalearn Isolated Gesture](http://chalearnlap.cvc.uab.es/dataset/21/description/) dataset which contains 47933 RGB and RGB-D gesture videos with 249 different gestures. Download the dataset from Chalearn's website and the labels from [here](http://www.cbsr.ia.ac.cn/users/jwan/database/IsoGD_labels.zip). Extract the training, validation and test set and their respective labels in the following manner.
+To train our model, we are using [Chalearn Isolated Gesture](http://chalearnlap.cvc.uab.es/dataset/21/description/) dataset which contains 47933 RGB and RGB-D gesture videos with 249 different gestures. Download the dataset from Chalearn's website and the labels from [here](http://www.cbsr.ia.ac.cn/users/jwan/database/IsoGD_labels.zip). Extract the training, validation and test set and their respective labels and place it in the following structure.
 ```
 ../
 ├── cs231n-sl-classification
@@ -56,7 +56,7 @@ To train our model, we are using [Chalearn Isolated Gesture](http://chalearnlap.
 │   │   └ ...
 │   └ ...
 ```
-# TODO Eun Hiroshi's code to extract the videos into frames / combine it with prepare_dataset.py
+TODO: Run Hiroshi's code to extract the videos into frames / combine it with prepare_dataset.py
 
 Next, run prepare_dataset.py
 ```
