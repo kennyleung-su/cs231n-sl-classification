@@ -5,7 +5,7 @@ We aim to create a gesture recognition algorithm using deep convolutional networ
 
 ## Dataset
 
-We are using [Chalearn Isolated Gesture]http://chalearnlap.cvc.uab.es/dataset/21/description/) dataset to train our model. To prepare the dataset, download the dataset from Chalearn.
+We are using [Chalearn Isolated Gesture](http://chalearnlap.cvc.uab.es/dataset/21/description/) dataset to train our model. To prepare the dataset, download the dataset from Chalearn.
 
 ## Getting Started
 
