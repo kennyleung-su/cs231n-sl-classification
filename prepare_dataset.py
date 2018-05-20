@@ -29,32 +29,27 @@ def main():
             kinect_vid_full = os.path.join(ROOT_DIR, kinect)
             kinect_frame_full, _ = os.path.splitext(kinect_vid_full)
 
+            if not os.path.exists(new_data_dir):
+                os.makedirs(new_data_dir)
+
             if os.path.exists(rgb_vid_full):
                 _, filename = os.path.split(rgb_vid_full)
                 new_path = os.path.join(new_data_dir, filename)
-                if not os.path.exists(new_path):
-                    os.makedir(new_path)
                 shutil.move(rgb_vid_full, new_path)
 
             if os.path.exists(rgb_frame_full):
                 _, filename = os.path.split(rgb_frame_full)
                 new_path = os.path.join(new_data_dir, filename)
-                if not os.path.exists(new_path):
-                    os.makedir(new_path)
                 shutil.move(rgb_frame_full, new_path)
 
             if os.path.exists(kinect_vid_full):
                 _, filename = os.path.split(kinect_vid_full)
                 new_path = os.path.join(new_data_dir, filename)
-                if not os.path.exists(new_path):
-                    os.makedir(new_path)
                 shutil.move(kinect_vid_full, new_path)
 
             if os.path.exists(kinect_frame_full):
                 _, filename = os.path.split(kinect_frame_full)
                 new_path = os.path.join(new_data_dir, filename)
-                if not os.path.exists(new_path):
-                    os.makedir(new_path)
                 shutil.move(kinect_frame_full, new_path)
 
             counter += 1
