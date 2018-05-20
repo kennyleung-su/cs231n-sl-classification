@@ -28,24 +28,24 @@ parser.add_argument('--arch', type=str,
 parser.add_argument('--dataloader', type=str,
 	help='Experiment should have set this by default. Change the dataloader only if you know what you are doing\n' +
 	'Type of dataloader: RGB-Encoding, RGBD-Encoding, RGB-Image, RGBD-Image')
-
+# General hyperparameters
 parser.add_argument('--max_example_per_label', type=int)
 parser.add_argument('--batch_size', type=int)
 parser.add_argument('--epochs', type=int)
 parser.add_argument('--learning_rate', type=float)
-parser.add_argument('--l2_regularizer', type=float)
-parser.add_argument('--dropout', type=float)
+parser.add_argument('--l2_regularizer', type=float, default=0.0)
+parser.add_argument('--dropout', type=float, default=0.0)
 parser.add_argument('--optimizer', type=str, default='adam'
 					help='Type of optimizer: adam, sgd, adagrad, rmsprop')
 # LSTM specific arguments
 parser.add_argument('--lstm_hidden_size', type=int)
-parser.add_argument('--lstm_num_layers', type=int)
-parser.add_argument('--lstm_bias', action='store_true')
-parser.add_argument('--lstm_batch_first', action='store_true')
-parser.add_argument('--lstm_bidirectional', action='store_true')
+parser.add_argument('--lstm_num_layers', type=int, default=1)
+parser.add_argument('--lstm_bias', action='store_true', default=False)
+parser.add_argument('--lstm_batch_first', action='store_true', default=True)
+parser.add_argument('--lstm_bidirectional', action='store_true', default=False)
 parser.add_argument('--max_seq_len', type=int,
 					help='Maximum temporal depth of video frames on which to train.')
-
+# General arguments
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
@@ -53,13 +53,15 @@ parser.add_argument('--log_interval', type=int, default=10)
 parser.add_argument('--num_workers', type=int, default=4,
 					help='Number of separate processes with which to run the DataLoader. '
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
+# Loading and saving of checkpoints
+parser.add_argument('--load', action='store_true', default=True)
 parser.add_argument('--checkpoint_to_load', type=str)
 
 args = parser.parse_args()
 
 # Perform check to ensure the name of experiment is set
 if not args.experiment:
-	raise ValueError('Name of experiment is not specified. Please state a experiment to continue.')
+	raise ValueError('Name of experiment is not specified. Please state a experiment to proceed.')
 
 
 class ConfigObjFromDict(object):
@@ -183,22 +185,21 @@ mkdir(train_output_dir)
 test_output_dir = os.path.join(TEST_DIR, args.experiment)
 mkdir(test_output_dir)
 
-#########################
-# Model Saving & Loading
-#########################
+#################
+# Checkpoint Path
+#################
 
 # File to seralize our PyTorch model to. Existing checkpoint will be overwritten.
 # https://pytorch.org/docs/stable/torch.html#torch.save
-# Used for mode = 'training'.
-MODEL_CONFIG.checkpoint_path = os.path.join(MODEL_DIR, '{0}-checkpoint.pkl'.format(args.experiment))
-
-# File in which to log output.
-# Just import logging, config in a library to log to the same location.
-logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(args.experiment, time.time()))
+MODEL_CONFIG.checkpoint_path = MODEL_DIR
 
 ##########
 # Logging
 ##########
+# File in which to log output.
+# Just import logging, config in a library to log to the same location.
+logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(args.experiment, time.time()))
+
 try:
 	file = open(logfile, 'r')
 except IOError:

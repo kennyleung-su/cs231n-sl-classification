@@ -17,13 +17,6 @@ import torch
 import torch.nn.functional as F
 
 
-# TODO: This is unused, so we can run debug on the main model.
-PretrainedConvLSTMClassifier__EXP_MODELS__ = {
-	'debug': LinearClassifier,
-	'basic': PretrainedConvLSTMClassifier,
-	'basic_dev': PretrainedConvLSTMClassifier
-}
-
 DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
 
 
