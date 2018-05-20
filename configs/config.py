@@ -35,8 +35,12 @@ parser.add_argument('--epochs', type=int)
 parser.add_argument('--learning_rate', type=float)
 parser.add_argument('--l2_regularizer', type=float, default=0.0)
 parser.add_argument('--dropout', type=float, default=0.0)
-parser.add_argument('--optimizer', type=str, default='adam'
-					help='Type of optimizer: adam, sgd, adagrad, rmsprop')
+parser.add_argument('--optimizer', type=str, default='adam',
+					help='Type of optimizer function: adam, sgd, adagrad, rmsprop')
+parser.add_argument('--initializer', type=str, default='xavier',
+					help='Type of initializer function: xavier, he')
+parser.add_argument('--loss', type=str, default='cross-entropy',
+					help='Type of loss function: cross-entropy, nll')
 # LSTM specific arguments
 parser.add_argument('--lstm_hidden_size', type=int)
 parser.add_argument('--lstm_num_layers', type=int, default=1)
@@ -54,8 +58,9 @@ parser.add_argument('--num_workers', type=int, default=4,
 					help='Number of separate processes with which to run the DataLoader. '
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
 # Loading and saving of checkpoints
-parser.add_argument('--load', action='store_true', default=True)
-parser.add_argument('--checkpoint_to_load', type=str)
+parser.add_argument('--load', action='store_true')
+parser.add_argument('--checkpoint_to_load', type=str,
+					help='Provide the name of the checkpoint to load')
 
 args = parser.parse_args()
 
@@ -127,6 +132,13 @@ MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 # TODO: Add a configuration for the sampling scheme.
 
 ########################
+# Models and Dataloaders
+########################
+
+
+
+
+########################
 # Model Hyperparameters
 ########################
 # TODO: Move this to the ResNet dataloader
@@ -151,11 +163,22 @@ optimizer_dict = {
 	'adam': torch.optim.Adam,
 	'sgd': torch.optim.SGD,
 	'adagrad': torch.optim.Adagrad,
-	'rmsprop': torch.optim.RMSProp
+	'rmsprop': torch.optim.RMSprop
+}
+
+initializer_dict = {
+	'xavier': torch.nn.init.xavier_normal_,
+	'he': torch.nn.init.kaiming_normal_
+}
+
+loss_dict = {
+	'cross-entropy': torch.nn.CrossEntropyLoss(),
+	'nll': torch.nn.NLLLoss()
 }
 
 MODEL_CONFIG.optimizer_fn = optimizer_dict[MODEL_CONFIG.optimizer]
-MODEL_CONFIG.initializer_fn = torch.nn.init.xavier_normal_
+MODEL_CONFIG.initializer_fn = initializer_dict[MODEL_CONFIG.initializer]
+MODEL_CONFIG.loss_fn = loss_dict[MODEL_CONFIG.loss]
 
 ################
 # Miscellaneous
@@ -179,12 +202,6 @@ LOG_DIR = os.path.join(EXPERIMENTS_DIR, 'logs')				# cs231n-sl-classification/ex
 mkdir(MODEL_DIR)
 mkdir(LOG_DIR)
 
-train_output_dir = os.path.join(TRAIN_DIR, args.experiment)
-mkdir(train_output_dir)
-
-test_output_dir = os.path.join(TEST_DIR, args.experiment)
-mkdir(test_output_dir)
-
 #################
 # Checkpoint Path
 #################
@@ -192,6 +209,7 @@ mkdir(test_output_dir)
 # File to seralize our PyTorch model to. Existing checkpoint will be overwritten.
 # https://pytorch.org/docs/stable/torch.html#torch.save
 MODEL_CONFIG.checkpoint_path = MODEL_DIR
+MODEL_CONFIG.checkpoint_to_load = os.path.join(MODEL_DIR, MODEL_CONFIG.checkpoint_to_load)
 
 ##########
 # Logging

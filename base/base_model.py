@@ -1,7 +1,7 @@
 """Base Pytorch models for visual gesture recognition."""
 
-from os.path import splitext
-
+import os.path.join
+import time.time
 import logging
 from configs import config
 import torch
@@ -26,17 +26,20 @@ class BaseModel(nn.Module):
 		self.training_epoch = checkpoint.get('epoch')
 		self.best_accuracy = checkpoint.get('best_accuracy')
 
-	def save_to_checkpoint(self, filename, is_best=False):
+	def save_to_checkpoint(self, path, is_best=False):
 		""""Saves information about the model to the checkpoint file.
 
 		If is_best = True, append to the filename and also copies this model to a 
 		directory containing the best-performing models.
 		"""
+		filename = os.path.join(path, '{}-{}'.format(self._model_config.experiment, time.time()))
+
 		if is_best:
-			path, ext = splitext(filename)
-			filename = path + '-best' + ext
+			filename += '-best-{d}.pkl'.format(self.best_accuracy)
 			''' TODO: If is_best = True, also copies this model information to a directory
 			containing the best-performing models.'''
+		else:
+			filename += '.pkl'
 
 		logging.info('Model saved to checkpoint: {}'.format(filename))
 		torch.save({
