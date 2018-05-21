@@ -9,25 +9,24 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 	# loop through data batches
 	count = 0
 	for batch_idx, (X, y) in enumerate(dataloader):
-		batch_size = 0
+		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
 			if is_lstm:
 				X['X'] = X['X'].cuda()
-				batch_size = X['X'].size(0)
 			else:
 				X = X.cuda()
-				batch_size = X.size(0)
 			y = y.cuda(async=True)
 
+		if is_lstm:
+			batch_size = X['X'].size(0)
+		else:
+			batch_size = X.size(0)
 		# Compute loss and accuracy
 		predictions = model(X)
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
 		total_loss += loss.item()
-		top1 = AverageMeter()
-		acc1 = accuracy(predictions.data, y, (1,))
-		top1.update(acc1[0], batch_size)
 
 		optimizer.zero_grad()
 		loss.backward()
@@ -46,21 +45,25 @@ def validate_model(model, dataloader, is_lstm, use_cuda=False):
 	top1 = AverageMeter()
 
 	for i, (X, y) in enumerate(dataloader):
-		batch_size = 0
+		batch_size = -1
+		# Utilize GPU if enabled
 		if use_cuda:
 			if is_lstm:
 				X['X'] = X['X'].cuda()
-				batch_size = X['X'].size(0)
 			else:
 				X = X.cuda()
-				batch_size = X.size(0)
 			y = y.cuda(async=True)
+
+		if is_lstm:
+			batch_size = X['X'].size(0)
+		else:
+			batch_size = X.size(0)
 		# compute output
 		predictions = model(X)
 
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
-		top1.update(acc1[0],batch_size)
+		top1.update(acc1[0], batch_size)
 
 	return top1.avg
 
