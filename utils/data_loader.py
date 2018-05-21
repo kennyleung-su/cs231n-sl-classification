@@ -16,7 +16,6 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 
 	# Build a dataloader using the configuration information. Subjected to change
 	data_type, dataset = dataloader_type.split('-')
-	print(data_type)
 
 	if dataset == 'image':
 		transformed_dataset = GestureFrameDataset(gesture_labels, data_dir, data_type, transform, max_example_per_label)
@@ -34,7 +33,7 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 			batch_size=batch_size,
 			shuffle=shuffle,
 			num_workers=num_workers,
-			collate_fn=PadCollate(transformed_dataset.max_seq_len, dim=1)
+			collate_fn=PadCollate(dataset.max_seq_len, dim=1)
 		)
 
 

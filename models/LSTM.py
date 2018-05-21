@@ -16,7 +16,7 @@ class EncodingLSTMClassifier(BaseModel):
 	Assumes that the input consists of ResNet (1000d) encoded DxT frames.
 	"""
 
-	# TODO Add in regularizer for LSTM
+	# TODO Add in regularizer for LSTM + set proper initialization
 
 	_RESNET_OUTPUT_SIZE = 1000	# Fixed variable
 
@@ -28,8 +28,8 @@ class EncodingLSTMClassifier(BaseModel):
 			hidden_size=self._model_config.lstm_hidden_size,
 			num_layers=self._model_config.lstm_num_layers,
 			bias=self._model_config.lstm_bias,
-			batch_first=self._model_config.lstm_,
-			dropout=self._model_config.lstm_batch_first,
+			batch_first=self._model_config.lstm_batch_first,
+			dropout=self._model_config.dropout,
 			bidirectional=self._model_config.lstm_bidirectional
 		)
 
@@ -47,7 +47,7 @@ class EncodingLSTMClassifier(BaseModel):
 
 		# pass the weights through the initializer
 		for m in self.modules():
-			print(m) #TODO set proper initialization
+			print("Proper initialization needed", m) #TODO set proper initialization
 
 
 	def forward(self, input):
