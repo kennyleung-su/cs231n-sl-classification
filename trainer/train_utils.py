@@ -1,7 +1,7 @@
 import logging
 import torch
 
-def train_model(model, dataloader, loss_fn, optimizer, epoch, use_cuda=False, verbose=False):
+def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=False, verbose=False):
 	# set model to train mode
 	model.train()
 	total_loss = 0
@@ -9,9 +9,15 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, use_cuda=False, ve
 	# loop through data batches
 	count = 0
 	for batch_idx, (X, y) in enumerate(dataloader):
+		batch_size = 0
 		# Utilize GPU if enabled
 		if use_cuda:
-			X['X'] = X['X'].cuda()
+			if is_lstm:
+				X['X'] = X['X'].cuda()
+				batch_size = X['X'].size(0)
+			else:
+				X = X.cuda()
+				batch_size = X.size(0)
 			y = y.cuda(async=True)
 
 		# Compute loss and accuracy
@@ -21,7 +27,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, use_cuda=False, ve
 		total_loss += loss.item()
 		top1 = AverageMeter()
 		acc1 = accuracy(predictions.data, y, (1,))
-		top1.update(acc1[0], X['X'].size(0))
+		top1.update(acc1[0], batch_size)
 
 		optimizer.zero_grad()
 		loss.backward()
@@ -34,21 +40,27 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, use_cuda=False, ve
 	total_loss /= count
 	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
 
-def validate_model(model, dataloader, use_cuda=False):
+def validate_model(model, dataloader, is_lstm, use_cuda=False):
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
 
 	for i, (X, y) in enumerate(dataloader):
+		batch_size = 0
 		if use_cuda:
-			X['X'] = X['X'].cuda()
+			if is_lstm:
+				X['X'] = X['X'].cuda()
+				batch_size = X['X'].size(0)
+			else:
+				X = X.cuda()
+				batch_size = X.size(0)
 			y = y.cuda(async=True)
 		# compute output
 		predictions = model(X)
 
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
-		top1.update(acc1[0], X['X'].size(0))
+		top1.update(acc1[0],batch_size)
 
 	return top1.avg
 

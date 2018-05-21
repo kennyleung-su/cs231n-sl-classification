@@ -1,7 +1,7 @@
 """Base Pytorch models for visual gesture recognition."""
 
-import os.path.join
-import time.time
+import os
+import time
 import logging
 from configs import config
 import torch
@@ -35,7 +35,7 @@ class BaseModel(nn.Module):
 		filename = os.path.join(path, '{}-{}'.format(self._model_config.experiment, time.time()))
 
 		if is_best:
-			filename += '-best-{d}.pkl'.format(self.best_accuracy)
+			filename += '-best-{:d}.pkl'.format(self.best_accuracy)
 			''' TODO: If is_best = True, also copies this model information to a directory
 			containing the best-performing models.'''
 		else:

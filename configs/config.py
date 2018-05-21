@@ -12,23 +12,25 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 import torchvision.models as models
 
+from models.LSTM import EncodingLSTMClassifier
+from models.ResNet import PretrainedResNetClassifier
+from utils import data_loader
+
 parser = argparse.ArgumentParser(description='Gesture classification task.')
 
 parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test" or "pickle".')
 
-# For pickling encodings
-# TODO
-
-# For training and testing
+# For training, testing and pickling
 parser.add_argument('--experiment', type=str,
 	help='Name of the experiment: LSTM(RGB)-1.0, LSTM(RGBD)-1.0, RESNET18(RGB)-1.0, RESNET18(RGBD)-1.0')
 parser.add_argument('--arch', type=str,
 	help='Type of architecture for the model. Experiment should have set this by default')
-parser.add_argument('--dataloader', type=str,
-	help='Experiment should have set this by default. Change the dataloader only if you know what you are doing\n' +
-	'Type of dataloader: RGB-Encoding, RGBD-Encoding, RGB-Image, RGBD-Image')
+parser.add_argument('--data_type', type=str,
+	help='Experiment should have set this by default. Change the data_type only if you know what you are doing\n' +
+	'Type of data type: RN18-RGB-encoding, RN18-RGBD-encoding, RGB-image, RGBD-image')
 # General hyperparameters
+parser.add_argument('--shuffle', action='store_true')
 parser.add_argument('--max_example_per_label', type=int)
 parser.add_argument('--batch_size', type=int)
 parser.add_argument('--epochs', type=int)
@@ -41,6 +43,11 @@ parser.add_argument('--initializer', type=str, default='xavier',
 					help='Type of initializer function: xavier, he')
 parser.add_argument('--loss', type=str, default='cross-entropy',
 					help='Type of loss function: cross-entropy, nll')
+# TODO Add in schedulers to optimize the learning: torch.optim.lr_scheduler
+# ResNet specific arguments
+parser.add_argument('--resnet_num_layers', type=int,
+					help='Number of layer of a pretrained resnet: 18, 34, 50, 101, 152')
+parser.add_argument('--freeze', action='store_true')
 # LSTM specific arguments
 parser.add_argument('--lstm_hidden_size', type=int)
 parser.add_argument('--lstm_num_layers', type=int, default=1)
@@ -65,9 +72,8 @@ parser.add_argument('--checkpoint_to_load', type=str,
 args = parser.parse_args()
 
 # Perform check to ensure the name of experiment is set
-if not args.experiment:
+if (args.mode == 'train' or arg.mode == 'test') and not args.experiment:
 	raise ValueError('Name of experiment is not specified. Please state a experiment to proceed.')
-
 
 class ConfigObjFromDict(object):
 	"""Handy class for creating an object updated as a dict but accessed as an obj."""
@@ -108,9 +114,9 @@ TEST_DATA_DIR = os.path.join(DATASET_DIR, 'test')
 TRAIN_DATA_DIR = os.path.join(DATASET_DIR, 'train')
 VALID_DATA_DIR = os.path.join(DATASET_DIR, 'valid')
 
-#################
+################
 # Configurations
-#################
+################
 
 # Read the flag and configuration file values and validate them to cast them to their
 # specified data types.
@@ -131,24 +137,28 @@ MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 
 # TODO: Add a configuration for the sampling scheme.
 
-########################
-# Models and Dataloaders
-########################
+########
+# Models
+########
 
+model_dict = {
+	'EncodingLSTMClassifier': EncodingLSTMClassifier,
+	'PretrainedResNetClassifier': PretrainedResNetClassifier
+}
 
+MODEL_CONFIG.model = model_dict[MODEL_CONFIG.arch]
+MODEL_CONFIG.is_lstm = (MODEL_CONFIG.arch == 'EncodingLSTMClassifier')
 
 
 ########################
 # Model Hyperparameters
 ########################
-# TODO: Move this to the ResNet dataloader
 # https://pytorch.org/docs/master/torchvision/models.html
 # 
 # All pre-trained models expect input images normalized in the same way,
 # i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where
 # H and W are expected to be at least 224. The images have to be loaded
 # in to a range of [0, 1] and then normalized using
-#MODEL_CONFIG.pretrained_cnn_model = models.__dict__[args.arch]
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 								 std=[0.229, 0.224, 0.225])
@@ -209,7 +219,6 @@ mkdir(LOG_DIR)
 # File to seralize our PyTorch model to. Existing checkpoint will be overwritten.
 # https://pytorch.org/docs/stable/torch.html#torch.save
 MODEL_CONFIG.checkpoint_path = MODEL_DIR
-MODEL_CONFIG.checkpoint_to_load = os.path.join(MODEL_DIR, MODEL_CONFIG.checkpoint_to_load)
 
 ##########
 # Logging

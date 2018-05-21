@@ -9,7 +9,6 @@ import sys
 from configs import config
 from configs.config import MODEL_CONFIG
 from utils import data_loader, checkpoint_loader
-from models.LSTM import PretrainedConvLSTMClassifier
 from trainer import train_utils
 
 import torch
@@ -25,15 +24,16 @@ def main():
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
 			MODEL_CONFIG.mode, MODEL_CONFIG.description))
 
-	if MODEL_CONFIG.debug:
-		# Just load the training and validation to get things running more quickly.
-		(train_dataloader, valid_dataloader) = data_loader.GetGestureFramesDataLoaders(
-			[config.TRAIN_DATA_DIR, config.VALID_DATA_DIR], MODEL_CONFIG)
-	else:
-		(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetGestureFramesDataLoaders(DATA_DIRS, MODEL_CONFIG)
+	if MODEL_CONFIG.mode == 'pickle':
+		pass
+		return
+	
+	(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Initialize the model, or load a pretrained one.
-	model = PretrainedConvLSTMClassifier__EXP_MODELS__[MODEL_CONFIG.experiment](model_config=MODEL_CONFIG)
+	model = MODEL_CONFIG.model(MODEL_CONFIG)
+	# Set the loss fn
+	loss_fn = MODEL_CONFIG.loss_fn
 	# Random seeds
 	random.seed(MODEL_CONFIG.seed)
 
@@ -52,13 +52,15 @@ def main():
 		else:
 			logging.info('Sorry, no GPUs are available. Running on CPU.')
 
+	# load checkpoint if available
 	if MODEL_CONFIG.load:
 		if MODEL_CONFIG.checkpoint_to_load:
 			logging.info('Loading checkpoint from {0}'.format(MODEL_CONFIG.checkpoint_to_load))
-			model.load_checkpoint(MODEL_CONFIG.checkpoint_to_load)
+			checkpoint_full_path = os.path.join(MODEL_CONFIG.checkpoint_path, MODEL_CONFIG.checkpoint_to_load)
+			model.load_checkpoint(checkpoint_full_path)
 		else:
 			logging.info('--checkpoint_to_load argument was not given. Searching for the model with the best acc.')
-			best_checkpoint = checkpoint_loader.get_best_checkpoint(MODEL_CONFIG):
+			best_checkpoint = checkpoint_loader.get_best_checkpoint(MODEL_CONFIG)
 			if best_checkpoint:
 				model.load_checkpoint(best_checkpoint)
 			else:
@@ -66,10 +68,6 @@ def main():
 
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires --load flag and --checkpoint_to_load argument.')
-
-	if MODEL_CONFIG.mode == 'pickle':
-		pass
-		return
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
@@ -80,22 +78,25 @@ def main():
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
 			train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
-									loss_fn=MODEL_CONFIG.loss_fn,
+									loss_fn=loss_fn,
 									optimizer=MODEL_CONFIG.optimizer_fn(
 										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
 									),
 									epoch=epoch,
+									is_lstm=MODEL_CONFIG.is_lstm,
 									use_cuda=MODEL_CONFIG.use_cuda,
 									verbose=MODEL_CONFIG.verbose)
 			
 			if epoch % 10 == 0:
 				train_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=train_dataloader,
+													is_lstm=MODEL_CONFIG.is_lstm,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
 				val_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=valid_dataloader,
+													is_lstm=MODEL_CONFIG.is_lstm,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
@@ -109,12 +110,12 @@ def main():
 				model.best_accuracy = val_acc
 				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
-	if not MODEL_CONFIG.debug:
-		# Run the model on the test set, using a new test dataloader.
-		test_acc = train_utils.validate_model(model=parallel_model,
-												dataloader=test_dataloader,
-												use_cuda=MODEL_CONFIG.use_cuda)
-		logging.info('Test Acc: {:.2f}%.'.format(test_acc))
+	# Run the model on the test set, using a new test dataloader.
+	test_acc = train_utils.validate_model(model=parallel_model,
+											dataloader=test_dataloader,
+											is_lstm=MODEL_CONFIG.is_lstm,
+											use_cuda=MODEL_CONFIG.use_cuda)
+	logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 
 	# TODO Save (and maybe visualize or analyze?) the results.
 	# Use:
