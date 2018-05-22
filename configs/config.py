@@ -47,9 +47,10 @@ parser.add_argument('--loss', type=str, default='cross-entropy',
 # ResNet specific arguments
 parser.add_argument('--resnet_num_layers', type=int,
 					help='Number of layer of a pretrained resnet: 18, 34, 50, 101, 152')
-#parser.add_argument('--freeze', action='store_true')
+parser.add_argument('--freeze', action='store_true')
 # LSTM specific arguments
 parser.add_argument('--lstm_hidden_size', type=int)
+parser.add_argument('--lstm_hidden_fc_size', type=int)
 parser.add_argument('--lstm_num_layers', type=int, default=1)
 parser.add_argument('--lstm_bias', action='store_true', default=False)
 parser.add_argument('--lstm_batch_first', action='store_true', default=True)
