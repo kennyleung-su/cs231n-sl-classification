@@ -85,6 +85,7 @@ def main():
 									optimizer=MODEL_CONFIG.optimizer_fn(
 										parallel_model.parameters(),
 										lr=MODEL_CONFIG.learning_rate,
+										weight_decay=MODEL_CONFIG.weight_decay
 									),
 									epoch=epoch,
 									is_lstm=MODEL_CONFIG.is_lstm,
