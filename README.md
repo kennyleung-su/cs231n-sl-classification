@@ -69,12 +69,12 @@ The dataset should be rearranged to the following structure
 │   └── ...
 ├ dataset
 │   ├ train
-│   │   ├ 001 (Label)
+│   │   ├ 1 (Label)
 │   │   │   ├ K_00001.avi
 │   │   │   ├ K_00001
 │   │   │   │   ├ K_00001_1.png
 │   │   │   │   └ ...
-│   │   ├ 002
+│   │   ├ 2
 │   │   │   └ ...
 │   │   └ ...
 │   ├ valid

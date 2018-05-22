@@ -22,7 +22,7 @@ class EncodingLSTMClassifier(BaseModel):
 
 	def __init__(self, *args, **kwargs):
 		super(EncodingLSTMClassifier, self).__init__(*args, **kwargs)
-
+		
 		self._lstm = nn.LSTM(
 			input_size=self._RESNET_OUTPUT_SIZE,
 			hidden_size=self._model_config.lstm_hidden_size,
@@ -33,7 +33,7 @@ class EncodingLSTMClassifier(BaseModel):
 			bidirectional=self._model_config.lstm_bidirectional
 		)
 
-		H = self._model_config.lstm_hidden_fc_size 
+		H = self._model_config.lstm_hidden_fc_size
 		self._fc = nn.Sequential(
           	nn.Linear(self._model_config.lstm_hidden_size, H),
 			nn.ReLU(),
@@ -41,9 +41,6 @@ class EncodingLSTMClassifier(BaseModel):
 			nn.ReLU(),
 			nn.Linear(H, self._num_output_classes),
 		)
-
-		self._fc_basic = nn.Linear(self._model_config.lstm_hidden_size,
-								   self._num_output_classes)
 
 		# pass the weights through the initializer
 		for m in self.modules():
@@ -59,7 +56,7 @@ class EncodingLSTMClassifier(BaseModel):
 		# https://pytorch.org/docs/master/nn.html#torch.nn.utils.rnn.pack_padded_sequence
 		X = X.permute(0, 2, 1)
 		packed_resnet = torch.nn.utils.rnn.pack_padded_sequence(X, seq_lens,
-			batch_first=True)
+			batch_first=self._model_config.lstm_batch_first)
 
 		# LSTM unrolls a len <= max_len_seq sequence of 1000d frame vectors.
 		logging.debug('Feeding input through LSTM.')
@@ -68,4 +65,4 @@ class EncodingLSTMClassifier(BaseModel):
 		# At this point, LSTM output yields a (max_seq_len, N, lstm_hidden_size) tensor.
 		# We extract the last frame from the LSTM as the sequence's final encoding.
 		logging.debug('Feeding input through fully-connected layer.')
-		return self._fc_basic(packed_h_t.view(N, -1))
+		return self._fc(packed_h_t.view(N, -1))
