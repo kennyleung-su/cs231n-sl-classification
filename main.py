@@ -39,7 +39,8 @@ def main():
 			if best_checkpoint:
 				model.load_checkpoint(best_checkpoint)
 			else:
-				logging.info('Best checkpoint cannot be found. Initializing the model as usual.')
+				logging.info('Best checkpoint cannot be found. Program will now terminate.')
+				return
 
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires --load flag and --checkpoint_to_load argument.')
@@ -92,7 +93,7 @@ def main():
 									use_cuda=MODEL_CONFIG.use_cuda,
 									verbose=MODEL_CONFIG.verbose)
 			
-			if epoch % 10 == 0:
+			if epoch % MODEL_CONFIG.log_interval == 0:
 				train_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=train_dataloader,
 													is_lstm=MODEL_CONFIG.is_lstm,

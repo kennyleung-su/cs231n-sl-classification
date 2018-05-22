@@ -35,8 +35,8 @@ parser.add_argument('--max_example_per_label', type=int)
 parser.add_argument('--batch_size', type=int)
 parser.add_argument('--epochs', type=int)
 parser.add_argument('--learning_rate', type=float)
-parser.add_argument('--weight_decay', type=float, default=0.0)
-parser.add_argument('--dropout', type=float, default=0.0)
+parser.add_argument('--weight_decay', type=float, default=0.)
+parser.add_argument('--dropout', type=float, default=0.)
 parser.add_argument('--optimizer', type=str, default='adam',
 					help='Type of optimizer function: adam, sgd, adagrad, rmsprop')
 parser.add_argument('--initializer', type=str, default='xavier',

@@ -15,8 +15,11 @@ def pickle_encoding(data_dirs, model_config, model):
 	transform = model_config.transform
 	gesture_labels = model_config.gesture_labels
 	data_type, _ = model_config.dataloader_type.split('-')
-	encoding_filename = 'RN{0}{1}-encoding.pkl'.format(str(model_config.resnet_num_layers),
+	transfer_learning_prefix = 'T' if model_config.load else ''
+	encoding_filename = '{0}RN{1}{2}-encoding.pkl'.format(transfer_learning_prefix ,str(model_config.resnet_num_layers),
 												  data_type)
+	# encoding with the prefix T means transfer learning has been carried out. else, it takes the output of 
+	# the original imagenet pretrained resnet
 
 	if max_example_per_label:
 		logging.info('Max example per label: {}'.format(max_example_per_label))
