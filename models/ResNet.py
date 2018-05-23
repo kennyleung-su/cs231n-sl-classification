@@ -36,15 +36,15 @@ class PretrainedResNetClassifier(BaseModel):
 		self._resnet_relu = nn.ReLU(inplace=True)
 		self._fc = nn.Linear(1000, self._num_output_classes)
 
-		# set generate_encoding to True only when pickling the encodings
+		# Set generate_encoding to True only when pickling the encodings
 		self.generate_encoding = False
 
-		# TODO freeze all the conv layers and only update the FC layers
-		'''if self._model_config.freeze:
-			for param in self._resnet.parameters():
+		# Freeze all the conv layers and only update the FC layers
+		if self._model_config.freeze:
+			for name, param in self._resnet.named_parameters():
+				logging.info('Freezing ResNet parameter: {0}'.format(name))
 				param.requires_grad = False
-
-		self._resnet.fc.requires_grad = True'''
+		self._resnet.fc.requires_grad = True
 
 	def forward(self, X):
 		""" Feeds frames into the ResNet"""

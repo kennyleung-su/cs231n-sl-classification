@@ -84,7 +84,10 @@ def main():
 									dataloader=train_dataloader,
 									loss_fn=loss_fn,
 									optimizer=MODEL_CONFIG.optimizer_fn(
-										parallel_model.parameters(),
+										# Allows the model to freeze certain parameters
+										# by setting requires_grad=False.
+										filter(lambda x: x.requires_grad,
+											parallel_model.parameters()),
 										lr=MODEL_CONFIG.learning_rate,
 										weight_decay=MODEL_CONFIG.weight_decay
 									),
