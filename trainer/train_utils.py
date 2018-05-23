@@ -39,10 +39,11 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 	total_loss /= count
 	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
 
-def validate_model(model, dataloader, is_lstm, use_cuda=False):
+def validate_model(model, dataloader, loss_fn, is_lstm, use_cuda=False):
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
+	total_loss = 0
 
 	for i, (X, y) in enumerate(dataloader):
 		batch_size = -1
@@ -60,12 +61,14 @@ def validate_model(model, dataloader, is_lstm, use_cuda=False):
 			batch_size = X.size(0)
 		# compute output
 		predictions = model(X)
+		loss = loss_fn(predictions, y)
+		total_loss += loss.item()
 
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], batch_size)
 
-	return top1.avg
+	return top1.avg, total_loss
 
 def accuracy(output, target, topk=(1,)):
 	# specifies the the precision of the top k values

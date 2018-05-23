@@ -5,6 +5,8 @@ import logging
 import numpy as np
 import random
 import sys
+import time
+import csv
 
 from configs import config
 from configs.config import MODEL_CONFIG
@@ -97,19 +99,24 @@ def main():
 									verbose=MODEL_CONFIG.verbose)
 			
 			if epoch % MODEL_CONFIG.log_interval == 0:
-				train_acc = train_utils.validate_model(model=parallel_model,
+				train_acc, train_loss = train_utils.validate_model(model=parallel_model,
 													dataloader=train_dataloader,
+													loss_fn=loss_fn,
 													is_lstm=MODEL_CONFIG.is_lstm,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
-				val_acc = train_utils.validate_model(model=parallel_model,
+				val_acc, val_loss = train_utils.validate_model(model=parallel_model,
 													dataloader=valid_dataloader,
+													loss_fn=loss_fn,
 													is_lstm=MODEL_CONFIG.is_lstm,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
-
+				datapoints = ['{:.2f}'.format(train_acc), train_loss, '{:.2f}'.format(val_acc), val_loss]
+				with open('test.csv', 'a') as f:
+					w = csv.writer(f)
+					w.writerow(datapoints)
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
 
