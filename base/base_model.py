@@ -12,6 +12,8 @@ class BaseModel(nn.Module):
 	"""Base model for the project, primarily for reading in
 	configurations and initializing the logger."""
 
+	_RESNET_OUTPUT_SIZE = 1000	# Fixed variable
+
 	def __init__(self, model_config):
 		super(BaseModel, self).__init__()
 		self._model_config = model_config

@@ -18,8 +18,6 @@ class EncodingLSTMClassifier(BaseModel):
 
 	# TODO Add in regularizer for LSTM + set proper initialization
 
-	_RESNET_OUTPUT_SIZE = 1000	# Fixed variable
-
 	def __init__(self, *args, **kwargs):
 		super(EncodingLSTMClassifier, self).__init__(*args, **kwargs)
 		

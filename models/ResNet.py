@@ -33,8 +33,20 @@ class PretrainedResNetClassifier(BaseModel):
 		else:
 			raise ValueError('There are no models with the given number of layers.')
 
-		self._resnet_relu = nn.ReLU(inplace=True)
-		self._fc = nn.Linear(1000, self._num_output_classes)
+		# An additional FC layer is used to map ResNet encodings to an additional
+		# 1000d latent representation, so that we can freeze the original deep ResNet
+		# model but train this additional FC layer to learn better encodings.
+		self._resnet_relu_fc = nn.Sequential(
+			nn.ReLU(inplace=True),
+			nn.Linear(self._RESNET_OUTPUT_SIZE, self._RESNET_OUTPUT_SIZE)
+		)
+
+		# This final layer handles classification by mapping the previous 1000d layer
+		# into the output-space dimension.
+		self._relu_fc = nn.Sequential(
+			nn.ReLU(inplace=True),
+			nn.Linear(self._RESNET_OUTPUT_SIZE, self._num_output_classes)
+		)
 
 		# Set generate_encoding to True only when pickling the encodings
 		self.generate_encoding = False
@@ -51,10 +63,11 @@ class PretrainedResNetClassifier(BaseModel):
 		logging.debug('Feeding input through pretrained resnet.')
 		X = self._resnet(X)
 
+		logging.debug('Feeding input through an additional hidden/encoding layer.')
+		X = self._resnet_relu_fc(X)
+
 		if self.generate_encoding:
 			return X
 
-		X = self._resnet_relu(X)
-
 		logging.debug('Feeding input through the fully-connected layer.')
-		return self._fc(X)
+		return self._relu_fc(X)
