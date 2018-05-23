@@ -35,7 +35,7 @@ class EncodingLSTMClassifier(BaseModel):
 
 		H = self._model_config.lstm_hidden_fc_size
 		self._fc = nn.Sequential(
-          	nn.Linear(self._model_config.lstm_hidden_size, H),
+			nn.Linear(self._model_config.lstm_hidden_size, H),
 			nn.ReLU(),
 			nn.Linear(H, H),
 			nn.ReLU(),
@@ -43,8 +43,20 @@ class EncodingLSTMClassifier(BaseModel):
 		)
 
 		# pass the weights through the initializer
+		modules_to_initialize = ['LSTM', 'Linear']
 		for m in self.modules():
-			print("Proper initialization needed", m) #TODO set proper initialization
+			classname = m.__class__.__name__
+			if classname in modules_to_initialize:
+				for name, param in m.named_parameters():
+					if 'bias' in name:
+						# TODO(kenny): Consider a dynamic bias initialization.
+						logging.info('Initializing bias {0}.{1} with zeros.'.format(
+							classname, name))
+						nn.init.constant_(param, 0.0)
+					elif 'weight' in name:
+						logging.info('Initializing weight {0} using {1}.'.format(
+							m, self._model_config.initializer))
+						self._model_config.initializer_fn(param)
 
 
 	def forward(self, input):
