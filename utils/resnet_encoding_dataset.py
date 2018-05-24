@@ -64,6 +64,7 @@ class ResnetEncodingDataset(Dataset):
 				data.append({
 					'frames': frames,
 					'label': self._labels_to_indices_dict[label],
+					'video_dir': video_dir,
 					'seq_len': seq_len
 				})
 

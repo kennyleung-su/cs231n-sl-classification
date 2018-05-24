@@ -3,6 +3,9 @@
 import csv
 import logging
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sn
 
 def accuracy(output, target, topk=(1,)):
 	# specifies the the precision of the top k values
@@ -83,9 +86,22 @@ class LossSaver(MetricsCsvSaver):
 
 
 class PredictionSaver(MetricsCsvSaver):
-	def __init__(self, output_path):
+	def __init__(self, output_path, num_classes):
 		super(PredictionSaver, self).__init__(output_path,
-											header=["id", "label", "pred"])
+											header=["id", "target", "pred"])
+		self._num_classes = num_classes
+		self._confusion_matrix = np.zeros((num_classes, num_classes))
 
-	def plot(self):
-		raise NotImplemented("Confusion matrix plotting not yet implemented.")
+	def update(self, vals):
+		# Receives a triplet of (id, target, pred)
+		id, target, pred = vals
+		self._confusion_matrix[target, pred] += 1
+		super(PredictionSaver, self).update
+
+	def plot(self, plot_output_path, title):
+		# TODO: Support having axis labels as the human-readable gesture names themselves.
+		cm = pd.DataFrame(self._confusion_matrix, range(self._num_classes), range(self._num_classes))
+		plt.figure()
+		sn.set(font_scale=1.4)  #for label size
+		sn.heatmap(cm, annot=True, annot_kws={"size": 16}, cmap="Blues")
+		plt.savefig(plot_output_path)

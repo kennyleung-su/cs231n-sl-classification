@@ -137,7 +137,8 @@ def main():
 		model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path)
 
 	# Run the model on the test set, using a new test dataloader.
-	preds_saver = PredictionSaver(os.path.join(config.METRICS, '{0}.{1}'.format('preds', time.time())))
+	preds_saver = PredictionSaver(os.path.join(config.METRICS, '{0}.{1}'.format('preds', time.time())),
+		num_classes=len(MODEL_CONFIG.gesture_labels))
 	test_acc = train_utils.validate_model(model=parallel_model,
 											dataloader=test_dataloader,
 											loss_fn=loss_fn,
@@ -151,7 +152,6 @@ def main():
 		title='Average Training Loss Across Iterations for {0}'.format(MODEL_CONFIG.experiment),
 		xlabel='Iteration',
 		ylabel='Loss')
-
 	train_acc_saver.plot(os.path.join(config.PLOTS, '{0}.{1}.png'.format('train_acc', time.time())),
 		title='Training Accuracy Across Epochs for {0}'.format(MODEL_CONFIG.experiment),
 		xlabel='Epoch',
@@ -160,8 +160,8 @@ def main():
 		title='Validation Accuracy Across Epochs for {0}'.format(MODEL_CONFIG.experiment),
 		xlabel='Epoch',
 		ylabel='Accuracy')
-
-	# TODO: Plot confusion matrix for predictions. Remember to remap back to original labels for interpretability.
+	preds_saver.plot(os.path.join(config.PLOTS, '{0}.{1}.png'.format('confusion_matrix', time.time())),
+		title='Confusion Matrix of Gesture Predictions')
 
 
 if __name__ == '__main__':

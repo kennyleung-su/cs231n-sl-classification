@@ -70,8 +70,16 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
 
+		if is_lstm and predictions_saver:
+			prediction_indices = torch.argmax(predictions, dim=1)
+			for batch_index in range(batch_size):
+				predictions_saver.update([
+					X['video_dirs'][batch_index],  			# id
+					y.numpy()[batch_index],					# label	
+					prediction_indices.numpy()[batch_index]	# prediction
+				])
+
 		# measure accuracy
-		# TODO: Pass the predictions saver into accuracy to get prediction labels.
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], batch_size)
 	
