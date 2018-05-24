@@ -1,6 +1,7 @@
 """Utilities for computing and saving model metrics."""
 
 import csv
+import logging
 import matplotlib.pyplot as plt
 
 def accuracy(output, target, topk=(1,)):
@@ -45,7 +46,8 @@ class MetricsCsvSaver(object):
 		self._rows = []
 
 	def __del__(self):
-		"""Saves the file upon destruction."""
+		"""Saves the file, so all data is saved even if an exception is thrown."""
+		logging.info('Saving metrics file to: {0}'.format(self._output_path))
 		with open(self._output_path, 'w') as f:
 			writer = csv.writer(f, lineterminator='\n')
 			writer.writerow(self._header)
@@ -54,13 +56,19 @@ class MetricsCsvSaver(object):
 	def update(self, vals):
 		self._rows.append(vals)
 
-	def plot(self, plot_output_path):
+	def plot(self, plot_output_path, title, xlabel, ylabel):
 		"""Naively plots the first col as the X-axis, vs. the second col as the Y-axis."""
-		X, Y = [list(a) for a in (zip(*x))]
+		logging.info('Saving {0} vs. {1} plot to: {2}'.format(ylabel, xlabel, plot_output_path))
+		X, Y = [list(a) for a in (zip(*self._rows))]
 		plt.figure()
 		plt.plot(X, Y)
+		plt.title(title)
+		plt.xlabel(xlabel)
+		plt.ylabel(ylabel)
 		plt.savefig(plot_output_path)
 
+
+# Light wrapper classes around common saver instances.
 
 class AccuracySaver(MetricsCsvSaver):
 	def __init__(self, output_path):

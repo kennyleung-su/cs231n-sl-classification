@@ -146,7 +146,23 @@ def main():
 											predictions_saver=preds_saver)
 	logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 
-	# TODO: Plot statistics using MetricsCsvSaver.plot.
+	# TODO: Plot training and validation loss on the same graph.
+	train_loss_saver.plot(os.path.join(config.PLOTS, '{0}.{1}.png'.format('train_loss', time.time())),
+		title='Average Training Loss Across Iterations for {0}'.format(MODEL_CONFIG.experiment),
+		xlabel='Iteration',
+		ylabel='Loss')
+
+	train_acc_saver.plot(os.path.join(config.PLOTS, '{0}.{1}.png'.format('train_acc', time.time())),
+		title='Training Accuracy Across Epochs for {0}'.format(MODEL_CONFIG.experiment),
+		xlabel='Epoch',
+		ylabel='Accuracy')
+	valid_acc_saver.plot(os.path.join(config.PLOTS, '{0}.{1}.png'.format('valid_acc', time.time())),
+		title='Validation Accuracy Across Epochs for {0}'.format(MODEL_CONFIG.experiment),
+		xlabel='Epoch',
+		ylabel='Accuracy')
+
+	# TODO: Plot confusion matrix for predictions. Remember to remap back to original labels for interpretability.
+
 
 if __name__ == '__main__':
 	main()
