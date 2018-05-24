@@ -3,15 +3,16 @@ according to config.py."""
 
 import logging
 import numpy as np
+import os
 import random
 import sys
 import time
-import csv
 
 from configs import config
 from configs.config import MODEL_CONFIG
 from utils import data_loader, checkpoint_loader, pickle_encoding
 from trainer import train_utils
+from utils.metrics import AccuracySaver, LossSaver, PredictionSaver
 
 import torch
 import torch.nn.functional as F
@@ -83,6 +84,11 @@ def main():
 		checkpoint_epoch = 0
 		if MODEL_CONFIG.checkpoint_to_load:
 			checkpoint_epoch = model.training_epoch
+
+		train_acc_saver = AccuracySaver(os.path.join(config.METRICS, '{0}.{1}'.format('train_acc', time.time())))
+		valid_acc_saver = AccuracySaver(os.path.join(config.METRICS, '{0}.{1}'.format('valid_acc', time.time())))
+		train_loss_saver = LossSaver(os.path.join(config.METRICS, '{0}.{1}'.format('train_loss', time.time())))
+
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
 			mean_loss = train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
@@ -99,9 +105,7 @@ def main():
 									is_lstm=MODEL_CONFIG.is_lstm,
 									use_cuda=MODEL_CONFIG.use_cuda,
 									verbose=MODEL_CONFIG.verbose)
-			lossdatapoints.append([epoch, mean_loss])
-
-
+			train_loss_saver.update([epoch, np.around(mean_loss, 3)])
 
 			if epoch % MODEL_CONFIG.log_interval == 0:
 				train_acc = train_utils.validate_model(model=parallel_model,
@@ -118,11 +122,9 @@ def main():
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
-				accuracy_datapoints.append([epoch, '{:.2f}'.format(train_acc), '{:.2f}'.format(val_acc)])
-				#atapoints = [epoch, '{:.2f}'.format(train_acc), train_loss, '{:.2f}'.format(val_acc), val_loss]
-				# with open('{0}/{1}_{2}.csv'.format(MODEL_CONFIG.name,MODEL_CONFIG.mode, MODEL_CONFIG.description), 'a') as f:
-				# 	w = csv.writer(f)
-				# 	w.writerow(datapoints)
+				train_acc_saver.update([epoch, '{:.3f}'.format(train_acc)])
+				valid_acc_saver.update([epoch, '{:.3f}'.format(val_acc)])
+
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
 
@@ -131,32 +133,20 @@ def main():
 				model.best_accuracy = val_acc
 				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
-		
-		# Save traing loss into csv, epoch, mean_loss
-		with open('{0}/{1}_{2}_train_loss.csv'.format(config.CSV, config.args.experiment, config.time.time()), 'a') as f:
-			w = csv.writer(f, lineterminator='\n')
-			w.writerows(lossdatapoints)
-		# Save training and valid accuracy into csv, epoch, train_acc, val_acc
-		with open('{0}/{1}_{2}_accuracy.csv'.format(config.CSV, config.args.experiment, config.time.time()), 'a') as f:
-			w = csv.writer(f, lineterminator='\n')
-			w.writerows(accuracy_datapoints)
-
 		# Save the final model to a checkpoint.
 		model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path)
 
 	# Run the model on the test set, using a new test dataloader.
+	preds_saver = PredictionSaver(os.path.join(config.METRICS, '{0}.{1}'.format('preds', time.time())))
 	test_acc = train_utils.validate_model(model=parallel_model,
 											dataloader=test_dataloader,
 											loss_fn=loss_fn,
 											is_lstm=MODEL_CONFIG.is_lstm,
-											use_cuda=MODEL_CONFIG.use_cuda)
+											use_cuda=MODEL_CONFIG.use_cuda,
+											predictions_saver=preds_saver)
 	logging.info('Test Acc: {:.2f}%.'.format(test_acc))
 
-	# TODO Save (and maybe visualize or analyze?) the results.
-	# Use:
-	# 	- config.TRAIN_DIR for aggregate training/validation results
-	# 	- config.TEST_DIR for aggregate testing results
-	# 	- config.MODEL_DIR for general model information
+	# TODO: Plot statistics using MetricsCsvSaver.plot.
 
 if __name__ == '__main__':
 	main()
