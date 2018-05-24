@@ -209,9 +209,11 @@ MODEL_CONFIG.seed = 1
 EXPERIMENTS_DIR = os.path.join(PROJECT_DIR, 'experiments', MODEL_CONFIG.experiment)
 MODEL_DIR = os.path.join(EXPERIMENTS_DIR, 'checkpoints')	# cs231n-sl-classification/experiments/{experiment-name}/checkpoints/
 LOG_DIR = os.path.join(EXPERIMENTS_DIR, 'logs')				# cs231n-sl-classification/experiments/{experiment-name}/logs/
+CSV = os.path.join(EXPERIMENTS_DIR, 'csv')	
 
 mkdir(MODEL_DIR)
 mkdir(LOG_DIR)
+mkdir(CSV)
 
 #################
 # Checkpoint Path

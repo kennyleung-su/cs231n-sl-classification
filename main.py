@@ -28,6 +28,8 @@ def main():
 
 	# Initialize the model, or load a pretrained one.
 	model = MODEL_CONFIG.model(MODEL_CONFIG)
+	lossdatapoints =[]
+	accuracy_datapoints =[]
 
 	# load checkpoint if available
 	if MODEL_CONFIG.load:
@@ -82,7 +84,7 @@ def main():
 		if MODEL_CONFIG.checkpoint_to_load:
 			checkpoint_epoch = model.training_epoch
 		for epoch in range(checkpoint_epoch, MODEL_CONFIG.epochs + checkpoint_epoch):
-			train_utils.train_model(model=parallel_model,
+			mean_loss = train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
 									loss_fn=loss_fn,
 									optimizer=MODEL_CONFIG.optimizer_fn(
@@ -97,15 +99,18 @@ def main():
 									is_lstm=MODEL_CONFIG.is_lstm,
 									use_cuda=MODEL_CONFIG.use_cuda,
 									verbose=MODEL_CONFIG.verbose)
-			
+			lossdatapoints.append([epoch, mean_loss])
+
+
+
 			if epoch % MODEL_CONFIG.log_interval == 0:
-				train_acc, train_loss = train_utils.validate_model(model=parallel_model,
+				train_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=train_dataloader,
 													loss_fn=loss_fn,
 													is_lstm=MODEL_CONFIG.is_lstm,
 													use_cuda=MODEL_CONFIG.use_cuda)
 
-				val_acc, val_loss = train_utils.validate_model(model=parallel_model,
+				val_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=valid_dataloader,
 													loss_fn=loss_fn,
 													is_lstm=MODEL_CONFIG.is_lstm,
@@ -113,10 +118,11 @@ def main():
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
-				datapoints = ['{:.2f}'.format(train_acc), train_loss, '{:.2f}'.format(val_acc), val_loss]
-				with open('test.csv', 'a') as f:
-					w = csv.writer(f)
-					w.writerow(datapoints)
+				accuracy_datapoints.append([epoch, '{:.2f}'.format(train_acc), '{:.2f}'.format(val_acc)])
+				#atapoints = [epoch, '{:.2f}'.format(train_acc), train_loss, '{:.2f}'.format(val_acc), val_loss]
+				# with open('{0}/{1}_{2}.csv'.format(MODEL_CONFIG.name,MODEL_CONFIG.mode, MODEL_CONFIG.description), 'a') as f:
+				# 	w = csv.writer(f)
+				# 	w.writerow(datapoints)
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
 
@@ -125,12 +131,23 @@ def main():
 				model.best_accuracy = val_acc
 				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
+		
+		# Save traing loss into csv, epoch, mean_loss
+		with open('{0}/{1}_{2}_train_loss.csv'.format(config.CSV, config.args.experiment, config.time.time()), 'a') as f:
+			w = csv.writer(f, lineterminator='\n')
+			w.writerows(lossdatapoints)
+		# Save training and valid accuracy into csv, epoch, train_acc, val_acc
+		with open('{0}/{1}_{2}_accuracy.csv'.format(config.CSV, config.args.experiment, config.time.time()), 'a') as f:
+			w = csv.writer(f, lineterminator='\n')
+			w.writerows(accuracy_datapoints)
+
 		# Save the final model to a checkpoint.
 		model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path)
 
 	# Run the model on the test set, using a new test dataloader.
 	test_acc = train_utils.validate_model(model=parallel_model,
 											dataloader=test_dataloader,
+											loss_fn=loss_fn,
 											is_lstm=MODEL_CONFIG.is_lstm,
 											use_cuda=MODEL_CONFIG.use_cuda)
 	logging.info('Test Acc: {:.2f}%.'.format(test_acc))

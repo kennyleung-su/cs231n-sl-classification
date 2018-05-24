@@ -24,6 +24,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 			batch_size = X.size(0)
 		# Compute loss and accuracy
 		predictions = model(X)
+		
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
 		total_loss += loss.item()
@@ -38,6 +39,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 
 	total_loss /= count
 	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
+	return total_loss
 
 def validate_model(model, dataloader, loss_fn, is_lstm, use_cuda=False):
 	# set the model to evaluation mode
@@ -45,6 +47,7 @@ def validate_model(model, dataloader, loss_fn, is_lstm, use_cuda=False):
 	top1 = AverageMeter()
 	total_loss = 0
 
+	count = 0
 	for i, (X, y) in enumerate(dataloader):
 		batch_size = -1
 		# Utilize GPU if enabled
@@ -61,14 +64,17 @@ def validate_model(model, dataloader, loss_fn, is_lstm, use_cuda=False):
 			batch_size = X.size(0)
 		# compute output
 		predictions = model(X)
+		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
-		total_loss += loss.item()
+		#total_loss += loss.item()
+
 
 		# measure accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
 		top1.update(acc1[0], batch_size)
-
-	return top1.avg, total_loss
+		print(top1)
+	
+	return top1.avg
 
 def accuracy(output, target, topk=(1,)):
 	# specifies the the precision of the top k values
