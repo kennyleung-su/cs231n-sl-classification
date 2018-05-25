@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser(description='Gesture classification task.')
 
 parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test" or "pickle".')
+parser.add_argument('--pickle_overwrite', action='store_true')
 
 # For training, testing and pickling
 parser.add_argument('--experiment', type=str,

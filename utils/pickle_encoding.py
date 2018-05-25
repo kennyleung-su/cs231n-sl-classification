@@ -11,6 +11,7 @@ def pickle_encoding(data_dirs, model_config, model):
 	# set generate_encoding to True to capture the encodings before the last layer
 	model.eval()
 	model.generate_encoding = True
+	overwrite = model_config.pickle_overwrite
 	max_example_per_label = model_config.max_example_per_label
 	transform = model_config.transform
 	gesture_labels = model_config.gesture_labels
@@ -20,6 +21,8 @@ def pickle_encoding(data_dirs, model_config, model):
 												  data_type)
 	# encoding with the prefix T means transfer learning has been carried out. else, it takes the output of 
 	# the original imagenet pretrained resnet
+	if overwrite:
+		logging.info('Pickle will now overwrite all the existing encodings.')
 
 	if max_example_per_label:
 		logging.info('Max example per label: {}'.format(max_example_per_label))
@@ -33,6 +36,8 @@ def pickle_encoding(data_dirs, model_config, model):
 				video_dirs = video_dirs[:max_example_per_label]
 
 			for video_dir in video_dirs:
+				if not overwrite and os.path.exists(os.path.join(video_dir, encoding_filename)):
+					continue
 				save_video_encoding_to_dir(video_dir, model, transform, encoding_filename)
 
 
