@@ -30,6 +30,7 @@ parser.add_argument('--dataloader_type', type=str,
 	help='Experiment should have set this by default. Change the dataloader_type only if you know what you are doing\n' +
 	'Type of dataloaders: RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
 # General hyperparameters
+parser.add_argument('--use_full_dataset', action='store_true')
 parser.add_argument('--shuffle', action='store_true')
 parser.add_argument('--max_example_per_label', type=int)
 parser.add_argument('--batch_size', type=int)
@@ -150,6 +151,10 @@ model_dict = {
 MODEL_CONFIG.model = model_dict[MODEL_CONFIG.arch]
 MODEL_CONFIG.is_lstm = (MODEL_CONFIG.arch == 'EncodingLSTMClassifier')
 
+# Whether to use the full dataset.
+TOTAL_NUMBER_OF_LABELS = 249
+if MODEL_CONFIG.use_full_dataset:
+	MODEL_CONFIG.gesture_labels = range(1, TOTAL_NUMBER_OF_LABELS + 1)
 
 ########################
 # Model Hyperparameters
@@ -196,10 +201,6 @@ MODEL_CONFIG.loss_fn = loss_dict[MODEL_CONFIG.loss]
 ################
 
 MODEL_CONFIG.seed = 1
-
-# TODO: Complete with other model types.
-# if MODEL_CONFIG.experiment == 'debug':
-# 	MODEL_CONFIG.model = dev_models.DummyModel
 
 ########################
 # Experiment Directories
