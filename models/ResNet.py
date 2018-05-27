@@ -21,6 +21,11 @@ class PretrainedResNetClassifier(BaseModel):
 		pretrained = self._model_config.pretrained
 		self._resnet = None
 
+		if pretrained:
+			logging.info('Using model pretrained on imagenet.')
+		else:
+			logging.info('Model initialized with fresh weights.')
+
 		if resnet_layer == 18:
 			self._resnet = models.resnet18(pretrained=pretrained)
 		elif resnet_layer == 34:

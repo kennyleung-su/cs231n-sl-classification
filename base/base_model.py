@@ -3,7 +3,6 @@
 import os
 import time
 import logging
-from configs import config
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
