@@ -47,6 +47,7 @@ parser.add_argument('--loss', type=str, default='cross-entropy',
 					help='Type of loss function: cross-entropy, nll')
 # TODO Add in schedulers to optimize the learning: torch.optim.lr_scheduler
 # ResNet specific arguments
+parser.add_argument('--pretrained', action='store_true')
 parser.add_argument('--resnet_num_layers', type=int,
 					help='Number of layer of a pretrained resnet: 18, 34, 50, 101, 152')
 parser.add_argument('--freeze', action='store_true')

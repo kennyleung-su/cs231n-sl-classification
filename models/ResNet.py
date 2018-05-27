@@ -18,18 +18,19 @@ class PretrainedResNetClassifier(BaseModel):
 		super(PretrainedResNetClassifier, self).__init__(*args, **kwargs)
 
 		resnet_layer = self._model_config.resnet_num_layers
+		pretrained = self._model_config.pretrained
 		self._resnet = None
 
 		if resnet_layer == 18:
-			self._resnet = models.resnet18(pretrained=True)
+			self._resnet = models.resnet18(pretrained=pretrained)
 		elif resnet_layer == 34:
-			self._resnet = models.resnet34(pretrained=True)
+			self._resnet = models.resnet34(pretrained=pretrained)
 		elif resnet_layer == 50:
-			self._resnet = models.resnet50(pretrained=True)
+			self._resnet = models.resnet50(pretrained=pretrained)
 		elif resnet_layer == 101:
-			self._resnet = models.resnet101(pretrained=True)
+			self._resnet = models.resnet101(pretrained=pretrained)
 		elif resnet_layer == 152:
-			self._resnet = models.resnet152(pretrained=True)
+			self._resnet = models.resnet152(pretrained=pretrained)
 		else:
 			raise ValueError('There are no models with the given number of layers.')
 
