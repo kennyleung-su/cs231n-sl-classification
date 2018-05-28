@@ -28,7 +28,9 @@ def pickle_encoding(data_dirs, model_config, model):
 		logging.info('Max example per label: {}'.format(max_example_per_label))
 
 	for data_dir in data_dirs:
+		model_config.slack.api_call('chat.postMessage', channel='#experiments', text='Pickling {}'.format(data_dir))
 		for label in gesture_labels:
+			model_config.slack.api_call('chat.postMessage', channel='#experiments', text='Pickling label {}'.format(label))
 			label_dir = os.path.join(data_dir, str(label))
 			video_dirs = get_video_dirs(label_dir, data_type)
 
@@ -42,6 +44,8 @@ def pickle_encoding(data_dirs, model_config, model):
 				# touch the file so another worker will know the encodings are being generated
 				touch(video_path)
 				save_video_encoding_to_dir(video_dir, model, transform, encoding_filename)
+
+	model_config.slack.api_call('chat.postMessage', channel='#experiments', text='Pickling completed')
 
 
 def save_video_encoding_to_dir(video_dir, model, transform, encoding_filename):

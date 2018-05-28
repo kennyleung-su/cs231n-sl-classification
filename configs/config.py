@@ -2,6 +2,7 @@ import argparse
 import logging
 import os
 import time
+from slackclient import SlackClient
 
 from collections import namedtuple
 from configobj import ConfigObj
@@ -133,6 +134,9 @@ for k, v in vars(args).items():
 	if v:
 		exp_config[k] = v
 MODEL_CONFIG = ConfigObjFromDict(**exp_config)
+
+# setup slack test token !!SENSITIVE!!
+MODEL_CONFIG.slack = SlackClient('xoxp-343746905410-345615598245-372037864134-57ade8')
 
 
 ########################
