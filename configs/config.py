@@ -135,9 +135,6 @@ for k, v in vars(args).items():
 		exp_config[k] = v
 MODEL_CONFIG = ConfigObjFromDict(**exp_config)
 
-# setup slack test token !!SENSITIVE!!
-MODEL_CONFIG.slack = SlackClient('xoxp-343746905410-345615598245-372037864134-57ade8')
-
 
 ########################
 # Dataset Configuration
