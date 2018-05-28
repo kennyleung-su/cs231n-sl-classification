@@ -36,8 +36,11 @@ def pickle_encoding(data_dirs, model_config, model):
 				video_dirs = video_dirs[:max_example_per_label]
 
 			for video_dir in video_dirs:
-				if not overwrite and os.path.exists(os.path.join(video_dir, encoding_filename)):
+				video_path = os.path.join(video_dir, encoding_filename)
+				if not overwrite and os.path.exists(video_path):
 					continue
+				# touch the file so another worker will know the encodings are being generated
+				touch(video_path)
 				save_video_encoding_to_dir(video_dir, model, transform, encoding_filename)
 
 
@@ -80,3 +83,7 @@ def get_video_dirs(label_dir, data_type):
 		raise ValueError('Data type for pickling is invalid')
 
 	return glob.glob(os.path.join(label_dir, '{0}*/'.format(prefix)))
+
+def touch(filename):
+	with open(filename, 'a'):
+		os.utime(filename, None)
