@@ -125,13 +125,13 @@ def main():
 				train_acc_saver.update([epoch, '{:.3f}'.format(train_acc)])
 				valid_acc_saver.update([epoch, '{:.3f}'.format(val_acc)])
 
+				# Check if current validation accuracy exceeds the best accuracy
+				if model.best_accuracy < val_acc:
+					model.best_accuracy = val_acc
+					model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
+		
 			# Update model epoch number and accuracy
 			model.training_epoch += 1
-
-			# Check if current validation accuracy exceeds the best accuracy
-			if model.best_accuracy < val_acc:
-				model.best_accuracy = val_acc
-				model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path, is_best=True)
 
 		# Save the final model to a checkpoint.
 		model.save_to_checkpoint(MODEL_CONFIG.checkpoint_path)

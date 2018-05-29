@@ -36,6 +36,9 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 			collate_fn=PadCollate(dataset.max_seq_len, dim=1)
 		)
 
+	if dataset == 'combination':
+		pass
+
 
 def GetDataLoaders(data_dirs, model_config):
 	"""Returns a tuple consisting of the train, valid, and test dataloaders."""

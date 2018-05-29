@@ -39,6 +39,7 @@ def pickle_encoding(data_dirs, model_config, model):
 				video_path = os.path.join(video_dir, encoding_filename)
 				if not overwrite and os.path.exists(video_path):
 					continue
+				print(video_dir)
 				# touch the file so another worker will know the encodings are being generated
 				touch(video_path)
 				save_video_encoding_to_dir(video_dir, model, transform, encoding_filename)
