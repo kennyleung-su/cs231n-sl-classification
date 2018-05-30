@@ -148,9 +148,9 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(1e-5, 1e-2), round_to=5),
+				sweeper.ValueType.CONTINUOUS, range=(1e-5, 1e-4), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.6), round_to=2),
+				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.4), round_to=2),
 			'lstm_hidden_size': sweeper.HyperparameterOption(
 				sweeper.ValueType.FROM_LIST, range=[128, 256, 512, 1024]),
 		},
