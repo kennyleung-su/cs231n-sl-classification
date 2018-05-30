@@ -11,6 +11,7 @@ def pickle_encoding(data_dirs, model_config, model):
 	# set generate_encoding to True to capture the encodings before the last layer
 	model.eval()
 	model.generate_encoding = True
+	use_cuda = model_config.use_cuda
 	overwrite = model_config.pickle_overwrite
 	max_example_per_label = model_config.max_example_per_label
 	transform = model_config.transform
@@ -52,7 +53,13 @@ def pickle_encoding(data_dirs, model_config, model):
 				batch_video_tensors.append(video_tensor)
 
 			# Expect the output to be (N, D) where N = sum of all time lengths of all videos.
-			encodings = model(torch.cat(batch_video_tensors, dim=0))
+			input_tensor = torch.cat(batch_video_tensors, dim=0)
+
+			if use_cuda:
+				logging.info('Using cuda for pickling label {}'.format(label))
+				input_tensor.cuda()
+
+			encodings = model(input_tensor)
 			video_start = 0
 			for video_len, video_path in zip(segment_lengths, video_paths):
 				logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))

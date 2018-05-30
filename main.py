@@ -29,9 +29,14 @@ def main():
 
 	# Initialize the model, or load a pretrained one.
 	model = MODEL_CONFIG.model(MODEL_CONFIG)
-	lossdatapoints =[]
-	accuracy_datapoints =[]
+	lossdatapoints = []
+	accuracy_datapoints = []
 
+	# Set the loss fn
+	loss_fn = MODEL_CONFIG.loss_fn
+	# Random seeds
+	random.seed(MODEL_CONFIG.seed)
+	
 	# load checkpoint if available
 	if MODEL_CONFIG.load:
 		if MODEL_CONFIG.checkpoint_to_load:
@@ -50,19 +55,6 @@ def main():
 	elif MODEL_CONFIG.mode == 'test':
 		raise ValueError('Testing the model requires --load flag and --checkpoint_to_load argument.')
 
-
-	if MODEL_CONFIG.mode == 'pickle':
-		logging.info('The model will now commence pickling')
-		pickle_encoding.pickle_encoding(DATA_DIRS, MODEL_CONFIG, model)
-		return
-	
-	(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
-
-	# Set the loss fn
-	loss_fn = MODEL_CONFIG.loss_fn
-	# Random seeds
-	random.seed(MODEL_CONFIG.seed)
-
 	# activate cuda if available and enable
 	parallel_model = model
 	if MODEL_CONFIG.use_cuda:
@@ -77,6 +69,13 @@ def main():
 			torch.cuda.manual_seed_all(MODEL_CONFIG.seed)
 		else:
 			logging.info('Sorry, no GPUs are available. Running on CPU.')
+
+	if MODEL_CONFIG.mode == 'pickle':
+		logging.info('The model will now commence pickling')
+		pickle_encoding.pickle_encoding(DATA_DIRS, MODEL_CONFIG, parallel_model)
+		return
+
+	(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	# Train the model.
 	if MODEL_CONFIG.mode == 'train':
