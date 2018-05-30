@@ -36,35 +36,45 @@ def pickle_encoding(data_dirs, model_config, model):
 			if max_example_per_label:
 				video_dirs = video_dirs[:max_example_per_label]
 
-			segment_lengths = []
-			video_paths = []
+			FIXED_BATCH_SIZE = 20
+			num_batches = (len(video_dirs) + (FIXED_BATCH_SIZE - 1)) // FIXED_BATCH_SIZE
+			print(num_batches)
+			for batch_idx in range(num_batches):
+				segment_lengths = []
+				video_paths = []
 
-			# Elements consist of (T, C, H, W) tensor.
-			batch_video_tensors = []
+				# Elements consist of (T, C, H, W) tensor.
+				batch_video_tensors = []
 
-			for video_dir in video_dirs:
-				logging.info('Parsing video directory: {0}'.format(video_dir))
-				video_path = os.path.join(video_dir, encoding_filename)
-				if not overwrite and os.path.exists(video_path):
-					continue
-				video_tensor = get_video_tensor_for_dir(video_dir, transform)
-				segment_lengths.append(video_tensor.shape[0])
-				video_paths.append(video_path)
-				batch_video_tensors.append(video_tensor)
+				start_idx = batch_idx * FIXED_BATCH_SIZE
+				end_idx = min(len(video_dirs), start_idx + FIXED_BATCH_SIZE)
+				for video_dir in video_dirs[start_idx : end_idx]:
+					logging.info('Parsing video directory: {0}'.format(video_dir))
+					video_path = os.path.join(video_dir, encoding_filename)
+					if not overwrite and os.path.exists(video_path):
+						continue
+					if overwrite and os.path.exists(video_path):
+						# remove the file before overwriting
+						os.remove(video_path)
 
-			# Expect the output to be (N, D) where N = sum of all time lengths of all videos.
-			input_tensor = torch.cat(batch_video_tensors, dim=0)
+					video_tensor = get_video_tensor_for_dir(video_dir, transform)
+					segment_lengths.append(video_tensor.shape[0])
+					video_paths.append(video_path)
+					batch_video_tensors.append(video_tensor)
 
-			if use_cuda:
-				logging.info('Using cuda for pickling label {}'.format(label))
-				input_tensor.cuda()
+				# Expect the output to be (N, D) where N = sum of all time lengths of all videos.
+				input_tensor = torch.cat(batch_video_tensors, dim=0)
 
-			encodings = model(input_tensor)
-			video_start = 0
-			for video_len, video_path in zip(segment_lengths, video_paths):
-				logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))
-				torch.save(torch.t(encodings[video_start : video_start+video_len, :]), video_path)
-				video_start += video_len
+				if use_cuda:
+					logging.info('Using cuda for pickling label {}'.format(label))
+					input_tensor.cuda()
+
+				encodings = model(input_tensor)
+				video_start = 0
+				for video_len, video_path in zip(segment_lengths, video_paths):
+					logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))
+					torch.save(torch.t(encodings[video_start : video_start+video_len, :]), video_path)
+					video_start += video_len
 
 
 def get_video_tensor_for_dir(video_dir, transform):
@@ -100,7 +110,3 @@ def get_video_dirs(label_dir, data_type):
 		raise ValueError('Data type for pickling is invalid')
 
 	return glob.glob(os.path.join(label_dir, '{0}*/'.format(prefix)))
-
-def touch(filename):
-	with open(filename, 'a'):
-		os.utime(filename, None)
