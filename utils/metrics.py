@@ -24,7 +24,7 @@ def accuracy(output, target, topk=(1,)):
 
 
 class AverageMeter(object):
-	"""Computes and stores the average and current value"""
+	"""Computes and stores the average and current value, among other statistics."""
 	def __init__(self):
 		self.reset()
 
@@ -33,20 +33,33 @@ class AverageMeter(object):
 		self.avg = 0
 		self.sum = 0
 		self.count = 0
+		self.min = float('inf')
+		self.max = float('-inf')
 
 	def update(self, val, n=1):
 		self.val = val
 		self.sum += val * n
 		self.count += n
 		self.avg = self.sum / self.count
+		# Update the range of visited values.
+		if val < self.min:
+			self.min = val
+		if val > self.max:
+			self.max = val
 
 
 class MetricsCsvSaver(object):
 	"""Stores metrics and writes them to the output path."""
-	def __init__(self, output_path, header):
+	def __init__(self, output_path, header, aggregate_index=None):
 		self._output_path = output_path
 		self._header = header
 		self._rows = []
+
+		# Whether to use an AverageMeter to track values at a given index of update().
+		self._aggregate_index = aggregate_index
+		if self._aggregate_index:
+			self.meter = AverageMeter()
+
 
 	def __del__(self):
 		"""Saves the file, so all data is saved even if an exception is thrown."""
@@ -58,11 +71,19 @@ class MetricsCsvSaver(object):
 
 	def update(self, vals):
 		self._rows.append(vals)
+		if self._aggregate_index:
+			if not self.meter:
+				raise ValueError('No AverageMeter has been initialized to aggregate metrics.')
+			self.meter.update(vals[self._aggregate_index])
+
+	def get_plot_points(self):
+		return [ list(a) for a in (zip(*self._rows)) ]
 
 	def plot(self, plot_output_path, title, xlabel, ylabel):
 		"""Naively plots the first col as the X-axis, vs. the second col as the Y-axis."""
 		logging.info('Saving {0} vs. {1} plot to: {2}'.format(ylabel, xlabel, plot_output_path))
-		X, Y = [list(a) for a in (zip(*self._rows))]
+		logging.info()
+		X, Y = self.get_plot_points()
 		plt.figure()
 		plt.plot(X, Y)
 		plt.title(title)
@@ -76,13 +97,15 @@ class MetricsCsvSaver(object):
 class AccuracySaver(MetricsCsvSaver):
 	def __init__(self, output_path):
 		super(AccuracySaver, self).__init__(output_path=output_path,
-											header=["epoch", "accuracy"])
+											header=["epoch", "accuracy"],
+											aggregate_index=1)
 
 
 class LossSaver(MetricsCsvSaver):
 	def __init__(self, output_path):
 		super(LossSaver, self).__init__(output_path=output_path,
-											header=["epoch", "loss"])
+										header=["epoch", "loss"],
+										aggregate_index=1)
 
 
 class PredictionSaver(MetricsCsvSaver):

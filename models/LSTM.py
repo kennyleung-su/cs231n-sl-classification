@@ -24,6 +24,7 @@ class EncodingLSTMClassifier(BaseModel):
 		self._lstm = nn.LSTM(
 			input_size=self._RESNET_OUTPUT_SIZE,
 			hidden_size=self._model_config.lstm_hidden_size,
+			# TODO: Fix bug! Can only handle lstm_num_layers = 1.
 			num_layers=self._model_config.lstm_num_layers,
 			bias=self._model_config.lstm_bias,
 			batch_first=self._model_config.lstm_batch_first,

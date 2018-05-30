@@ -70,6 +70,7 @@ parser.add_argument('--num_workers', type=int, default=4,
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
 # Loading and saving of checkpoints
 parser.add_argument('--load', action='store_true')
+parser.add_argument('--num_sweeps', type=int, default=0)
 parser.add_argument('--checkpoint_to_load', type=str,
 					help='Provide the name of the checkpoint to load')
 
@@ -92,6 +93,12 @@ class ConfigObjFromDict(object):
 
 	def __str__(self):
 		return ' '.join(['{0}: {1}\n'.format(k, v) for k, v in self.__dict__.items()])
+
+	def __copy__(self):
+		return ConfigObjFromDict(**self.__dict__)
+
+	def to_dict(self):
+		return self.__dict__
 
 
 ###################
