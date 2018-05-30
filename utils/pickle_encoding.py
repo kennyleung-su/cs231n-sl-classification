@@ -47,6 +47,10 @@ def pickle_encoding(data_dirs, model_config, model):
 				video_path = os.path.join(video_dir, encoding_filename)
 				if not overwrite and os.path.exists(video_path):
 					continue
+				if overwrite and os.path.exists(video_path):
+					# remove the file before overwriting
+					os.remove(video_path)
+
 				video_tensor = get_video_tensor_for_dir(video_dir, transform)
 				segment_lengths.append(video_tensor.shape[0])
 				video_paths.append(video_path)
@@ -100,7 +104,3 @@ def get_video_dirs(label_dir, data_type):
 		raise ValueError('Data type for pickling is invalid')
 
 	return glob.glob(os.path.join(label_dir, '{0}*/'.format(prefix)))
-
-def touch(filename):
-	with open(filename, 'a'):
-		os.utime(filename, None)
