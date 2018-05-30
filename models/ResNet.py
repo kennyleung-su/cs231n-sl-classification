@@ -69,10 +69,18 @@ class PretrainedResNetClassifier(BaseModel):
 		logging.debug('Feeding input through pretrained resnet.')
 		X = self._resnet(X)
 
+		if self.generate_encoding and not self._model_config.load:
+			# We return the original ResNet encodings since we aren't loading
+			# a custom ResNet model.
+			return X
+
 		logging.debug('Feeding input through an additional hidden/encoding layer.')
 		X = self._resnet_relu_fc(X)
 
 		if self.generate_encoding:
+			# We want the transfer-learned resnet if a model has been loaded.
+			# This transfer-learned model has an additional 1000 x 1000 hidden
+			# layer.
 			return X
 
 		logging.debug('Feeding input through the fully-connected layer.')
