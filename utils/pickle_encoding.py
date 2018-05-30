@@ -35,17 +35,32 @@ def pickle_encoding(data_dirs, model_config, model):
 			if max_example_per_label:
 				video_dirs = video_dirs[:max_example_per_label]
 
+			segment_lengths = []
+			video_paths = []
+
+			# Elements consist of (T, C, H, W) tensor.
+			batch_video_tensors = []
+
 			for video_dir in video_dirs:
+				logging.info('Parsing video directory: ', video_dir)
 				video_path = os.path.join(video_dir, encoding_filename)
 				if not overwrite and os.path.exists(video_path):
 					continue
-				print(video_dir)
-				# touch the file so another worker will know the encodings are being generated
-				touch(video_path)
-				save_video_encoding_to_dir(video_dir, model, transform, encoding_filename)
+				video_tensor = get_video_tensor_for_dir(video_dir, transform)
+				segment_lengths.append(video_tensor.shape[0])
+				video_paths.append(video_path)
+				batch_video_tensors.append(video_tensor)
+
+			# Expect the output to be (N, D) where N = sum of all time lengths of all videos.
+			encodings = model(torch.cat(batch_video_tensors, dim=0))
+			video_start = 0
+			for video_len, video_path in zip(segment_lengths, video_paths):
+				logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))
+				torch.save(torch.t(encodings[video_start : video_start+video_len, :]), video_path)
+				video_start += video_len
 
 
-def save_video_encoding_to_dir(video_dir, model, transform, encoding_filename):
+def get_video_tensor_for_dir(video_dir, transform):
 	filenames = glob.glob(os.path.join(video_dir, '*.png'))
 	matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
 	# sorted list of (frame_number, frame_path) tuples
@@ -56,22 +71,16 @@ def save_video_encoding_to_dir(video_dir, model, transform, encoding_filename):
 		# Read an (H, W, C) shaped tensor.
 		frame_ndarray = imageio.imread(frame_file)
 		# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
-		# print('before:', frame_ndarray)
 		frame_ndarray = transform(frame_ndarray)
 		frames_list.append(frame_ndarray)
 	# Stacks up to a (C, T, H, W) tensor.
 	tensor = torch.stack(frames_list, dim=1)
 	C, T, H, W = tensor.shape
-	encoded_tensor = torch.stack(
-		[model(torch.unsqueeze(torch.squeeze(tensor[:, t, :, :]), dim=0)) for t in range(T)], dim=2
-	)
-	# Squeezing results in a (D, T) tensor.
-	encoded_tensor = torch.squeeze(encoded_tensor, dim=0)
-	print(encoded_tensor.shape)
-	
-	location = os.path.join(video_dir, encoding_filename)
-	logging.info('Pickling an encoded tensor of shape {0} to {1}.'.format(encoded_tensor.shape, location))
-	torch.save(encoded_tensor, location)
+
+	# (C, T, H, W) => (T, C, H, W)
+	tensor = torch.transpose(tensor, 0, 1)
+	return tensor
+
 
 def get_video_dirs(label_dir, data_type):
 	# return a list of paths for the images
