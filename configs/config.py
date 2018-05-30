@@ -2,7 +2,6 @@ import argparse
 import logging
 import os
 import time
-from slackclient import SlackClient
 
 from collections import namedtuple
 from configobj import ConfigObj

@@ -12,4 +12,3 @@ pytz==2018.4
 six==1.11.0
 torch==0.4.0
 torchvision==0.2.1
-slackclient==1.2.1
