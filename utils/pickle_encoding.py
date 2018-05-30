@@ -42,7 +42,7 @@ def pickle_encoding(data_dirs, model_config, model):
 			batch_video_tensors = []
 
 			for video_dir in video_dirs:
-				logging.info('Parsing video directory: ', video_dir)
+				logging.info('Parsing video directory: {0}'.format(video_dir))
 				video_path = os.path.join(video_dir, encoding_filename)
 				if not overwrite and os.path.exists(video_path):
 					continue
