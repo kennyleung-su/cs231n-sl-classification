@@ -25,7 +25,7 @@ class GestureFrameDataset(Dataset):
 		self._data_type = data_type
 		self._data_dir = data_dir
 		# Populate data about where to find and load the videos.
-		self.data = self.populate_gesture_frame_data(data_dir, gesture_labels, data_type)
+		self.data = self.populate_gesture_frame_data(gesture_labels)
 		self.len = len(self.data)
 		logging.info('Initialized a GestureFrameDataset of size {0}.'.format(self.len))
 		super(GestureFrameDataset, self).__init__()
