@@ -22,6 +22,9 @@ class GestureFrameDataset(Dataset):
 		self._transform = transform
 		self._max_example_per_label = max_example_per_label
 		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
+		self._data_type = data_type
+		self._data_dir = data_dir
+		# Populate data about where to find and load the videos.
 		self.data = self.populate_gesture_frame_data(data_dir, gesture_labels, data_type)
 		self.len = len(self.data)
 		logging.info('Initialized a GestureFrameDataset of size {0}.'.format(self.len))
@@ -29,18 +32,26 @@ class GestureFrameDataset(Dataset):
 
 	def __getitem__(self, idx):
 		# TODO(kenny): Figure out how to sample with balanced labels.
-		return self.data[idx]
+		# Lazy load image from the given path.
+		image_data = self.data[idx]
+		label, image_path = image_data['label'], image_data['image_path']
+		# Read a (H, W, C) shaped tensor
+		image_ndarray = imageio.imread(image_path)
+		# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
+		# print('before:', frame_ndarray)
+		image_ndarray = self._transform(image_ndarray)
+		return (image_ndarray, self._labels_to_indices_dict[label])
 
 	def __len__(self):
 		return self.len
 
-	def populate_gesture_frame_data(self, data_dir, gesture_labels, data_type):
+	def populate_gesture_frame_data(self, gesture_labels):
 		"""Returns a list of dicts with keys:
 			'frames': 3D tensor (N, W, C) representing the frames for a video
 			'label': y (ground truth)
 		"""
 		logging.info('Populating frame tensors for {0} specified labels in data dir {1}: {2}'.format(
-			len(gesture_labels), data_dir, gesture_labels))
+			len(gesture_labels), self._data_dir, gesture_labels))
 
 		if self._max_example_per_label:
 			logging.info('Max example per label: {}'.format(self._max_example_per_label))
@@ -48,30 +59,28 @@ class GestureFrameDataset(Dataset):
 		data = []
 
 		for label in gesture_labels:
-			label_dir = os.path.join(data_dir, str(label))
-			imagefiles = self.get_imagefiles(label_dir, data_type)
+			label_dir = os.path.join(self._data_dir, str(label))
+			imagefiles = self.get_imagefiles(label_dir, self._data_type)
 
 			# cap the number of images per label
 			if self._max_example_per_label:
 				imagefiles = imagefiles[:self._max_example_per_label]
 
-			logging.info('Reading frame tensors for label {0} ({1} images)'.format(label, len(imagefiles)))
+			logging.info('Assigning imagefile paths for label: {0} ({1} images)'.format(label, len(imagefiles)))
 			for imagefile in imagefiles:
-				# Read a (H, W, C) shaped tensor
-				image_ndarray = imageio.imread(imagefile)
-				# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
-				# print('before:', frame_ndarray)
-				image_ndarray = self._transform(image_ndarray)
-				data.append((image_ndarray, self._labels_to_indices_dict[label]))
+				data.append({
+					'label': label,
+					'image_path': imagefile
+				})
 
 		return data
 
-	def get_imagefiles(self, label_dir, data_type):
+	def get_imagefiles(self, label_dir):
 		# return a list of paths for the images
 		prefix = None
-		if data_type == 'RGB':
+		if self._data_type == 'RGB':
 			prefix = 'M_'
-		elif data_type == 'RGBD':
+		elif self._data_type == 'RGBD':
 			prefix = 'K_'
 		else:
 			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
