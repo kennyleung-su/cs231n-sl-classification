@@ -151,8 +151,6 @@ def main():
 				sweeper.ValueType.CONTINUOUS, range=(1e-5, 1e-4), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.4), round_to=2),
-			'lstm_hidden_size': sweeper.HyperparameterOption(
-				sweeper.ValueType.FROM_LIST, range=[128, 256, 512, 1024]),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
