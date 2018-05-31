@@ -148,9 +148,11 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(1e-5, 1e-4), round_to=5),
+				sweeper.ValueType.CONTINUOUS, range=(1e-6, 1e-3), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.4), round_to=2),
+				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.5), round_to=2),
+			'weight_decay': sweeper.HyperparameterOption(
+				sweeper.ValueType.CONTINUOUS, range=(0, 1e2), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
@@ -171,6 +173,7 @@ def main():
 
 		hyp_sweeper.analyze_hyperparameter('learning_rate')
 		hyp_sweeper.analyze_hyperparameter('dropout')
+		hyp_sweeper.analyze_hyperparameter('weight_decay')
 
 	# TODO: Analyze the performance across different sweeps.
 	hyp_sweeper.analyze_performance()
