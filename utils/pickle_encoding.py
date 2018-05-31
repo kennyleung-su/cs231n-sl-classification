@@ -38,7 +38,6 @@ def pickle_encoding(data_dirs, model_config, model):
 
 			FIXED_BATCH_SIZE = 20
 			num_batches = (len(video_dirs) + (FIXED_BATCH_SIZE - 1)) // FIXED_BATCH_SIZE
-			print(num_batches)
 			for batch_idx in range(num_batches):
 				segment_lengths = []
 				video_paths = []
@@ -61,6 +60,10 @@ def pickle_encoding(data_dirs, model_config, model):
 					segment_lengths.append(video_tensor.shape[0])
 					video_paths.append(video_path)
 					batch_video_tensors.append(video_tensor)
+
+				if not batch_video_tensors:
+					# No videos to pickle, continue on with the next batch.
+					continue
 
 				# Expect the output to be (N, D) where N = sum of all time lengths of all videos.
 				input_tensor = torch.cat(batch_video_tensors, dim=0)
