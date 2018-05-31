@@ -72,6 +72,7 @@ class ModelConfigMetadataWrapper(ConfigObjFromDict):
 			logging.info('max {0}: {1}'.format(name, saver.meter.max))
 
 
+
 class HyperparameterSweeper(object):
 
 	def __init__(self, config_options, model_config, metrics_dir, plots_dir):
@@ -129,7 +130,7 @@ class HyperparameterSweeper(object):
 		# TODO: Clean up this logic. Sorry for the mess!
 		plt.figure()
 		plt.xlabel('Iteration')
-		plt.ylabel('Loss')
+		plt.ylabel('Training Loss')
 		plt.title('Average Training Loss Across Iterations')
 		for config in self._generated_configs:
 			plt.plot(*config.train_loss_saver.get_plot_points(),
@@ -143,7 +144,7 @@ class HyperparameterSweeper(object):
 
 		plt.figure()
 		plt.xlabel('Epoch')
-		plt.ylabel('Accuracy')
+		plt.ylabel('Validation Accuracy')
 		plt.title('Validation Accuracy Across Epochs')
 		for config in self._generated_configs:
 			plt.plot(*config.valid_acc_saver.get_plot_points(),
@@ -156,8 +157,8 @@ class HyperparameterSweeper(object):
 		plt.savefig(valid_acc_output_path)
 
 		plt.figure()
-		plt.xlabel('Iteration')
-		plt.ylabel('Loss')
+		plt.xlabel('Epoch')
+		plt.ylabel('Training Accuracy')
 		plt.title('Training Accuracy Across Epochs')
 		for config in self._generated_configs:
 			plt.plot(*config.train_acc_saver.get_plot_points(),
@@ -168,6 +169,14 @@ class HyperparameterSweeper(object):
 			hyperparameter, train_acc_output_path))
 		plt.legend()
 		plt.savefig(train_acc_output_path)
+
+	def analyze_confusion(self):
+		for config in self._generated_configs:
+			config.preds_saver.plot(
+				os.path.join(self._plots_dir, 'heatmap.{0}.{1}.png'.format(
+					self._model_config.experiment,
+					time.time())),
+				'Gesture classification confusion matrix')
 
 	def number_of_completed_sweeps(self):
 		return len(self._generated_configs)

@@ -174,6 +174,7 @@ def main():
 
 	# TODO: Analyze the performance across different sweeps.
 	hyp_sweeper.analyze_performance()
+	hyp_sweeper.analyze_confusion()
 
 
 if __name__ == '__main__':
