@@ -36,7 +36,7 @@ def pickle_encoding(data_dirs, model_config, model):
 			if max_example_per_label:
 				video_dirs = video_dirs[:max_example_per_label]
 
-			FIXED_BATCH_SIZE = 20
+			FIXED_BATCH_SIZE = 100
 			num_batches = (len(video_dirs) + (FIXED_BATCH_SIZE - 1)) // FIXED_BATCH_SIZE
 			for batch_idx in range(num_batches):
 				segment_lengths = []

@@ -55,7 +55,7 @@ class PretrainedResNetClassifier(BaseModel):
 		)
 
 		# Set generate_encoding to True only when pickling the encodings
-		self.generate_encoding = False
+		self.generate_encoding = self._model_config.mode == 'pickle'
 
 		# Freeze all the conv layers and only update the FC layers
 		if self._model_config.freeze:
