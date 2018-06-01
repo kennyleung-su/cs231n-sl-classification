@@ -60,7 +60,7 @@ class GestureFrameDataset(Dataset):
 
 		for label in gesture_labels:
 			label_dir = os.path.join(self._data_dir, str(label))
-			imagefiles = self.get_imagefiles(label_dir, self._data_type)
+			imagefiles = self.get_imagefiles(label_dir)
 
 			# cap the number of images per label
 			if self._max_example_per_label:
