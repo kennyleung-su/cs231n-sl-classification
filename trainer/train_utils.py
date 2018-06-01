@@ -1,5 +1,6 @@
 import logging
 import torch
+from tqdm import tqdm
 
 from utils.metrics import accuracy, AverageMeter
 
@@ -11,7 +12,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 
 	# loop through data batches
 	count = 0
-	for batch_idx, (X, y) in enumerate(dataloader):
+	for batch_idx, (X, y) in enumerate(tqdm(dataloader)):
 		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
