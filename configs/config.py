@@ -69,7 +69,7 @@ parser.add_argument('--debug', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
 parser.add_argument('--log_interval', type=int, default=10)
-parser.add_argument('--num_workers', type=int, default=4,
+parser.add_argument('--num_workers', type=int, default=10,
 					help='Number of separate processes with which to run the DataLoader. '
 					'Set to a value, e.g. 4, when running on a VM with high compute.')
 # Loading and saving of checkpoints

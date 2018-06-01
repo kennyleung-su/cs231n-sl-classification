@@ -112,8 +112,15 @@ def run_experiment_with_config(model_config):
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
-				model_config.train_acc_saver.update([epoch, np.around(train_acc.numpy(), 3)])
-				model_config.valid_acc_saver.update([epoch, np.around(val_acc.numpy(), 3)])
+
+				if model_config.use_cuda:
+					train_acc_np = train_acc.cpu().numpy()
+					val_acc_np = val_acc.cpu().numpy()
+				else:
+					train_acc_np = train_acc.numpy()
+					val_acc_np = val_acc.numpy()
+				model_config.train_acc_saver.update([epoch, np.around(train_acc_np, 3)])
+				model_config.valid_acc_saver.update([epoch, np.around(val_acc_np, 3)])
 
 				# Check if current validation accuracy exceeds the best accuracy
 				if model.best_accuracy < val_acc:

@@ -33,7 +33,8 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 			batch_size=batch_size,
 			shuffle=shuffle,
 			num_workers=num_workers,
-			collate_fn=PadCollate(dataset.max_seq_len, dim=1)
+			collate_fn=PadCollate(dataset.max_seq_len, dim=1),
+			pin_memory=True
 		)
 
 	if dataset == 'combination':
