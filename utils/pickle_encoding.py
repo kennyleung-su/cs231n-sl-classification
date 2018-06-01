@@ -13,6 +13,9 @@ def pickle_encoding(data_dirs, model_config, model):
 	model.generate_encoding = True
 	use_cuda = model_config.use_cuda
 	overwrite = model_config.pickle_overwrite
+	pickle_dataset = model_config.pickle_dataset
+	pickle_label_start = model_config.pickle_label_start
+	pickle_label_end = model_config.pickle_label_end
 	max_example_per_label = model_config.max_example_per_label
 	transform = model_config.transform
 	gesture_labels = model_config.gesture_labels
@@ -28,8 +31,26 @@ def pickle_encoding(data_dirs, model_config, model):
 	if max_example_per_label:
 		logging.info('Max example per label: {}'.format(max_example_per_label))
 
+	if pickle_dataset:
+		logging.info('Pickling for only {} dataset'.format(pickle_dataset))
+
+	if pickle_label_start:
+		logging.info('Pickling from start label: {}'.format(pickle_label_start))
+
+	if pickle_label_end:
+		logging.info('Pickling till end label: {}'.format(pickle_label_end))
+
 	for data_dir in data_dirs:
+		if pickle_dataset and pickle_dataset != os.path.split(data_dir)[1]:
+			print('Skip {} dataset'.format(os.path.split(data_dir)[1]))
+			continue
 		for label in gesture_labels:
+			if pickle_label_start and label < pickle_label_start:
+				print('Skip {} label as it is before the start'.format(label))
+				continue
+			if pickle_label_end and label > pickle_label_end:
+				print('Skip {} label as it is after the end'.format(label))
+				continue
 			label_dir = os.path.join(data_dir, str(label))
 			video_dirs = get_video_dirs(label_dir, data_type)
 
