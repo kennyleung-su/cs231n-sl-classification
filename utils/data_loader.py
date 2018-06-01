@@ -17,6 +17,10 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 	# Build a dataloader using the configuration information. Subjected to change
 	data_type, dataset = dataloader_type.split('-')
 
+	if os.path.split(data_dir)[1] == 'test':
+		logging.info('Remove max_example_per_label for test dataset')
+		max_example_per_label = None
+
 	if dataset == 'image':
 		transformed_dataset = GestureFrameDataset(gesture_labels, data_dir, data_type, transform, max_example_per_label)
 
