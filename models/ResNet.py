@@ -64,6 +64,22 @@ class PretrainedResNetClassifier(BaseModel):
 				param.requires_grad = False
 		self._resnet.fc.requires_grad = True
 
+		# set initializer
+		if not pretrained:
+			for m in self.modules():
+				classname = m.__class__.__name__
+				if classname in modules_to_initialize:
+					for name, param in m.named_parameters():
+						if 'bias' in name:
+							# TODO(kenny): Consider a dynamic bias initialization.
+							logging.info('Initializing bias {0}.{1} with zeros.'.format(
+								classname, name))
+							nn.init.constant_(param, 0.0)
+						elif 'weight' in name:
+							logging.info('Initializing weight {0} using {1}.'.format(
+								m, self._model_config.initializer))
+							self._model_config.initializer_fn(param)
+
 	def forward(self, X):
 		""" Feeds frames into the ResNet"""
 		logging.debug('Feeding input through pretrained resnet.')
