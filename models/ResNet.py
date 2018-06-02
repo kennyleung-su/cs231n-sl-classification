@@ -66,6 +66,7 @@ class PretrainedResNetClassifier(BaseModel):
 
 		# set initializer
 		if not pretrained:
+			modules_to_initialize = ['Conv2d', 'Linear']
 			for m in self.modules():
 				classname = m.__class__.__name__
 				if classname in modules_to_initialize:
