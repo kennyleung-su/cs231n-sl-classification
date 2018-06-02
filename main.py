@@ -70,7 +70,7 @@ def run_experiment_with_config(model_config):
 			pickle_encoding.pickle_encoding(DATA_DIRS, model_config, parallel_model)
 			return
 
-	(train_dataloader, valid_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, model_config)
+	(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, model_config)
 
 	# Train the model.
 	if model_config.mode == 'train':

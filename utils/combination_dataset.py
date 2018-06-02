@@ -7,22 +7,54 @@ import numpy as np
 import os
 import re
 import torch
-from torch.utils.data import Dataset
+
+from utils.resnet_encoding_dataset import ResnetEncodingDataset
 
 
-class CombinationEncodingDataset(Dataset):
-
-	def __init__(self, gesture_labels, data_dir, data_type, max_example_per_label):
-		self._labels_to_indices_dict = self.map_labels_to_indices(gesture_labels)
-		self._max_example_per_label = max_example_per_label
-		logging.info('Reindexed labels: {0}'.format(self._labels_to_indices_dict))
-		self.data, self.max_seq_len = self.populate_encoding_data(data_dir, gesture_labels, data_type)
-		self.len = len(self.data)
-		logging.info('Initialized a ResnetEncodingDataset of size {0}.'.format(self.len))
-		super(ResnetEncodingDataset, self).__init__()
+class CombinationDataset(ResnetEncodingDataset):
 
 	def __getitem__(self, idx):
-		return self.data[idx]
+		# TODO(kenny): Figure out how to sample with balanced labels.
+		item = self.data[idx]
 
-	def __len__(self):
-		return self.len
+		# Tack on the (D, T) tensor representing the spatiotemporal frames for a video.
+		video_dir = os.path.join(self._data_dir, item['video_dir'])
+		item['frames'] = self.read_frame_tensors_from_dir(video_dir)
+		return item
+
+	def populate_encoding_data(self, gesture_labels):
+		"""Returns a list of dicts with keys:
+			'label': y (ground truth)
+			'seq_len': number of frames in the video
+			'video_dir': data-dir-relative directory where videos are stored
+		"""
+		logging.info('Populating frame tensors for {0} specified labels in data dir {1}: {2}'.format(
+			len(gesture_labels), self._data_dir, gesture_labels))
+
+		if self._max_example_per_label:
+			logging.info('Max example per label: {}'.format(self._max_example_per_label))
+
+		data = []
+		max_seq_len = -1
+
+		for label in gesture_labels:
+			label_dir = os.path.join(self._data_dir, str(label))
+			video_dirs = self.get_video_dirs(label_dir)
+
+			# cap the number of images per label
+			if self._max_example_per_label:
+				video_dirs = video_dirs[:self._max_example_per_label]
+
+			logging.info('Assigning frame tensor locations for label: {0} ({1} videos)'.format(
+				label, len(video_dirs)))
+			for video_dir in video_dirs:
+				# Keep track of the global max seq len for batch RNN unrolling purposes.
+				seq_len = len(glob.glob(os.path.join(video_dir, '*.png')))
+				max_seq_len = max(max_seq_len, seq_len)
+				data.append({
+					'label': self._labels_to_indices_dict[label],
+					'video_dir': video_dir,
+					'seq_len': seq_len
+				})
+
+		return data, max_seq_len

@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from utils.pad_utils import PadCollate
 from utils.gesture_frame_dataset import GestureFrameDataset
 from utils.resnet_encoding_dataset import ResnetEncodingDataset
+from utils.combination_dataset import CombinationDataset
 
 def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 				batch_size, transform, num_workers, max_example_per_label, shuffle=False):
@@ -42,7 +43,15 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 		)
 
 	if dataset == 'combination':
-		pass
+		dataset = CombinationDataset(gesture_labels, data_dir, data_type, max_example_per_label)
+
+		return DataLoader(dataset,
+			batch_size=batch_size,
+			shuffle=shuffle,
+			num_workers=num_workers,
+			collate_fn=PadCollate(dataset.max_seq_len, dim=1)
+			# pin_memory=True
+		)
 
 
 def GetDataLoaders(data_dirs, model_config):
