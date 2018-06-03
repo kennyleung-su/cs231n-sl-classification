@@ -80,6 +80,7 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 		for epoch in range(checkpoint_epoch, model_config.epochs + checkpoint_epoch):
 			mean_loss = train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
+									# TODO: Pass class weights array to the loss function if it's CE.
 									loss_fn=loss_fn,
 									optimizer=model_config.optimizer_fn(
 										# Allows the model to freeze certain parameters
@@ -164,9 +165,6 @@ def main():
 		plots_dir = config.PLOTS
 	)
 
-
-	# Running locally without a test folder - DO NOT SUBMIT.
-	DATA_DIRS[-1] = DATA_DIRS[-2]
 	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
 	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
