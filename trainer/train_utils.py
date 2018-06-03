@@ -38,8 +38,8 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		optimizer.step()
 
 		if verbose:
-			print('Progress [{}/{} ({:.0f}%)]'.format(count, len(dataloader.dataset), 
-				100. * batch_idx / len(dataloader)))
+			print('Progress [{}/{} ({:.0f}%)]\tLoss:{1}'.format(count, len(dataloader.dataset), 
+				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
 	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
@@ -75,7 +75,7 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 			prediction_indices = torch.argmax(predictions, dim=1)
 			for batch_index in range(batch_size):
 				predictions_saver.update([
-					X['video_dirs'][batch_index],  			# id
+					X['video_dirs'][batch_index].strip('/').split('/')[-1], # id
 					y.numpy()[batch_index],					# label	
 					prediction_indices.numpy()[batch_index]	# prediction
 				])
