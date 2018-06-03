@@ -13,27 +13,28 @@ from utils.metrics import AccuracySaver, LossSaver, PredictionSaver
 class ValueType(Enum):
 		DISCRETE = 1
 		CONTINUOUS = 2
-		FROM_LIST = 3  # TODO: Make FROM_LIST samples exhastive for the list, if possible.
 
 
 class HyperparameterOption(object):
-	def __init__(self, value_type, range, round_to=10):
+	def __init__(self, value_type, value_range=(0, 10), exp_range=None, round_to=10):
 		self._value_type = value_type
-		self._range = range   # either of the form [min, max) or [x1, x2, x3]
+		# Values are range^(exp_range) drawn uniformly using (low, high) tuples.
+		self._range = value_range
+		self._exp_range = exp_range
 		self._round_to = round_to
-		if self._value_type != ValueType.FROM_LIST:
-			assert len(range) == 2, "Range must be of length 2 for the given value type range."
+		assert len(self._range) == 2, "Value range must be of length 2."
+		assert self._exp_range is None or len(self._exp_range) == 2, "Exponent range must be of length 2."
+
+	def sample_exp(self):
+		return np.random.randint(*self._exp_range) if self._exp_range else 0
 
 	def sample(self):
 		if self._value_type == ValueType.DISCRETE:
 			# Sample a discrete value
-			return np.random.randint(*self._range)
+			return np.random.randint(*self._range) * 10**self.sample_exp()
 		elif self._value_type == ValueType.CONTINUOUS:
 			# Sample a continuous value
-			return np.around(np.random.uniform(*self._range), self._round_to)
-		elif self._value_type == ValueType.FROM_LIST:
-			# Sample a random value from the list
-			return np.random.choice(self._range).astype(list)  # For some reason this fixes dtype issues.
+			return np.around(np.random.uniform(*self._range), self._round_to) * 10**self.sample_exp()
 
 
 class ModelConfigMetadataWrapper(ConfigObjFromDict):
