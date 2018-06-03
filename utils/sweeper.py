@@ -62,6 +62,10 @@ class ModelConfigMetadataWrapper(ConfigObjFromDict):
 				num_classes=len(kwargs['gesture_labels']))
 
 	def __str__(self):
+		if not self.sampled_config:
+			# If we aren't sweeping, then just return 'default' + the time of the
+			# experiment because it's just using the default parameters.
+			return 'default.{0}'.format(time.time())
 		args = []
 		for k, v in sorted(self.sampled_config.items()):
 			args.append('{0}={1}'.format(k, v))
