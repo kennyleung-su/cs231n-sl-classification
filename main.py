@@ -20,7 +20,7 @@ import torch.nn.functional as F
 
 DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
 
-def run_experiment_with_config(model_config):
+def run_experiment_with_config(model_config, train_dataloader, valid_dataloader, test_dataloader):
 	# Initialize the model, or load a pretrained one.
 	model = MODEL_CONFIG.model(model_config)
 	lossdatapoints = []
@@ -70,8 +70,6 @@ def run_experiment_with_config(model_config):
 			pickle_encoding.pickle_encoding(DATA_DIRS, model_config, parallel_model)
 			return
 
-	(train_dataloader, valid_dataloader, test_dataloader) = data_loader.GetDataLoaders(DATA_DIRS, model_config)
-
 	# Train the model.
 	if model_config.mode == 'train':
 		logging.info("Model will now begin training.")
@@ -97,7 +95,7 @@ def run_experiment_with_config(model_config):
 									verbose=model_config.verbose)
 			model_config.train_loss_saver.update([epoch, np.around(mean_loss, 3)])
 
-			if epoch % model_config.log_interval == 0:
+			if epoch % model_config.validate_every == 0:
 				train_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=train_dataloader,
 													loss_fn=loss_fn,
@@ -155,36 +153,42 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(1e-6, 1e-3), round_to=5),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -3), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(0.0, 0.5), round_to=2),
+				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.4), round_to=2),
 			'weight_decay': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, range=(0, 1e2), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-3, -1), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
 		plots_dir = config.PLOTS
 	)
 
-	if MODEL_CONFIG.num_sweeps == 0:
+
+	# Running locally without a test folder - DO NOT SUBMIT.
+	DATA_DIRS[-1] = DATA_DIRS[-2]
+	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
+
+	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
 		 model_config = hyp_sweeper.get_original_sweep()
-		 run_experiment_with_config(model_config)
+		 run_experiment_with_config(model_config, *dataloaders)
 	else:
 		# Run the model across random hyperparameter settings.
 		for model_config in hyp_sweeper.get_random_sweeps(MODEL_CONFIG.num_sweeps):
-			logging.info('===== HYPERPARAMETER SWEEP <{0}> {1}/{2} ====='.format(
-				hash(model_config), hyp_sweeper.number_of_completed_sweeps(),
-				model_config.num_sweeps))
+			logging.info('===== HYPERPARAMETER SWEEP {0}/{1} ====='.format(
+				hyp_sweeper.number_of_completed_sweeps(), model_config.num_sweeps))
 			logging.info('Hyperparameters swept: {0}'.format(model_config.sampled_config))
-			run_experiment_with_config(model_config)
+			run_experiment_with_config(model_config, *dataloaders)
 
 		hyp_sweeper.analyze_hyperparameter('learning_rate')
 		hyp_sweeper.analyze_hyperparameter('dropout')
 		hyp_sweeper.analyze_hyperparameter('weight_decay')
 
 	# TODO: Analyze the performance across different sweeps.
-	hyp_sweeper.analyze_performance()
-	hyp_sweeper.analyze_confusion()
+	if MODEL_CONFIG.mode != 'pickle':
+		hyp_sweeper.analyze_performance()
+		# hyp_sweeper.analyze_confusion()	
+		hyp_sweeper.analyze_train_vs_valid_accuracy()
 
 
 if __name__ == '__main__':

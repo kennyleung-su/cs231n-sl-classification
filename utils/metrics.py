@@ -119,6 +119,7 @@ class PredictionSaver(MetricsCsvSaver):
 		# Receives a triplet of (id, target, pred)
 		id, target, pred = vals
 		self._confusion_matrix[target, pred] += 1
+		self._rows.append(vals)
 		super(PredictionSaver, self).update
 
 	def plot(self, plot_output_path, title):

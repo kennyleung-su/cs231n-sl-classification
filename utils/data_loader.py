@@ -56,7 +56,7 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 
 def GetDataLoaders(data_dirs, model_config):
 	"""Returns a tuple consisting of the train, valid, and test dataloaders."""
-	return (GenerateDataLoader(
+	return [GenerateDataLoader(
 		model_config.gesture_labels,
 		model_config.dataloader_type,
 		data_directory,
@@ -66,4 +66,4 @@ def GetDataLoaders(data_dirs, model_config):
 		model_config.num_workers or 0,
 		model_config.max_example_per_label,
 		model_config.shuffle
-		) for data_directory in data_dirs)
+		) for data_directory in data_dirs]
