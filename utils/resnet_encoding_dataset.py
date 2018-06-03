@@ -34,6 +34,7 @@ class ResnetEncodingDataset(Dataset):
 
 		# Tack on the (D, T) tensor representing the spatiotemporal frames for a video.
 		video_dir = os.path.join(self._data_dir, item['video_dir'])
+		logging.debug('Fetching gesture video for: {0}: {1}'.format(idx, video_dir)) 
 		item['frames'] = self.read_frame_tensors_from_dir(video_dir)
 		return item
 
