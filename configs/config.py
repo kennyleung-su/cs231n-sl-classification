@@ -244,14 +244,18 @@ MODEL_CONFIG.checkpoint_path = MODEL_DIR
 ##########
 # File in which to log output.
 # Just import logging, config in a library to log to the same location.
-logfile = os.path.join(LOG_DIR, '{0}-{1}-info.txt'.format(args.experiment, time.time()))
+curr_time = time.time()
+info_logfile = os.path.join(LOG_DIR, '{0}-{1}.INFO'.format(args.experiment, curr_time)) 
+debug_logfile = os.path.join(LOG_DIR, '{0}-{1}.DEBUG'.format(args.experiment, curr_time))
 
 try:
-	file = open(logfile, 'r')
+	info_f = open(info_logfile, 'r')
+	debug_f = open(debug_logfile, 'r')
 except IOError:
-	file = open(logfile, 'w')
+	info_f = open(info_logfile, 'w')
+	debug_f = open(debug_logfile, 'w')
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG if args.debug else logging.INFO)
+logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(asctime)s] %(message)s')
 
 # Set up a streaming logger.
@@ -259,9 +263,14 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 
-fh = logging.FileHandler(logfile)
-fh.setLevel(logging.INFO)
-fh.setFormatter(formatter)
+fh_info = logging.FileHandler(info_logfile)
+fh_info.setLevel(logging.INFO)
+fh_info.setFormatter(formatter)
+
+fh_debug = logging.FileHandler(debug_logfile)
+fh_debug.setLevel(logging.DEBUG)
+fh_debug.setFormatter(formatter)
 
 logger.addHandler(ch)
-logger.addHandler(fh)
+logger.addHandler(fh_info)
+logger.addHandler(fh_debug)
