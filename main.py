@@ -156,7 +156,7 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -3), round_to=5),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-5, -3), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.4), round_to=2),
 			'weight_decay': sweeper.HyperparameterOption(
