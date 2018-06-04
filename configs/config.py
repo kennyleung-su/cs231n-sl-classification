@@ -180,14 +180,27 @@ if MODEL_CONFIG.use_full_dataset:
 # H and W are expected to be at least 224. The images have to be loaded
 # in to a range of [0, 1] and then normalized using
 
-normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+normalize = None
+
+if MODEL_CONFIG.dataloader_type == 'RGB-image':
+	normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 								 std=[0.229, 0.224, 0.225])
-MODEL_CONFIG.transform = transforms.Compose([
-			transforms.ToPILImage(),
-			transforms.CenterCrop(224),
-			transforms.ToTensor(),
-			normalize,
-		])
+#elif MODEL_CONFIG.dataloader_type == 'RGBD-image':
+#	normalize = transforms.Normalize(mean=[0., 0., 0.],
+#								 std=[0.229, 0.224, 0.225])
+
+	MODEL_CONFIG.transform = transforms.Compose([
+				transforms.ToPILImage(),
+				transforms.CenterCrop(224),
+				transforms.ToTensor(),
+				normalize,
+			])
+elif MODEL_CONFIG.dataloader_type == 'RGBD-image':
+	MODEL_CONFIG.transform = transforms.Compose([
+				transforms.ToPILImage(),
+				transforms.CenterCrop(224),
+				transforms.ToTensor(),
+			])
 
 optimizer_dict = {
 	'adam': torch.optim.Adam,
