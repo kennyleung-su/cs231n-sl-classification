@@ -186,7 +186,7 @@ if MODEL_CONFIG.dataloader_type == 'RGB-image':
 	normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 								 std=[0.229, 0.224, 0.225])
 elif MODEL_CONFIG.dataloader_type == 'RGBD-image':
-	normalize = transforms.Normalize(mean=[0.0269, 0.0269, 0.0269],
+	normalize = transforms.Normalize(mean=[0., 0., 0.],
 								 std=[0.2541, 0.2547, 0.2539])
 
 MODEL_CONFIG.transform = transforms.Compose([
