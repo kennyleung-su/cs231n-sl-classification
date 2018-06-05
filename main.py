@@ -78,7 +78,7 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 			checkpoint_epoch = model.training_epoch
 
 		for epoch in range(checkpoint_epoch, model_config.epochs + checkpoint_epoch):
-			mean_loss = train_utils.train_model(model=parallel_model,
+			mean_loss, train_acc = train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
 									# TODO: Pass class weights array to the loss function if it's CE.
 									loss_fn=loss_fn,
@@ -96,13 +96,18 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 									verbose=model_config.verbose)
 			model_config.train_loss_saver.update([epoch, np.around(mean_loss, 3)])
 
-			if epoch % model_config.validate_every == 0:
-				train_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=train_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
+			if model_config.use_cuda:
+				train_acc_np = train_acc.cpu().numpy()
+			else:
+				train_acc_np = train_acc.numpy()
 
+			model_config.train_acc_saver.update([epoch, np.around(train_acc_np, 3)])
+
+			# save the model after every epoch
+			if model_config.save_every_epoch:
+				model.save_to_checkpoint(model_config.checkpoint_path)
+
+			if epoch % model_config.validate_every == 0:
 				with torch.no_grad():
 					val_acc = train_utils.validate_model(model=parallel_model,
 														dataloader=valid_dataloader,
@@ -110,16 +115,13 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 														is_lstm=model_config.is_lstm,
 														use_cuda=model_config.use_cuda)
 
-				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
-					.format(epoch, train_acc, val_acc))
+				logging.info('Validation Acc: {:.2f}%'
+					.format(val_acc))
 
 				if model_config.use_cuda:
-					train_acc_np = train_acc.cpu().numpy()
 					val_acc_np = val_acc.cpu().numpy()
 				else:
-					train_acc_np = train_acc.numpy()
 					val_acc_np = val_acc.numpy()
-				model_config.train_acc_saver.update([epoch, np.around(train_acc_np, 3)])
 				model_config.valid_acc_saver.update([epoch, np.around(val_acc_np, 3)])
 
 				# Check if current validation accuracy exceeds the best accuracy

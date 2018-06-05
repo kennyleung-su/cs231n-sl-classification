@@ -68,6 +68,7 @@ parser.add_argument('--max_seq_len', type=int,
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
+parser.add_argument('--save_every_epoch', action='store_true')
 parser.add_argument('--validate_every', type=int, default=10,
 					help='Number of interval epochs between which to validate the model.')
 parser.add_argument('--num_workers', type=int, default=16,
