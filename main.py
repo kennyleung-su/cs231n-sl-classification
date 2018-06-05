@@ -101,14 +101,16 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 													dataloader=train_dataloader,
 													loss_fn=loss_fn,
 													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
+													use_cuda=model_config.use_cuda,
+													verbose=model_config.verbose)
 
 				with torch.no_grad():
 					val_acc = train_utils.validate_model(model=parallel_model,
 														dataloader=valid_dataloader,
 														loss_fn=loss_fn,
 														is_lstm=model_config.is_lstm,
-														use_cuda=model_config.use_cuda)
+														use_cuda=model_config.use_cuda,
+														verbose=model_config.verbose)
 
 				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
 					.format(epoch, train_acc, val_acc))
