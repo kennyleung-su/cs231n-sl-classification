@@ -21,9 +21,7 @@ def process_rgb_optical_flow(data_dir, prefix='M_'):
 	indices = [int(f.split('/')[-1].rstrip('.png').split('_')[-1]) for f in frames]
 	sorted_indices = np.argsort(indices)
 	sorted_frames = frames[sorted_indices]
-	
 	# Feed each adjacent pair of frames into the dense optical flow model.
-	print('Saving optical flow images for frames in directory: {0}'.format(data_dir))
 	save_optical_flow(sorted_frames, data_dir)
 
 
@@ -31,7 +29,7 @@ def save_optical_flow(frames, output_dir):
 	"""Computes and saves optical flow frames in the output directory."""
 	frame1_path = frames[0]
 	prev_frame = cv2.cvtColor(cv2.imread(frame1_path), cv2.COLOR_RGB2GRAY)
-	for i in tqdm(range(1, len(frames))):
+	for i in range(1, len(frames)):
 		# Hue, saturation, value (3-channel representation of the optical flow vector)
 
 		output_file = os.path.join(output_dir, 'OF_{0}.png'.format(i))
@@ -59,10 +57,12 @@ def save_optical_flow(frames, output_dir):
 
 def main():
 	for folder in folders:
+		print('Saving optical flow images for frames in folder: {0}'.format(folder))
 		for prefix in prefices:
 			label_dirs = glob.glob('{0}/*/{1}*'.format(os.path.join(DATASET_DIR, folder), prefix))
-			label_dirs = filter(lambda x: os.path.isdir(x), label_dirs)
-			for label_dir in label_dirs:
+			label_dirs = [x for x in label_dirs if os.path.isdir(x)]
+			print('Saving optical flow images for frames with prefix: {0}'.format(prefix))
+			for label_dir in tqdm(label_dirs):
 				process_rgb_optical_flow(label_dir, prefix=prefix)
 
 
