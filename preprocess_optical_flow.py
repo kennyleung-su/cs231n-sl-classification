@@ -52,21 +52,25 @@ def save_optical_flow(frames, output_dir):
 		rgb_flow = cv2.cvtColor(hsv,cv2.COLOR_HSV2RGB)
 
 		# Save to file if it doesn't already exist
+		print('Saving file...{0}'.format(output_file))
 		cv2.imwrite(output_file, rgb_flow)
 		prev_frame = next_frame
 
 
 def main():
-	pool = ThreadPool(4) 
+	pool = ThreadPool(10)
+	results = []
 	for folder in folders:
 		print('Saving optical flow images for frames in folder: {0}'.format(folder))
 		for prefix in prefices:
 			label_dirs = glob.glob('{0}/*/{1}*'.format(os.path.join(DATASET_DIR, folder), prefix))
 			label_dirs = [x for x in label_dirs if os.path.isdir(x)]
-			print('Saving optical flow images for frames with prefix: {0}'.format(prefix))
+			print('Saving optical flow images for frames with prefix {0} in folder: {1}'.format(
+				prefix, os.path.join(DATASET_DIR, folder)))
 			for label_dir in tqdm(label_dirs):
 				pool.apply_async(process_rgb_optical_flow, (label_dir, prefix))
-				# process_rgb_optical_flow(label_dir, prefix=prefix)
+	pool.close()
+	pool.join()
 
 
 if __name__ == '__main__':
