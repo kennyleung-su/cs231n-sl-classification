@@ -123,8 +123,10 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 				model_config.valid_acc_saver.update([epoch, np.around(val_acc_np, 3)])
 
 				# Check if current validation accuracy exceeds the best accuracy
-				if model.best_accuracy < val_acc:
-					model.best_accuracy = val_acc
+				best_acc = float(model.best_accuracy)
+				curr_acc = float(val_acc)
+				if best_acc < curr_acc:
+					model.best_accuracy = curr_acc
 					model.save_to_checkpoint(model_config.checkpoint_path, is_best=True)
 		
 			# Update model epoch number and accuracy
