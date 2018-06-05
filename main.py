@@ -162,9 +162,9 @@ def main():
 			'learning_rate': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, exp_range=(-5, -3), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.4), round_to=2),
+				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.2), round_to=2),
 			'weight_decay': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-3, -1), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
