@@ -136,7 +136,7 @@ def main():
 	counter = Counter()  # max
 	for folder in folders:
 		# print('Saving optical flow images for frames in folder: {0}'.format(folder))
-		label_dirs = glob.glob('{0}/35/{1}*'.format(os.path.join(DATASET_DIR, folder), args.prefix))
+		label_dirs = glob.glob('{0}/*/{1}*'.format(os.path.join(DATASET_DIR, folder), args.prefix))
 		label_dirs = [x for x in label_dirs if os.path.isdir(x)]
 		# print('Saving optical flow images for frames with prefix {0} in folder: {1}'.format(
 		# args.prefix, os.path.join(DATASET_DIR, folder)))
