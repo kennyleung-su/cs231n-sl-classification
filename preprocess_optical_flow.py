@@ -6,6 +6,7 @@ import cv2
 import glob
 import numpy as np
 import os
+from tqdm import tqdm
 
 folders = ['train', 'valid', 'test']
 prefices = ['M_', 'K_']
@@ -30,8 +31,13 @@ def save_optical_flow(frames, output_dir):
 	"""Computes and saves optical flow frames in the output directory."""
 	frame1_path = frames[0]
 	prev_frame = cv2.cvtColor(cv2.imread(frame1_path), cv2.COLOR_RGB2GRAY)
-	for i in range(1, len(frames)):
+	for i in tqdm(range(1, len(frames))):
 		# Hue, saturation, value (3-channel representation of the optical flow vector)
+
+		output_file = os.path.join(output_dir, 'OF_{0}.png'.format(i))
+		if os.path.isfile(output_file):
+			continue
+
 		hsv = np.zeros((*prev_frame.shape[:2], 3))
 		next_frame = cv2.cvtColor(cv2.imread(frames[i]), cv2.COLOR_RGB2GRAY)
 		flow = cv2.calcOpticalFlowFarneback(prev_frame, next_frame, None, 0.5, 3, 15, 3, 5, 1.2, 0)
@@ -47,9 +53,7 @@ def save_optical_flow(frames, output_dir):
 		rgb_flow = cv2.cvtColor(hsv,cv2.COLOR_HSV2RGB)
 
 		# Save to file if it doesn't already exist
-		output_file = os.path.join(output_dir, 'OF_{0}.png'.format(i))
-		if not os.path.isfile(output_file):
-			cv2.imwrite(output_file, rgb_flow)
+		cv2.imwrite(output_file, rgb_flow)
 		prev_frame = next_frame
 
 
