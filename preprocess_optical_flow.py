@@ -4,7 +4,7 @@ Stores the optical flow computed from each pair of time frames as a new image: O
 """
 import cv2
 import glob
-import multiprocessing.dummy as mp
+from multiprocessing.dummy import Pool as ThreadPool 
 import numpy as np
 import os
 from tqdm import tqdm
@@ -57,7 +57,7 @@ def save_optical_flow(frames, output_dir):
 
 
 def main():
-	pool = mp.Pool(8)
+	pool = ThreadPool(4) 
 	for folder in folders:
 		print('Saving optical flow images for frames in folder: {0}'.format(folder))
 		for prefix in prefices:
@@ -66,8 +66,6 @@ def main():
 			print('Saving optical flow images for frames with prefix: {0}'.format(prefix))
 			for label_dir in tqdm(label_dirs):
 				pool.apply_async(process_rgb_optical_flow, (label_dir, prefix))
-				pool.close()
-				pool.join()
 				# process_rgb_optical_flow(label_dir, prefix=prefix)
 
 
