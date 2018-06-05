@@ -64,9 +64,9 @@ logger.addHandler(fh_info)
 
 
 class Counter(object):
-	def __init__(self):
+	def __init__(self, total):
 		self.val = multiprocessing.Value('i', 0)
-		self.pbar = tqdm()
+		self.pbar = tqdm(total=total)
 
 	def __del__(self):
 		self.pbar.close()
@@ -126,14 +126,15 @@ def save_optical_flow(frames, output_dir, stride, counter=None, overwrite=False)
 		cv2.imwrite(output_file, rgb_flow)
 		logging.info('Saved optical flow file: {0}'.format(output_file))
 		prev_frame = next_frame
-		if counter:
-			counter.increment()
+
+	if counter:
+		counter.increment()
 
 
 def main():
 	pool = ThreadPool(args.num_workers)
 	results = []
-	counter = Counter()  # max
+	counter = Counter(total=47933)  # max
 	for folder in folders:
 		# print('Saving optical flow images for frames in folder: {0}'.format(folder))
 		label_dirs = glob.glob('{0}/*/{1}*'.format(os.path.join(DATASET_DIR, folder), args.prefix))
