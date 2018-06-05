@@ -64,9 +64,9 @@ logger.addHandler(fh_info)
 
 
 class Counter(object):
-	def __init__(self, total):
+	def __init__(self):
 		self.val = multiprocessing.Value('i', 0)
-		self.pbar = tqdm(total=total)
+		self.pbar = tqdm()
 
 	def __del__(self):
 		self.pbar.close()
@@ -133,7 +133,7 @@ def save_optical_flow(frames, output_dir, stride, counter=None, overwrite=False)
 def main():
 	pool = ThreadPool(args.num_workers)
 	results = []
-	counter = Counter(3500000)  # max
+	counter = Counter()  # max
 	for folder in folders:
 		# print('Saving optical flow images for frames in folder: {0}'.format(folder))
 		label_dirs = glob.glob('{0}/35/{1}*'.format(os.path.join(DATASET_DIR, folder), args.prefix))
