@@ -61,6 +61,7 @@ def main():
 	for folder in folders:
 		for prefix in prefices:
 			label_dirs = glob.glob('{0}/*/{1}*'.format(os.path.join(DATASET_DIR, folder), prefix))
+			label_dirs = filter(lambda x: os.path.isdir(x), label_dirs)
 			for label_dir in label_dirs:
 				process_rgb_optical_flow(label_dir, prefix=prefix)
 
