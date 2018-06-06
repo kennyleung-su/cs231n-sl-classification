@@ -143,7 +143,8 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 														dataloader=valid_dataloader,
 														loss_fn=loss_fn,
 														is_lstm=model_config.is_lstm,
-														use_cuda=model_config.use_cuda)
+														use_cuda=model_config.use_cuda,
+														verbose=model_config.verbose)
 
 				logging.info('Validation Acc: {:.2f}%'
 					.format(val_acc))

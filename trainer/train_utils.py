@@ -43,7 +43,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		optimizer.step()
 
 		if verbose:
-			print('Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
+			print('Train Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
 				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
@@ -52,13 +52,13 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 
 	return total_loss, train_acc
 
-def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, use_cuda=False):
+def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, use_cuda=False, verbose=False):
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
 
 	count = 0
-	for i, (X, y) in enumerate(tqdm(dataloader)):
+	for batch_idx, (X, y) in enumerate(dataloader):
 		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
@@ -75,6 +75,10 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		# compute output
 		predictions = model(X)
 		count += predictions.shape[0]
+
+		if verbose:
+			print('Valid/Test Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
+				100. * batch_idx / len(dataloader), loss.item()))
 
 		if is_lstm and predictions_saver:
 			prediction_indices = torch.argmax(predictions, dim=1)
