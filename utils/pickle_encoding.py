@@ -104,7 +104,7 @@ def pickle_encoding(data_dirs, model_config, model):
 					logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))
 					obj_to_save = torch.t(encodings[video_start : video_start+video_len, :])
 					if use_cuda:
-						obj_to_save = obj_to_save.cpu().numpy()
+						obj_to_save = obj_to_save.cpu()
 					pickle.dump(obj_to_save, open(video_path, 'wb'))
 					video_start += video_len
 
