@@ -97,15 +97,15 @@ class ResnetEncodingDataset(Dataset):
 		if data_type.startswith('OF'):  # optical flow images, which has both RGB and RGBD variants.
 			file_prefix = 'OF'
 			data_type = data_type.lstrip('OF')
-		if data_type == 'RGB':
+		if data_type.endswith('RGB'):
 			dir_prefix = 'M_'
-		elif data_type == 'RGBD':
+		elif data_type.endswith('RGBD'):
 			dir_prefix = 'K_'
 		else:
 			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
 
-		return glob.glob(os.path.join(label_dir, '{0}*/{1}*.png'.format(
-			dir_prefix, file_prefix or dir_prefix)))
+		return glob.glob(os.path.join(label_dir, '{0}*/'.format(
+			dir_prefix)))
 
 
 	@staticmethod
