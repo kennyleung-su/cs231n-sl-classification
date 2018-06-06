@@ -35,7 +35,7 @@ class ResnetEncodingDataset(Dataset):
 		# Tack on the (D, T) tensor representing the spatiotemporal frames for a video.
 		video_dir = os.path.join(self._data_dir, item['video_dir'])
 		logging.debug('Fetching gesture video for: {0}: {1}'.format(idx, video_dir)) 
-		item['frames'] = self.read_frame_tensors_from_dir(video_dir)
+		item['frames'] = self.read_frame_tensors_from_dir(video_dir, self._data_type)
 		return item
 
 	def __len__(self):
@@ -58,7 +58,7 @@ class ResnetEncodingDataset(Dataset):
 
 		for label in gesture_labels:
 			label_dir = os.path.join(self._data_dir, str(label))
-			video_dirs = self.get_video_dirs(label_dir)
+			video_dirs = self.get_video_dirs(label_dir, self._data_type)
 
 			# cap the number of images per label
 			if self._max_example_per_label:
@@ -78,15 +78,15 @@ class ResnetEncodingDataset(Dataset):
 
 		return data, max_seq_len
 
-	def read_frame_tensors_from_dir(self, directory):
-		location = os.path.join(directory, '{}-encoding.pkl'.format(self._data_type))
+	def read_frame_tensors_from_dir(self, directory, data_type):
+		location = os.path.join(directory, '{}-encoding.pkl'.format(data_type))
 		return torch.load(location, map_location=lambda storage, loc: storage)
 
-	def get_video_dirs(self, label_dir):
+	def get_video_dirs(self, label_dir, data_type):
 
 		# return a list of paths for the images
 		prefix = None
-		data_type = self._data_type
+
 		if data_type.endswith('RGB'):
 			prefix = 'M_'
 		elif data_type.endswith('RGBD'):
