@@ -86,9 +86,10 @@ class ResnetEncodingDataset(Dataset):
 
 		# return a list of paths for the images
 		prefix = None
-		if self._data_type.endswith('RGB'):
+		data_type = self._data_type
+		if data_type.endswith('RGB'):
 			prefix = 'M_'
-		elif self._data_type.endswith('RGBD'):
+		elif data_type.endswith('RGBD'):
 			prefix = 'K_'
 		else:
 			raise ValueError('Data type for pickling is invalid')

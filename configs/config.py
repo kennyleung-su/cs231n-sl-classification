@@ -32,7 +32,7 @@ parser.add_argument('--arch', type=str,
 	help='Type of architecture for the model. Experiment should have set this by default')
 parser.add_argument('--dataloader_type', type=str,
 	help='Experiment should have set this by default. Change the dataloader_type only if you know what you are doing\n' +
-	'Type of dataloaders: RN18-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
+	'Type of dataloaders: (RN18RGB-encoding+TRN18RGBD-encoding)-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
 # General hyperparameters
 parser.add_argument('--starting_from', type=int, default=1)
 parser.add_argument('--use_full_dataset', action='store_true')
@@ -189,6 +189,12 @@ if MODEL_CONFIG.dataloader_type in ['RGB-image', 'OFRGB-image']:
 elif MODEL_CONFIG.dataloader_type in ['RGBD-image', 'OFRGBD-image']:
 	normalize = transforms.Normalize(mean=[0.1337, 0.1337, 0.1337],
 								 std=[0.2541, 0.2547, 0.2539])
+elif MODEL_CONFIG.dataloader_type == 'OFRGB-image':
+	normalize = transforms.Normalize(mean=[-0.2686, -0.2686, -0.1343],
+								std=[0.0655,  0.5214,  0.4264])
+elif MODEL_CONFIG.dataloader_type == 'OFRGBD-image':
+	normalize = transforms.Normalize(mean=1.00e-2*[-6.7142, -6.7142, -6.7142],
+								std=[0.2501,  0.3951,  0.3619])
 
 MODEL_CONFIG.transform = transforms.Compose([
 			transforms.ToPILImage(),

@@ -20,7 +20,7 @@ import torch.nn.functional as F
 
 DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
 
-def run_experiment_with_config(model_config, train_dataloader, valid_dataloader, test_dataloader):
+def run_experiment_with_config(model_config, train_dataloader=False, valid_dataloader=False, test_dataloader=False):
 	# Initialize the model, or load a pretrained one.
 	model = MODEL_CONFIG.model(model_config)
 	lossdatapoints = []
@@ -51,6 +51,7 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 
 	# activate cuda if available and enable
 	parallel_model = model
+
 	if model_config.use_cuda:
 		if torch.cuda.is_available():
 			logging.info('Running the model using GPUs. (--use_cuda)')
@@ -69,6 +70,35 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 		with torch.no_grad():
 			pickle_encoding.pickle_encoding(DATA_DIRS, model_config, parallel_model)
 			return
+
+	# Test the model.
+	if model_config.mode == 'test':
+		logging.info("Model will now begin test on training, validation and test set.")
+
+		with torch.no_grad():
+			train_acc = train_utils.validate_model(model=parallel_model,
+													dataloader=train_dataloader,
+													loss_fn=loss_fn,
+													is_lstm=model_config.is_lstm,
+													use_cuda=model_config.use_cuda)
+			logging.info('Training Acc: {:.2f}%'
+					.format(train_acc))
+
+			val_acc = train_utils.validate_model(model=parallel_model,
+													dataloader=valid_dataloader,
+													loss_fn=loss_fn,
+													is_lstm=model_config.is_lstm,
+													use_cuda=model_config.use_cuda)
+			logging.info('Valid Acc: {:.2f}%'
+					.format(val_acc))
+
+			test_acc = train_utils.validate_model(model=parallel_model,
+													dataloader=test_dataloader,
+													loss_fn=loss_fn,
+													is_lstm=model_config.is_lstm,
+													use_cuda=model_config.use_cuda)
+			logging.info('Test Acc: {:.2f}%'
+					.format(test_acc))
 
 	# Train the model.
 	if model_config.mode == 'train':
@@ -113,7 +143,8 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 														dataloader=valid_dataloader,
 														loss_fn=loss_fn,
 														is_lstm=model_config.is_lstm,
-														use_cuda=model_config.use_cuda)
+														use_cuda=model_config.use_cuda,
+														verbose=model_config.verbose)
 
 				logging.info('Validation Acc: {:.2f}%'
 					.format(val_acc))
@@ -171,11 +202,16 @@ def main():
 		plots_dir = config.PLOTS
 	)
 
+
+	if MODEL_CONFIG.mode == 'pickle':
+		model_config = hyp_sweeper.get_original_sweep()
+		run_experiment_with_config(model_config)
+
 	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
-	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
-		 model_config = hyp_sweeper.get_original_sweep()
-		 run_experiment_with_config(model_config, *dataloaders)
+	if MODEL_CONFIG.num_sweeps == 0:
+		model_config = hyp_sweeper.get_original_sweep()
+		run_experiment_with_config(model_config, *dataloaders)
 	else:
 		# Run the model across random hyperparameter settings.
 		for model_config in hyp_sweeper.get_random_sweeps(MODEL_CONFIG.num_sweeps):
