@@ -58,7 +58,7 @@ class ResnetEncodingDataset(Dataset):
 
 		for label in gesture_labels:
 			label_dir = os.path.join(self._data_dir, str(label))
-			video_dirs = self.get_video_dirs(label_dir)
+			video_dirs = self.get_video_dirs(label_dir, data_type)
 
 			# cap the number of images per label
 			if self._max_example_per_label:
@@ -82,13 +82,13 @@ class ResnetEncodingDataset(Dataset):
 		location = os.path.join(directory, '{}-encoding.pkl'.format(self._data_type))
 		return torch.load(location, map_location=lambda storage, loc: storage)
 
-	def get_video_dirs(self, label_dir):
+	def get_video_dirs(self, label_dir, data_type):
 
 		# return a list of paths for the images
 		prefix = None
-		if self._data_type.endswith('RGB'):
+		if data_type.endswith('RGB'):
 			prefix = 'M_'
-		elif self._data_type.endswith('RGBD'):
+		elif data_type.endswith('RGBD'):
 			prefix = 'K_'
 		else:
 			raise ValueError('Data type for pickling is invalid')
