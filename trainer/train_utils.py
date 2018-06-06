@@ -56,7 +56,6 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
-	total_loss = 0
 
 	count = 0
 	for batch_idx, (X, y) in enumerate(dataloader):
@@ -76,7 +75,6 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		# compute output
 		predictions = model(X)
 		count += predictions.shape[0]
-		loss = loss_fn(predictions, y)
 
 		if verbose:
 			print('Valid/Test Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 

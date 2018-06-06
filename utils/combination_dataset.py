@@ -1,7 +1,6 @@
 # Load a combination of ResNet encodings / pose estimation for LSTM
 
 import glob
-import imageio
 import logging
 import numpy as np
 import os
@@ -47,6 +46,7 @@ class CombinationDataset(ResnetEncodingDataset):
 
 			logging.info('Assigning frame tensor locations for label: {0} ({1} videos)'.format(
 				label, len(video_dirs)))
+			
 			for video_dir in video_dirs:
 				# Keep track of the global max seq len for batch RNN unrolling purposes.
 				seq_len = len(glob.glob(os.path.join(video_dir, '*.png')))
