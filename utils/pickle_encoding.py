@@ -62,7 +62,7 @@ def pickle_encoding(data_dirs, model_config, model):
 			if max_example_per_label:
 				video_dirs = video_dirs[:max_example_per_label]
 
-			FIXED_BATCH_SIZE = 50
+			FIXED_BATCH_SIZE = 1
 			num_batches = (len(video_dirs) + (FIXED_BATCH_SIZE - 1)) // FIXED_BATCH_SIZE
 			for batch_idx in range(num_batches):
 				segment_lengths = []
@@ -112,9 +112,9 @@ def pickle_encoding(data_dirs, model_config, model):
 def get_video_tensor_for_dir(video_dir, transform, data_type):
 	if data_type.startswith('OF'):
 		file_prefix = 'OF'
-	elif data_type.startswith('RGB'):
+	elif data_type.endswith('RGB'):
 		file_prefix = 'M'
-	elif data_type.startswith('RGBD'):
+	elif data_type.endswith('RGBD'):
 		file_prefix = 'K'
 
 	filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
