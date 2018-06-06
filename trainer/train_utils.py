@@ -85,8 +85,8 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 			for batch_index in range(batch_size):
 				predictions_saver.update([
 					X['video_dirs'][batch_index].strip('/').split('/')[-1], # id
-					y.numpy()[batch_index],					# label	
-					prediction_indices.numpy()[batch_index]	# prediction
+					y.cpu().numpy()[batch_index] if use_cuda else y.numpy()[batch_index],					# label	
+					prediction_indices.cpu().numpy()[batch_index] if use_cuda else prediction_indices.numpy()[batch_index]	# prediction
 				])
 
 		# measure accuracy
