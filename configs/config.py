@@ -68,6 +68,7 @@ parser.add_argument('--max_seq_len', type=int,
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--use_cuda', action='store_true')
+parser.add_argument('--save_every_epoch', action='store_true')
 parser.add_argument('--validate_every', type=int, default=10,
 					help='Number of interval epochs between which to validate the model.')
 parser.add_argument('--num_workers', type=int, default=16,
@@ -188,6 +189,12 @@ if MODEL_CONFIG.dataloader_type == 'RGB-image':
 elif MODEL_CONFIG.dataloader_type == 'RGBD-image':
 	normalize = transforms.Normalize(mean=[0.1337, 0.1337, 0.1337],
 								 std=[0.2541, 0.2547, 0.2539])
+elif MODEL_CONFIG.dataloader_type == 'OFRGB-image':
+	normalize = transforms.Normalize(mean=[-0.2686, -0.2686, -0.1343],
+								std=[0.0655,  0.5214,  0.4264])
+elif MODEL_CONFIG.dataloader_type == 'OFRGBD-image':
+	normalize = transforms.Normalize(mean=1.00e-2*[-6.7142, -6.7142, -6.7142],
+								std=[0.2501,  0.3951,  0.3619])
 
 MODEL_CONFIG.transform = transforms.Compose([
 			transforms.ToPILImage(),

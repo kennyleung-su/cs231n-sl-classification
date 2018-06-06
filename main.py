@@ -20,7 +20,7 @@ import torch.nn.functional as F
 
 DATA_DIRS = [config.TRAIN_DATA_DIR, config.VALID_DATA_DIR, config.TEST_DATA_DIR]
 
-def run_experiment_with_config(model_config, train_dataloader, valid_dataloader, test_dataloader):
+def run_experiment_with_config(model_config, train_dataloader=False, valid_dataloader=False, test_dataloader=False):
 	# Initialize the model, or load a pretrained one.
 	model = MODEL_CONFIG.model(model_config)
 	lossdatapoints = []
@@ -78,7 +78,7 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 			checkpoint_epoch = model.training_epoch
 
 		for epoch in range(checkpoint_epoch, model_config.epochs + checkpoint_epoch):
-			mean_loss = train_utils.train_model(model=parallel_model,
+			mean_loss, train_acc = train_utils.train_model(model=parallel_model,
 									dataloader=train_dataloader,
 									# TODO: Pass class weights array to the loss function if it's CE.
 									loss_fn=loss_fn,
@@ -96,14 +96,18 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 									verbose=model_config.verbose)
 			model_config.train_loss_saver.update([epoch, np.around(mean_loss, 3)])
 
-			if epoch % model_config.validate_every == 0:
-				train_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=train_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda,
-													verbose=model_config.verbose)
+			if model_config.use_cuda:
+				train_acc_np = train_acc.cpu().numpy()
+			else:
+				train_acc_np = train_acc.numpy()
 
+			model_config.train_acc_saver.update([epoch, np.around(train_acc_np, 3)])
+
+			# save the model after every epoch
+			if model_config.save_every_epoch:
+				model.save_to_checkpoint(model_config.checkpoint_path)
+
+			if epoch % model_config.validate_every == 0:
 				with torch.no_grad():
 					val_acc = train_utils.validate_model(model=parallel_model,
 														dataloader=valid_dataloader,
@@ -112,21 +116,20 @@ def run_experiment_with_config(model_config, train_dataloader, valid_dataloader,
 														use_cuda=model_config.use_cuda,
 														verbose=model_config.verbose)
 
-				logging.info('Train Epoch: {}\tTrain Acc: {:.2f}%\tValidation Acc: {:.2f}%'
-					.format(epoch, train_acc, val_acc))
+				logging.info('Validation Acc: {:.2f}%'
+					.format(val_acc))
 
 				if model_config.use_cuda:
-					train_acc_np = train_acc.cpu().numpy()
 					val_acc_np = val_acc.cpu().numpy()
 				else:
-					train_acc_np = train_acc.numpy()
 					val_acc_np = val_acc.numpy()
-				model_config.train_acc_saver.update([epoch, np.around(train_acc_np, 3)])
 				model_config.valid_acc_saver.update([epoch, np.around(val_acc_np, 3)])
 
 				# Check if current validation accuracy exceeds the best accuracy
-				if model.best_accuracy < val_acc:
-					model.best_accuracy = val_acc
+				best_acc = float(model.best_accuracy)
+				curr_acc = float(val_acc)
+				if best_acc < curr_acc:
+					model.best_accuracy = curr_acc
 					model.save_to_checkpoint(model_config.checkpoint_path, is_best=True)
 		
 			# Update model epoch number and accuracy
@@ -160,20 +163,25 @@ def main():
 			'learning_rate': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, exp_range=(-5, -3), round_to=5),
 			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.4), round_to=2),
+				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.2), round_to=2),
 			'weight_decay': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-3, -1), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
 		plots_dir = config.PLOTS
 	)
 
+
+	if MODEL_CONFIG.mode == 'pickle':
+		model_config = hyp_sweeper.get_original_sweep()
+		run_experiment_with_config(model_config)
+
 	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
 
-	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
-		 model_config = hyp_sweeper.get_original_sweep()
-		 run_experiment_with_config(model_config, *dataloaders)
+	if MODEL_CONFIG.num_sweeps == 0:
+		model_config = hyp_sweeper.get_original_sweep()
+		run_experiment_with_config(model_config, *dataloaders)
 	else:
 		# Run the model across random hyperparameter settings.
 		for model_config in hyp_sweeper.get_random_sweeps(MODEL_CONFIG.num_sweeps):
