@@ -32,7 +32,8 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
-		total_loss += loss.item()
+		loss_num = loss.item()
+		total_loss += loss_num
 		
 		# Compute running accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
@@ -40,11 +41,12 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 
 		optimizer.zero_grad()
 		loss.backward()
+		del loss, predictions, X, y
 		optimizer.step()
 
 		if verbose:
-			print('Train Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
-				100. * batch_idx / len(dataloader), loss.item()))
+			print('Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
+				100. * batch_idx / len(dataloader), loss_num))
 
 	total_loss /= count
 	train_acc = top1.avg
