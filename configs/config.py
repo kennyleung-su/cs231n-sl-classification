@@ -22,8 +22,6 @@ parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test" or "pickle".')
 parser.add_argument('--pickle_overwrite', action='store_true')
 parser.add_argument('--pickle_dataset', type=str)
-parser.add_argument('--pickle_label_start', type=int)
-parser.add_argument('--pickle_label_end', type=int)
 
 # For training, testing and pickling
 parser.add_argument('--experiment', type=str,
@@ -171,7 +169,6 @@ MODEL_CONFIG.is_lstm = (MODEL_CONFIG.arch == 'EncodingLSTMClassifier')
 TOTAL_NUMBER_OF_LABELS = 249
 if MODEL_CONFIG.use_full_dataset:
 	MODEL_CONFIG.gesture_labels = range(MODEL_CONFIG.starting_from, TOTAL_NUMBER_OF_LABELS + 1)
-
 ########################
 # Model Hyperparameters
 ########################
