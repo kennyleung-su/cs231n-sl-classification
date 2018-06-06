@@ -43,7 +43,7 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		optimizer.step()
 
 		if verbose:
-			print('Progress [{}/{} ({:.0f}%)]\tLoss:{1}'.format(count, len(dataloader.dataset), 
+			print('Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
 				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
