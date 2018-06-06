@@ -8,6 +8,7 @@ from utils.metrics import accuracy, AverageMeter
 def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=False, verbose=False):
 	# set model to train mode
 	model.train()
+	top1 = AverageMeter()
 	total_loss = 0
 
 	# loop through data batches
@@ -26,12 +27,16 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 			batch_size = X['X'].size(0)
 		else:
 			batch_size = X.size(0)
-		# Compute loss and accuracy
+		# Compute loss
 		predictions = model(X)
 		
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
 		total_loss += loss.item()
+		
+		# Compute running accuracy
+		acc1 = accuracy(predictions.data, y, (1,))
+		top1.update(acc1[0], batch_size)
 
 		optimizer.zero_grad()
 		loss.backward()
@@ -42,8 +47,10 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
-	logging.info('Train Epoch: {} \tLoss: {:.6f}'.format(epoch, total_loss))
-	return total_loss
+	train_acc = top1.avg
+	logging.info('Train Epoch: {} \tLoss: {:.6f} \t Training Acc: {:.2f}'.format(epoch, total_loss, train_acc))
+
+	return total_loss, train_acc
 
 def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, use_cuda=False):
 	# set the model to evaluation mode
