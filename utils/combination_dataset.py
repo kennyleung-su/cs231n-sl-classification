@@ -17,8 +17,17 @@ class CombinationDataset(ResnetEncodingDataset):
 		item = self.data[idx]
 
 		# Tack on the (D, T) tensor representing the spatiotemporal frames for a video.
-		video_dir = os.path.join(self._data_dir, item['video_dir'])
-		item['frames'] = self.read_frame_tensors_from_dir(video_dir)
+		video_dir_list = item['video_dir_list']
+		frames_list = []
+
+		for idx, video_dir in enumerate(video_dir_list):
+			video_dir = os.path.join(self._data_dir, video_dir)
+			data_type = self._data_types[idx]
+			frames_list.append(self.read_frame_tensors_from_dir(video_dir, data_type))
+
+		item['frames'] = torch.cat(frames_list, 1)
+		print(item['frames'].shape)
+
 		return item
 
 	def populate_encoding_data(self, gesture_labels):
@@ -36,24 +45,41 @@ class CombinationDataset(ResnetEncodingDataset):
 		data = []
 		max_seq_len = -1
 
+		data_type_str = self._data_type[1:-1]
+		data_types = data_type_str.split('+')
+		self._data_types = data_types
+		
 		for label in gesture_labels:
 			label_dir = os.path.join(self._data_dir, str(label))
-			video_dirs = self.get_video_dirs(label_dir)
+			video_dirs_list = []
 
-			# cap the number of images per label
-			if self._max_example_per_label:
-				video_dirs = video_dirs[:self._max_example_per_label]
+			for data_type in data_types:
+				video_dirs = self.get_video_dirs(label_dir, data_type)
+				print(video_dirs)
+
+				# cap the number of images per label
+				if self._max_example_per_label:
+					video_dirs = video_dirs[:self._max_example_per_label]
+
+				print(video_dirs)
+
+				video_dirs_list.append(video_dirs)
 
 			logging.info('Assigning frame tensor locations for label: {0} ({1} videos)'.format(
 				label, len(video_dirs)))
-			
-			for video_dir in video_dirs:
+
+			for video_idx, video_dir in enumerate(video_dirs_list[0]):
 				# Keep track of the global max seq len for batch RNN unrolling purposes.
 				seq_len = len(glob.glob(os.path.join(video_dir, '*.png')))
 				max_seq_len = max(max_seq_len, seq_len)
+				video_dir_list = [video_dir]
+
+				for video_dirs in video_dirs_list[1:]:
+					video_dir_list.append(video_dirs[video_idx])
+
 				data.append({
 					'label': self._labels_to_indices_dict[label],
-					'video_dir': video_dir,
+					'video_dir_list': video_dir_list,
 					'seq_len': seq_len
 				})
 

@@ -21,8 +21,13 @@ class EncodingLSTMClassifier(BaseModel):
 	def __init__(self, *args, **kwargs):
 		super(EncodingLSTMClassifier, self).__init__(*args, **kwargs)
 		
+		input_size = self._RESNET_OUTPUT_SIZE
+
+		if self._model_config.encoding_input_size:
+			input_size = self._model_config.encoding_input_size
+
 		self._lstm = nn.LSTM(
-			input_size=self._RESNET_OUTPUT_SIZE,
+			input_size=input_size,
 			hidden_size=self._model_config.lstm_hidden_size,
 			# TODO: Fix bug! Can only handle lstm_num_layers = 1.
 			num_layers=self._model_config.lstm_num_layers,

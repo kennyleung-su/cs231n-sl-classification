@@ -58,7 +58,7 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 	top1 = AverageMeter()
 
 	count = 0
-	for batch_idx, (X, y) in enumerate(dataloader):
+	for batch_idx, (X, y) in enumerate(tqdm(dataloader)):
 		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
