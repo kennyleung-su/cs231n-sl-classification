@@ -77,15 +77,22 @@ class GestureFrameDataset(Dataset):
 
 	def get_imagefiles(self, label_dir):
 		# return a list of paths for the images
-		prefix = None
-		if self._data_type == 'RGB':
-			prefix = 'M_'
-		elif self._data_type == 'RGBD':
-			prefix = 'K_'
+		dir_prefix = None
+		file_prefix = None
+		data_type = self._data_type
+
+		if data_type.startswith('OF'):  # optical flow images, which has both RGB and RGBD variants.
+			file_prefix = 'OF'
+			data_type = data_type.lstrip('OF')
+		if data_type == 'RGB':
+			file_prefix = 'M_'
+		elif data_type == 'RGBD':
+			file_prefix = 'K_'
 		else:
 			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
 
-		return glob.glob(os.path.join(label_dir, '{0}*/{0}*.png'.format(prefix)))
+		return glob.glob(os.path.join(label_dir, '{0}*/{1}*.png'.format(
+			dir_prefix or file_prefix, file_prefix)))
 
 	@staticmethod
 	def map_labels_to_indices(gesture_labels):
