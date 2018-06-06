@@ -9,7 +9,6 @@ from torch.utils.data import DataLoader
 from utils.pad_utils import PadCollate
 from utils.gesture_frame_dataset import GestureFrameDataset
 from utils.resnet_encoding_dataset import ResnetEncodingDataset
-from utils.resnet_encoding_dataset_cache import ResnetEncodingDatasetCache
 from utils.combination_dataset import CombinationDataset
 
 def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
@@ -35,10 +34,7 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 		)
 
 	if dataset == 'encoding':
-		if caching:
-			dataset = ResnetEncodingDataset(gesture_labels, data_dir, data_type, max_example_per_label)
-		else:
-			dataset = ResnetEncodingDataset(gesture_labels, data_dir, data_type, max_example_per_label)
+		dataset = ResnetEncodingDataset(gesture_labels, data_dir, data_type, max_example_per_label)
 
 		return DataLoader(dataset,
 			batch_size=batch_size,
