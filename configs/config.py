@@ -183,10 +183,10 @@ if MODEL_CONFIG.use_full_dataset:
 
 normalize = None
 
-if MODEL_CONFIG.dataloader_type == 'RGB-image':
+if MODEL_CONFIG.dataloader_type in ['RGB-image', 'OFRGB-image']:
 	normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 								 std=[0.229, 0.224, 0.225])
-elif MODEL_CONFIG.dataloader_type == 'RGBD-image':
+elif MODEL_CONFIG.dataloader_type in ['RGBD-image', 'OFRGBD-image']:
 	normalize = transforms.Normalize(mean=[0.1337, 0.1337, 0.1337],
 								 std=[0.2541, 0.2547, 0.2539])
 elif MODEL_CONFIG.dataloader_type == 'OFRGB-image':
