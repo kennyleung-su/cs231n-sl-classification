@@ -85,14 +85,14 @@ class GestureFrameDataset(Dataset):
 			file_prefix = 'OF'
 			data_type = data_type.lstrip('OF')
 		if data_type == 'RGB':
-			file_prefix = 'M_'
+			dir_prefix = 'M_'
 		elif data_type == 'RGBD':
-			file_prefix = 'K_'
+			dir_prefix = 'K_'
 		else:
 			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
 
 		return glob.glob(os.path.join(label_dir, '{0}*/{1}*.png'.format(
-			dir_prefix or file_prefix, file_prefix)))
+			dir_prefix, file_prefix or dir_prefix)))
 
 	@staticmethod
 	def map_labels_to_indices(gesture_labels):
