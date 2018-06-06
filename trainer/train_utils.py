@@ -56,10 +56,9 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 	# set the model to evaluation mode
 	model.eval()
 	top1 = AverageMeter()
-	total_loss = 0
 
 	count = 0
-	for i, (X, y) in enumerate(dataloader):
+	for i, (X, y) in enumerate(tqdm(dataloader)):
 		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
@@ -76,7 +75,6 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		# compute output
 		predictions = model(X)
 		count += predictions.shape[0]
-		loss = loss_fn(predictions, y)
 
 		if is_lstm and predictions_saver:
 			prediction_indices = torch.argmax(predictions, dim=1)

@@ -32,7 +32,7 @@ parser.add_argument('--arch', type=str,
 	help='Type of architecture for the model. Experiment should have set this by default')
 parser.add_argument('--dataloader_type', type=str,
 	help='Experiment should have set this by default. Change the dataloader_type only if you know what you are doing\n' +
-	'Type of dataloaders: RN18-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
+	'Type of dataloaders: (RN18RGB-encoding+TRN18RGBD-encoding)-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
 # General hyperparameters
 parser.add_argument('--starting_from', type=int, default=1)
 parser.add_argument('--use_full_dataset', action='store_true')
