@@ -12,7 +12,7 @@ from utils.resnet_encoding_dataset import ResnetEncodingDataset
 from utils.combination_dataset import CombinationDataset
 
 def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
-				batch_size, transform, num_workers, max_example_per_label, shuffle=False, caching=False):
+				batch_size, transform, num_workers, max_example_per_label, shuffle=False):
 	"""Returns a configured DataLoader instance."""
 
 	# Build a dataloader using the configuration information. Subjected to change
@@ -20,7 +20,6 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 
 	if os.path.split(data_dir)[1] == 'test':
 		logging.info('Remove max_example_per_label for test dataset')
-		caching = False
 		max_example_per_label = None
 
 
@@ -68,5 +67,4 @@ def GetDataLoaders(data_dirs, model_config):
 		model_config.num_workers or 0,
 		model_config.max_example_per_label,
 		model_config.shuffle,
-		model_config.cache_dataloader,
 		) for data_directory in data_dirs]

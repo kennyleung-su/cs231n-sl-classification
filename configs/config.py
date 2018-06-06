@@ -33,7 +33,6 @@ parser.add_argument('--arch', type=str,
 parser.add_argument('--dataloader_type', type=str,
 	help='Experiment should have set this by default. Change the dataloader_type only if you know what you are doing\n' +
 	'Type of dataloaders: (RN18RGB+TRN18RGBD)-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
-parser.add_argument('--cache_dataloader', action='store_true')
 
 # General hyperparameters
 parser.add_argument('--starting_from', type=int, default=1)
