@@ -7,6 +7,11 @@ import os
 import re
 import torch
 
+try:
+   import cPickle as pickle
+except:
+   import pickle
+
 def pickle_encoding(data_dirs, model_config, model):
 	# set generate_encoding to True to capture the encodings before the last layer
 	model.eval()
@@ -21,7 +26,7 @@ def pickle_encoding(data_dirs, model_config, model):
 	gesture_labels = model_config.gesture_labels
 	data_type, _ = model_config.dataloader_type.split('-')
 	transfer_learning_prefix = 'T' if model_config.load else ''
-	encoding_filename = '{0}RN{1}{2}-encoding.pkl'.format(transfer_learning_prefix ,str(model_config.resnet_num_layers),
+	encoding_filename = '{0}RN{1}{2}-encoding.pt'.format(transfer_learning_prefix ,str(model_config.resnet_num_layers),
 												  data_type)
 	# encoding with the prefix T means transfer learning has been carried out. else, it takes the output of 
 	# the original imagenet pretrained resnet
@@ -77,7 +82,7 @@ def pickle_encoding(data_dirs, model_config, model):
 						# remove the file before overwriting
 						os.remove(video_path)
 
-					video_tensor = get_video_tensor_for_dir(video_dir, transform)
+					video_tensor = get_video_tensor_for_dir(video_dir, transform, data_type)
 					segment_lengths.append(video_tensor.shape[0])
 					video_paths.append(video_path)
 					batch_video_tensors.append(video_tensor)
@@ -97,12 +102,19 @@ def pickle_encoding(data_dirs, model_config, model):
 				video_start = 0
 				for video_len, video_path in zip(segment_lengths, video_paths):
 					logging.info('Saving encodings for {0} of shape: {1}'.format(video_path, (encodings[video_start : video_start+video_len, :]).shape))
-					torch.save(torch.t(encodings[video_start : video_start+video_len, :]), video_path)
+					pickle.dump(torch.t(encodings[video_start : video_start+video_len, :]), open(video_path, 'wb'))
 					video_start += video_len
 
 
-def get_video_tensor_for_dir(video_dir, transform):
-	filenames = glob.glob(os.path.join(video_dir, '*.png'))
+def get_video_tensor_for_dir(video_dir, transform, data_type):
+	if data_type.startswith('OF'):
+		file_prefix = 'OF'
+	elif data_type.startswith('RGB'):
+		file_prefix = 'M'
+	elif data_type.startswith('RGBD'):
+		file_prefix = 'K'
+
+	filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
 	matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
 	# sorted list of (frame_number, frame_path) tuples
 	frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
@@ -125,12 +137,17 @@ def get_video_tensor_for_dir(video_dir, transform):
 
 def get_video_dirs(label_dir, data_type):
 	# return a list of paths for the images
-	prefix = None
+	dir_prefix = None
+	file_prefix = None
+
+	if data_type.startswith('OF'):  # optical flow images, which has both RGB and RGBD variants.
+		data_type = data_type.lstrip('OF')
 	if data_type == 'RGB':
-		prefix = 'M_'
+		dir_prefix = 'M_'
 	elif data_type == 'RGBD':
-		prefix = 'K_'
+		dir_prefix = 'K_'
 	else:
 		raise ValueError('Data type for pickling is invalid')
 
-	return glob.glob(os.path.join(label_dir, '{0}*/'.format(prefix)))
+	return glob.glob(os.path.join(label_dir, '{0}*/'.format(dir_prefix)))
+

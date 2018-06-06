@@ -9,6 +9,11 @@ import re
 import torch
 from torch.utils.data import Dataset
 
+try:
+   import cPickle as pickle
+except:
+   import pickle
+
 
 class ResnetEncodingDataset(Dataset):
 	"""Dataset of tensors corresponding to gesture video.
@@ -79,22 +84,29 @@ class ResnetEncodingDataset(Dataset):
 		return data, max_seq_len
 
 	def read_frame_tensors_from_dir(self, directory):
-		location = os.path.join(directory, '{}-encoding.pkl'.format(self._data_type))
-		return torch.load(location, map_location=lambda storage, loc: storage)
+		location = os.path.join(directory, '{}-encoding.pt'.format(self._data_type))
+		return pickle.load(open(location, 'rb'))
 
 	def get_video_dirs(self, label_dir):
 
 		# return a list of paths for the images
-		prefix = None
+		dir_prefix = None
+		file_prefix = None
 		data_type = self._data_type
-		if data_type.endswith('RGB'):
-			prefix = 'M_'
-		elif data_type.endswith('RGBD'):
-			prefix = 'K_'
-		else:
-			raise ValueError('Data type for pickling is invalid')
 
-		return glob.glob(os.path.join(label_dir, '{0}*/'.format(prefix)))
+		if data_type.startswith('OF'):  # optical flow images, which has both RGB and RGBD variants.
+			file_prefix = 'OF'
+			data_type = data_type.lstrip('OF')
+		if data_type == 'RGB':
+			dir_prefix = 'M_'
+		elif data_type == 'RGBD':
+			dir_prefix = 'K_'
+		else:
+			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
+
+		return glob.glob(os.path.join(label_dir, '{0}*/{1}*.png'.format(
+			dir_prefix, file_prefix or dir_prefix)))
+
 
 	@staticmethod
 	def map_labels_to_indices(gesture_labels):
