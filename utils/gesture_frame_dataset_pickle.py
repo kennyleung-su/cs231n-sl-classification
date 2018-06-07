@@ -98,10 +98,11 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 		elif data_type.endswith('RGBD'):
 			file_prefix = 'K'
 
-		filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
 		if file_prefix == 'OF':
+			filenames = glob.glob(os.path.join(video_dir, '{0}_stride1.png'.format(file_prefix)))
 			matches = [re.match(r'.*_(\d+)_stride1\.png', name) for name in filenames]
 		else:
+			filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
 			matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
 		# sorted list of (frame_number, frame_path) tuples
 		frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
