@@ -99,7 +99,10 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			file_prefix = 'K'
 
 		filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
-		matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
+		if file_prefix = 'OF':
+			matches = [re.match(r'.*_(\d+)_stride1\.png', name) for name in filenames]
+		else:
+			matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
 		# sorted list of (frame_number, frame_path) tuples
 		frames = sorted([(int(match.group(1)), match.group(0)) for match in matches])
 		sorted_filenames = [f[1] for f in frames] 
