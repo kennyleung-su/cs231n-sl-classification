@@ -120,7 +120,6 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 		if duplicate_last_frame:
 			frames_list.append(last_frame)
 
-		print(frames_list)
 		# Stacks up to a (T, C, H, W) tensor.
 		tensor = torch.stack(frames_list, dim=0)
 
