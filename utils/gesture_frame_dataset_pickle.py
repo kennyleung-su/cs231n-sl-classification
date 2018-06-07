@@ -99,7 +99,7 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			file_prefix = 'K'
 
 		filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
-		if file_prefix = 'OF':
+		if file_prefix == 'OF':
 			matches = [re.match(r'.*_(\d+)_stride1\.png', name) for name in filenames]
 		else:
 			matches = [re.match(r'.*_(\d+)\.png', name) for name in filenames]
