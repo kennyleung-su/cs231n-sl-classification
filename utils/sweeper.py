@@ -37,7 +37,7 @@ class HyperparameterOption(object):
 			value = int(np.random.randint(*self._range) * 10**self.sample_exp())
 		elif self._value_type == ValueType.CONTINUOUS:
 			# Sample a continuous value
-			value = np.around(np.random.uniform(*self._range) * 10**self.sample_exp(), self._round_to)
+			value = np.around(np.random.randint(*self._range) * 10**self.sample_exp(), self._round_to)
 		return max(self._eps, value)
 
 
@@ -132,6 +132,7 @@ class HyperparameterSweeper(object):
 		config_options."""
 		config = {}
 		for attr, option in self._config_options.items():
+			print('Sampling', attr)
 			config[attr] = option.sample()
 		return config
 

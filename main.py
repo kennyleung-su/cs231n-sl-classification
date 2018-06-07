@@ -68,7 +68,10 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 	if model_config.mode == 'pickle':
 		logging.info('The model will now commence pickling')
 		with torch.no_grad():
-			pickle_encoding.pickle_encoding(DATA_DIRS, model_config, parallel_model)
+			dataloaders = [train_dataloader, valid_dataloader, test_dataloader]
+			for dataloader in dataloaders:
+				if dataloader:
+					pickle_encoding.pickle_encoding(parallel_model, dataloader, model_config.use_cuda)
 			return
 
 	# Test the model.
@@ -191,9 +194,7 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-5, -3), round_to=5),
-			'dropout': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, value_range=(0.0, 0.2), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -1), round_to=4),
 			'weight_decay': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=2),
 		},
@@ -202,14 +203,12 @@ def main():
 		plots_dir = config.PLOTS
 	)
 
+	data_dirs = [data_dir for data_dir in DATA_DIRS if 
+		(not MODEL_CONFIG.pickle_dataset or MODEL_CONFIG.pickle_dataset == os.path.split(data_dir)[1])]
 
-	if MODEL_CONFIG.mode == 'pickle':
-		model_config = hyp_sweeper.get_original_sweep()
-		run_experiment_with_config(model_config)
+	dataloaders = data_loader.GetDataLoaders(data_dirs, MODEL_CONFIG)
 
-	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
-
-	if MODEL_CONFIG.num_sweeps == 0:
+	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
 		model_config = hyp_sweeper.get_original_sweep()
 		run_experiment_with_config(model_config, *dataloaders)
 	else:
@@ -221,13 +220,12 @@ def main():
 			run_experiment_with_config(model_config, *dataloaders)
 
 		hyp_sweeper.analyze_hyperparameter('learning_rate')
-		hyp_sweeper.analyze_hyperparameter('dropout')
 		hyp_sweeper.analyze_hyperparameter('weight_decay')
 
 	# TODO: Analyze the performance across different sweeps.
 	if MODEL_CONFIG.mode != 'pickle':
 		hyp_sweeper.analyze_performance()
-		# hyp_sweeper.analyze_confusion()	
+		hyp_sweeper.analyze_confusion()	
 		hyp_sweeper.analyze_train_vs_valid_accuracy()
 
 
