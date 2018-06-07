@@ -104,7 +104,7 @@ class ResnetEncodingDataset(Dataset):
 		elif data_type.endswith('RGBD'):
 			dir_prefix = 'K_'
 		else:
-			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
+			raise ValueError('Data type for Resnet Encoding Dataloader is invalid')
 
 		return sorted(glob.glob(os.path.join(label_dir, '{0}*/'.format(
 			dir_prefix))))

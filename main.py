@@ -68,7 +68,10 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 	if model_config.mode == 'pickle':
 		logging.info('The model will now commence pickling')
 		with torch.no_grad():
-			pickle_encoding.pickle_encoding(DATA_DIRS, model_config, parallel_model)
+			dataloaders = [train_dataloader, valid_dataloader, test_dataloader]
+			for dataloader in dataloaders:
+				if dataloader:
+					pickle_encoding.pickle_encoding(parallel_model, dataloader, model_config.use_cuda)
 			return
 
 	# Test the model.
@@ -200,14 +203,12 @@ def main():
 		plots_dir = config.PLOTS
 	)
 
+	data_dirs = [data_dir for data_dir in DATA_DIRS if 
+		(not MODEL_CONFIG.pickle_dataset or MODEL_CONFIG.pickle_dataset == os.path.split(data_dir)[1])]
 
-	if MODEL_CONFIG.mode == 'pickle':
-		model_config = hyp_sweeper.get_original_sweep()
-		run_experiment_with_config(model_config)
+	dataloaders = data_loader.GetDataLoaders(data_dirs, MODEL_CONFIG)
 
-	dataloaders = data_loader.GetDataLoaders(DATA_DIRS, MODEL_CONFIG)
-
-	if MODEL_CONFIG.num_sweeps == 0:
+	if MODEL_CONFIG.num_sweeps == 0 or MODEL_CONFIG.mode == 'pickle':
 		model_config = hyp_sweeper.get_original_sweep()
 		run_experiment_with_config(model_config, *dataloaders)
 	else:
