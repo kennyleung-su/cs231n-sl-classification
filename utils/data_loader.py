@@ -18,7 +18,12 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 	"""Returns a configured DataLoader instance."""
 
 	# Build a dataloader using the configuration information. Subjected to change
-	data_type, dataset = dataloader_type.split('-')
+	data_type, dataset = dataloader_type.split('-')	
+
+	if os.path.split(data_dir)[1] == 'test':
+		logging.info('Remove max_example_per_label for test dataset')
+		max_example_per_label = None
+
 
 	if pickle_config:
 		transformed_dataset = GestureFrameDatasetPickle(gesture_labels, data_dir, data_type, transform, max_example_per_label, pickle_config)
@@ -28,11 +33,6 @@ def GenerateDataLoader(gesture_labels, dataloader_type, data_dir, max_seq_len,
 			shuffle=False,
 			num_workers=num_workers
 		)
-
-	if os.path.split(data_dir)[1] == 'test':
-		logging.info('Remove max_example_per_label for test dataset')
-		max_example_per_label = None
-
 
 	if dataset == 'image':
 		transformed_dataset = GestureFrameDataset(gesture_labels, data_dir, data_type, transform, max_example_per_label)

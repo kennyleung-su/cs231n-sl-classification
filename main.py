@@ -79,22 +79,6 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 		logging.info("Model will now begin test on training, validation and test set.")
 
 		with torch.no_grad():
-			train_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=train_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
-			logging.info('Training Acc: {:.2f}%'
-					.format(train_acc))
-
-			val_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=valid_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
-			logging.info('Valid Acc: {:.2f}%'
-					.format(val_acc))
-
 			test_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=test_dataloader,
 													loss_fn=loss_fn,
@@ -106,7 +90,7 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 	# Train the model.
 	if model_config.mode == 'train':
 		logging.info("Model will now begin training.")
-		checkpoint_epoch = 0
+		checkpoint_epoch = 1
 		if model_config.checkpoint_to_load:
 			checkpoint_epoch = model.training_epoch
 

@@ -35,9 +35,8 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		total_loss += loss.item() 
 
 		if verbose:
-			logging.debug('Predictions:', predictions)
-			logging.debug('Loss:', loss)
-			logging.debug('y:', y)
+			logging.debug('mini-batch loss: {}'.format(loss))
+			logging.debug('y: {}'.format(y))
 		
 		# Compute running accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
@@ -90,7 +89,8 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 			prediction_indices = torch.argmax(predictions, dim=1)
 			for batch_index in range(batch_size):
 				predictions_saver.update([
-					X['video_dirs'][batch_index].strip('/').split('/')[-1], # id
+					#X['video_dirs'][batch_index].strip('/').split('/')[-1], # id
+					'replace me',
 					y.cpu().numpy()[batch_index] if use_cuda else y.numpy()[batch_index],					# label	
 					prediction_indices.cpu().numpy()[batch_index] if use_cuda else prediction_indices.numpy()[batch_index]	# prediction
 				])
