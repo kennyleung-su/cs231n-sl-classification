@@ -105,7 +105,7 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
 			frame_ndarray = transform(frame_ndarray)
 			frames_list.append(frame_ndarray)
-		# Stacks up to a (C, T, H, W) tensor.
+		# Stacks up to a (T, C, H, W) tensor.
 		tensor = torch.stack(frames_list, dim=0)
 
 		return tensor
