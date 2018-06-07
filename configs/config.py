@@ -22,6 +22,8 @@ parser.add_argument('--mode', type=str, default='train',
 	help='Running mode: "train" or "test" or "pickle".')
 parser.add_argument('--pickle_overwrite', action='store_true')
 parser.add_argument('--pickle_dataset', type=str)
+parser.add_argument('--pickle_label_start', type=int)
+parser.add_argument('--pickle_label_end', type=int)
 
 # For training, testing and pickling
 parser.add_argument('--experiment', type=str,
@@ -30,8 +32,7 @@ parser.add_argument('--arch', type=str,
 	help='Type of architecture for the model. Experiment should have set this by default')
 parser.add_argument('--dataloader_type', type=str,
 	help='Experiment should have set this by default. Change the dataloader_type only if you know what you are doing\n' +
-	'Type of dataloaders: (RN18RGB+TRN18RGBD)-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
-
+	'Type of dataloaders: (RN18RGB-encoding+TRN18RGBD-encoding)-combination, RN18RGB-encoding, RN18RGBD-encoding, RGB-image, RGBD-image')
 # General hyperparameters
 parser.add_argument('--starting_from', type=int, default=1)
 parser.add_argument('--use_full_dataset', action='store_true')
@@ -169,6 +170,7 @@ MODEL_CONFIG.is_lstm = (MODEL_CONFIG.arch == 'EncodingLSTMClassifier')
 TOTAL_NUMBER_OF_LABELS = 249
 if MODEL_CONFIG.use_full_dataset:
 	MODEL_CONFIG.gesture_labels = range(MODEL_CONFIG.starting_from, TOTAL_NUMBER_OF_LABELS + 1)
+
 ########################
 # Model Hyperparameters
 ########################
