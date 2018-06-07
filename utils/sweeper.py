@@ -19,7 +19,7 @@ class ValueType(Enum):
 
 
 class HyperparameterOption(object):
-	def __init__(self, value_type, value_range=(0, 10), exp_range=None, round_to=8):
+	def __init__(self, value_type, value_range=(1, 10), exp_range=None, round_to=8):
 		self._value_type = value_type
 		# Values are range^(exp_range) drawn uniformly using (low, high) tuples.
 		self._range = value_range
