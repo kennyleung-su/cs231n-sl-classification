@@ -180,7 +180,9 @@ def main():
 			'learning_rate': sweeper.HyperparameterOption(
 				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -1), round_to=4),
 			'weight_decay': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=4),
+			'dropout': sweeper.HyperparameterOption(
+				sweeper.ValueType.PROBABILITY, value_range=(0, 0.2), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
@@ -205,6 +207,7 @@ def main():
 
 		hyp_sweeper.analyze_hyperparameter('learning_rate')
 		hyp_sweeper.analyze_hyperparameter('weight_decay')
+		hyp_sweeper.analyze_hyperparameter('dropout')
 
 	# TODO: Analyze the performance across different sweeps.
 	if MODEL_CONFIG.mode != 'pickle':
