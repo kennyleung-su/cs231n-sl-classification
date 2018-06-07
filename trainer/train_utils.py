@@ -29,11 +29,15 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 			batch_size = X.size(0)
 		# Compute loss
 		predictions = model(X)
-		
+	
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
-		loss_num = loss.item()
-		total_loss += loss_num
+		total_loss += loss.item() 
+
+		if verbose:
+			logging.debug('Predictions:', predictions)
+			logging.debug('Loss:', loss)
+			logging.debug('y:', y)
 		
 		# Compute running accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
@@ -41,12 +45,11 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 
 		optimizer.zero_grad()
 		loss.backward()
-		del loss, predictions, X, y
 		optimizer.step()
 
 		if verbose:
 			print('Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
-				100. * batch_idx / len(dataloader), loss_num))
+				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
 	train_acc = top1.avg
@@ -77,6 +80,7 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		# compute output
 		predictions = model(X)
 		count += predictions.shape[0]
+		loss = loss_fn(predictions, y)
 
 		if verbose:
 			print('Valid/Test Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 

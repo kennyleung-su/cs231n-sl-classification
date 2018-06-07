@@ -86,6 +86,9 @@ class ResnetEncodingDataset(Dataset):
 	def read_frame_tensors_from_dir(self, directory, data_type):
 		location = os.path.join(directory, '{}-encoding.pt'.format(data_type))
 		return pickle.load(open(location, 'rb'))
+		# old torch loading
+		# location = os.path.join(directory, '{}-encoding.pkl'.format(data_type))
+		# return torch.load(location, map_location=lambda storage, loc: storage)
 
 	def get_video_dirs(self, label_dir, data_type):
 
