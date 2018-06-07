@@ -43,12 +43,12 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 		optimizer.step()
 
 		if verbose:
-			print('Train Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
+			print('Train Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3:4f}'.format(count, len(dataloader.dataset), 
 				100. * batch_idx / len(dataloader), loss.item()))
 
 	total_loss /= count
 	train_acc = top1.avg
-	logging.info('Train Epoch: {} \tLoss: {:.6f} \t Training Acc: {:.2f}'.format(epoch, total_loss, train_acc))
+	logging.info('Train Epoch: {0} \tLoss: {1:.4f} \t Training Acc: {2:.2f}'.format(epoch, total_loss, train_acc))
 
 	return total_loss, train_acc
 
@@ -75,9 +75,10 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 		# compute output
 		predictions = model(X)
 		count += predictions.shape[0]
+		loss = loss_fn(predictions, y)
 
 		if verbose:
-			print('Valid/Test Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3}'.format(count, len(dataloader.dataset), 
+			print('Valid/Test Progress [{0}/{1} ({2:.0f}%)]\tLoss:{3:.6f}'.format(count, len(dataloader.dataset), 
 				100. * batch_idx / len(dataloader), loss.item()))
 
 		if is_lstm and predictions_saver:
