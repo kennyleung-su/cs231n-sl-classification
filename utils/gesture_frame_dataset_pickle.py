@@ -86,8 +86,13 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			dir_prefix))))
 
 	def get_video_tensor_for_dir(self, video_dir, transform, data_type):
+		# for OF frames
+		duplicate_last_frame = False
+		last_frame = None
+
 		if data_type.startswith('OF'):
 			file_prefix = 'OF'
+			duplicate_last_frame = True
 		elif data_type.endswith('RGB'):
 			file_prefix = 'M'
 		elif data_type.endswith('RGBD'):
@@ -105,6 +110,10 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
 			frame_ndarray = transform(frame_ndarray)
 			frames_list.append(frame_ndarray)
+			last_frame = frame_ndarray
+		
+		if duplicate_last_frame:
+			frames_list.append(last_frame)
 		# Stacks up to a (T, C, H, W) tensor.
 		tensor = torch.stack(frames_list, dim=0)
 
