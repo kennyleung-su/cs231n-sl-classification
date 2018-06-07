@@ -29,10 +29,15 @@ def train_model(model, dataloader, loss_fn, optimizer, epoch, is_lstm, use_cuda=
 			batch_size = X.size(0)
 		# Compute loss
 		predictions = model(X)
-		
+	
 		count += predictions.shape[0]
 		loss = loss_fn(predictions, y)
-		total_loss += loss.item()
+		total_loss += loss.item() 
+
+		if verbose:
+			logging.debug('Predictions:', predictions)
+			logging.debug('Loss:', loss)
+			logging.debug('y:', y)
 		
 		# Compute running accuracy
 		acc1 = accuracy(predictions.data, y, (1,))
@@ -58,7 +63,7 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 	top1 = AverageMeter()
 
 	count = 0
-	for batch_idx, (X, y) in enumerate(dataloader):
+	for batch_idx, (X, y) in enumerate(tqdm(dataloader)):
 		batch_size = -1
 		# Utilize GPU if enabled
 		if use_cuda:
@@ -86,8 +91,8 @@ def validate_model(model, dataloader, loss_fn, is_lstm, predictions_saver=None, 
 			for batch_index in range(batch_size):
 				predictions_saver.update([
 					X['video_dirs'][batch_index].strip('/').split('/')[-1], # id
-					y.numpy()[batch_index],					# label	
-					prediction_indices.numpy()[batch_index]	# prediction
+					y.cpu().numpy()[batch_index] if use_cuda else y.numpy()[batch_index],					# label	
+					prediction_indices.cpu().numpy()[batch_index] if use_cuda else prediction_indices.numpy()[batch_index]	# prediction
 				])
 
 		# measure accuracy

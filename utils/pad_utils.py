@@ -67,7 +67,9 @@ class PadCollate:
         # Rearrange all elements in order of decreasing sequence length
         seq_lens = np.sort(seq_lens)[::-1]
 
-        labels = torch.LongTensor(list(map(lambda x: x[1], frames_and_labels)))
+        labels = [x[1] for x in frames_and_labels]
+        labels = [labels[i] for i in seq_lens_indices]
+        labels = torch.LongTensor(labels)
         seq_lens = torch.from_numpy(np.stack(seq_lens))
 
         return {'X': frames, 'seq_lens': seq_lens, 'video_dirs': video_dirs}, labels
