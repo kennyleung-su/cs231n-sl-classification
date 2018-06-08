@@ -1,0 +1,360 @@
+[2018-06-08 03:08:19,144] Cmd: python main.py --experiment LSTM_RGB_final_10_gestures --use_cuda --mode train --num_workers 32 --validate_every 1 --num_sweeps 3
+[2018-06-08 03:08:19,145] Config:
+ name: LSTM_RGB_final
+ arch: EncodingLSTMClassifier
+ dataloader_type: RN18RGB-encoding
+ shuffle: True
+ description: Applies a LSTM architecture to the full set of RGB video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+ loss: cross-entropy
+ initializer: xavier
+ optimizer: adam
+ lstm_hidden_size: 256
+ lstm_hidden_fc_size: 512
+ lstm_num_layers: 1
+ lstm_bias: False
+ lstm_batch_first: True
+ lstm_bidirectional: False
+ epochs: 30
+ batch_size: 50
+ learning_rate: 0.001
+ gesture_labels: [5, 19, 38, 37, 8, 29, 213, 241, 18, 92]
+ weight_decay: 0.0
+ dropout: 0.0
+ num_sweeps: 3
+ mode: train
+ experiment: LSTM_RGB_final_10_gestures
+ starting_from: 1
+ use_cuda: True
+ validate_every: 1
+ num_workers: 32
+ model: <class 'models.LSTM.EncodingLSTMClassifier'>
+ is_lstm: True
+ encoding_input_size: 1000
+ transform: <torchvision.transforms.transforms.Compose object at 0x7f1efc2f1dd8>
+ optimizer_fn: <class 'torch.optim.adam.Adam'>
+ initializer_fn: <function xavier_normal_ at 0x7f1f442291e0>
+ loss_fn: CrossEntropyLoss()
+ seed: 1
+ checkpoint_path: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints
+
+[2018-06-08 03:08:19,145] Running experiment <LSTM_RGB_final> in train mode.
+Description of model: Applies a LSTM architecture to the full set of RGB video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+[2018-06-08 03:08:19,145] Reindexed labels: {5: 0, 19: 1, 38: 2, 37: 3, 8: 4, 29: 5, 213: 6, 241: 7, 18: 8, 92: 9}
+[2018-06-08 03:08:19,145] Populating frame tensors for 10 specified labels in data dir /home/shared/dataset/train: [5, 19, 38, 37, 8, 29, 213, 241, 18, 92]
+[2018-06-08 03:08:19,155] Assigning frame tensor locations for label: 5 (851 videos)
+[2018-06-08 03:08:19,272] Assigning frame tensor locations for label: 19 (492 videos)
+[2018-06-08 03:08:19,347] Assigning frame tensor locations for label: 38 (459 videos)
+[2018-06-08 03:08:19,411] Assigning frame tensor locations for label: 37 (377 videos)
+[2018-06-08 03:08:19,464] Assigning frame tensor locations for label: 8 (375 videos)
+[2018-06-08 03:08:19,515] Assigning frame tensor locations for label: 29 (285 videos)
+[2018-06-08 03:08:19,556] Assigning frame tensor locations for label: 213 (257 videos)
+[2018-06-08 03:08:19,598] Assigning frame tensor locations for label: 241 (256 videos)
+[2018-06-08 03:08:19,641] Assigning frame tensor locations for label: 18 (349 videos)
+[2018-06-08 03:08:19,699] Assigning frame tensor locations for label: 92 (349 videos)
+[2018-06-08 03:08:19,744] Initialized a ResnetEncodingDataset of size 4050.
+[2018-06-08 03:08:19,744] Reindexed labels: {5: 0, 19: 1, 38: 2, 37: 3, 8: 4, 29: 5, 213: 6, 241: 7, 18: 8, 92: 9}
+[2018-06-08 03:08:19,745] Populating frame tensors for 10 specified labels in data dir /home/shared/dataset/valid: [5, 19, 38, 37, 8, 29, 213, 241, 18, 92]
+[2018-06-08 03:08:19,746] Assigning frame tensor locations for label: 5 (125 videos)
+[2018-06-08 03:08:19,763] Assigning frame tensor locations for label: 19 (79 videos)
+[2018-06-08 03:08:19,774] Assigning frame tensor locations for label: 38 (48 videos)
+[2018-06-08 03:08:19,782] Assigning frame tensor locations for label: 37 (42 videos)
+[2018-06-08 03:08:19,789] Assigning frame tensor locations for label: 8 (58 videos)
+[2018-06-08 03:08:19,797] Assigning frame tensor locations for label: 29 (42 videos)
+[2018-06-08 03:08:19,803] Assigning frame tensor locations for label: 213 (37 videos)
+[2018-06-08 03:08:19,809] Assigning frame tensor locations for label: 241 (37 videos)
+[2018-06-08 03:08:19,817] Assigning frame tensor locations for label: 18 (42 videos)
+[2018-06-08 03:08:19,824] Assigning frame tensor locations for label: 92 (42 videos)
+[2018-06-08 03:08:19,829] Initialized a ResnetEncodingDataset of size 552.
+[2018-06-08 03:08:19,829] Remove max_example_per_label for test dataset
+[2018-06-08 03:08:19,829] Reindexed labels: {5: 0, 19: 1, 38: 2, 37: 3, 8: 4, 29: 5, 213: 6, 241: 7, 18: 8, 92: 9}
+[2018-06-08 03:08:19,829] Populating frame tensors for 10 specified labels in data dir /home/shared/dataset/test: [5, 19, 38, 37, 8, 29, 213, 241, 18, 92]
+[2018-06-08 03:08:19,831] Assigning frame tensor locations for label: 5 (139 videos)
+[2018-06-08 03:08:19,853] Assigning frame tensor locations for label: 19 (75 videos)
+[2018-06-08 03:08:19,867] Assigning frame tensor locations for label: 38 (72 videos)
+[2018-06-08 03:08:19,879] Assigning frame tensor locations for label: 37 (53 videos)
+[2018-06-08 03:08:19,889] Assigning frame tensor locations for label: 8 (56 videos)
+[2018-06-08 03:08:19,898] Assigning frame tensor locations for label: 29 (32 videos)
+[2018-06-08 03:08:19,903] Assigning frame tensor locations for label: 213 (49 videos)
+[2018-06-08 03:08:19,913] Assigning frame tensor locations for label: 241 (46 videos)
+[2018-06-08 03:08:19,923] Assigning frame tensor locations for label: 18 (38 videos)
+[2018-06-08 03:08:19,929] Assigning frame tensor locations for label: 92 (56 videos)
+[2018-06-08 03:08:19,938] Initialized a ResnetEncodingDataset of size 616.
+[2018-06-08 03:08:19,938] ===== HYPERPARAMETER SWEEP 1/3 =====
+[2018-06-08 03:08:19,939] Hyperparameters swept: {'learning_rate': 0.0006, 'weight_decay': 0.0005, 'dropout': 0.13}
+[2018-06-08 03:08:19,959] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 03:08:19,968] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 03:08:19,971] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 03:08:19,972] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:08:19,972] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 03:08:19,975] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:08:19,975] Initializing weight Linear(in_features=512, out_features=10, bias=True) using xavier.
+[2018-06-08 03:08:19,975] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:08:20,522] Running the model using GPUs. (--use_cuda)
+[2018-06-08 03:08:24,872] Model will now begin training.
+[2018-06-08 03:09:01,991] Train Epoch: 1 	Loss: 0.042089 	 Training Acc: 23.41
+[2018-06-08 03:09:10,909] Validation Acc: 13.77%
+[2018-06-08 03:09:10,910] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528427350.910049-best-13.pkl
+[2018-06-08 03:09:24,270] Train Epoch: 2 	Loss: 0.034212 	 Training Acc: 36.62
+[2018-06-08 03:09:35,751] Validation Acc: 16.49%
+[2018-06-08 03:09:35,752] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528427375.752159-best-16.pkl
+[2018-06-08 03:09:49,195] Train Epoch: 3 	Loss: 0.026198 	 Training Acc: 50.42
+[2018-06-08 03:10:00,596] Validation Acc: 22.83%
+[2018-06-08 03:10:00,597] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528427400.597831-best-22.pkl
+[2018-06-08 03:10:13,986] Train Epoch: 4 	Loss: 0.020749 	 Training Acc: 61.48
+[2018-06-08 03:10:25,796] Validation Acc: 19.38%
+[2018-06-08 03:10:41,760] Train Epoch: 5 	Loss: 0.016877 	 Training Acc: 68.74
+[2018-06-08 03:10:53,395] Validation Acc: 19.75%
+[2018-06-08 03:11:06,889] Train Epoch: 6 	Loss: 0.014866 	 Training Acc: 72.67
+[2018-06-08 03:11:18,730] Validation Acc: 19.38%
+[2018-06-08 03:11:34,585] Train Epoch: 7 	Loss: 0.013289 	 Training Acc: 75.46
+[2018-06-08 03:11:46,550] Validation Acc: 23.01%
+[2018-06-08 03:11:46,551] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528427506.551457-best-23.pkl
+[2018-06-08 03:11:59,934] Train Epoch: 8 	Loss: 0.011529 	 Training Acc: 78.20
+[2018-06-08 03:12:11,886] Validation Acc: 17.21%
+[2018-06-08 03:12:28,015] Train Epoch: 9 	Loss: 0.010416 	 Training Acc: 79.70
+[2018-06-08 03:12:39,826] Validation Acc: 18.84%
+[2018-06-08 03:12:55,659] Train Epoch: 10 	Loss: 0.009920 	 Training Acc: 81.43
+[2018-06-08 03:13:07,418] Validation Acc: 17.93%
+[2018-06-08 03:13:20,832] Train Epoch: 11 	Loss: 0.009493 	 Training Acc: 82.02
+[2018-06-08 03:13:32,752] Validation Acc: 21.56%
+[2018-06-08 03:13:48,485] Train Epoch: 12 	Loss: 0.008753 	 Training Acc: 83.36
+[2018-06-08 03:13:59,691] Validation Acc: 20.47%
+[2018-06-08 03:14:13,302] Train Epoch: 13 	Loss: 0.007963 	 Training Acc: 84.72
+[2018-06-08 03:14:23,982] Validation Acc: 21.01%
+[2018-06-08 03:14:39,894] Train Epoch: 14 	Loss: 0.007562 	 Training Acc: 85.85
+[2018-06-08 03:14:51,693] Validation Acc: 18.48%
+[2018-06-08 03:15:05,426] Train Epoch: 15 	Loss: 0.007064 	 Training Acc: 86.62
+[2018-06-08 03:15:15,615] Validation Acc: 21.74%
+[2018-06-08 03:15:28,711] Train Epoch: 16 	Loss: 0.007845 	 Training Acc: 85.73
+[2018-06-08 03:15:40,492] Validation Acc: 22.46%
+[2018-06-08 03:15:53,843] Train Epoch: 17 	Loss: 0.006707 	 Training Acc: 86.91
+[2018-06-08 03:16:05,582] Validation Acc: 19.20%
+[2018-06-08 03:16:19,339] Train Epoch: 18 	Loss: 0.006185 	 Training Acc: 88.22
+[2018-06-08 03:16:28,352] Validation Acc: 22.28%
+[2018-06-08 03:16:43,957] Train Epoch: 19 	Loss: 0.005940 	 Training Acc: 89.14
+[2018-06-08 03:16:55,901] Validation Acc: 23.19%
+[2018-06-08 03:16:55,901] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528427815.9019217-best-23.pkl
+[2018-06-08 03:17:11,717] Train Epoch: 20 	Loss: 0.005079 	 Training Acc: 90.74
+[2018-06-08 03:17:23,545] Validation Acc: 20.11%
+[2018-06-08 03:17:36,812] Train Epoch: 21 	Loss: 0.005386 	 Training Acc: 89.46
+[2018-06-08 03:17:48,751] Validation Acc: 20.65%
+[2018-06-08 03:18:04,740] Train Epoch: 22 	Loss: 0.005298 	 Training Acc: 90.30
+[2018-06-08 03:18:16,385] Validation Acc: 20.65%
+[2018-06-08 03:18:29,784] Train Epoch: 23 	Loss: 0.004839 	 Training Acc: 91.04
+[2018-06-08 03:18:41,595] Validation Acc: 21.38%
+[2018-06-08 03:18:55,468] Train Epoch: 24 	Loss: 0.004664 	 Training Acc: 91.43
+[2018-06-08 03:19:06,362] Validation Acc: 22.83%
+[2018-06-08 03:19:22,466] Train Epoch: 25 	Loss: 0.004561 	 Training Acc: 91.38
+[2018-06-08 03:19:33,265] Validation Acc: 23.19%
+[2018-06-08 03:19:49,437] Train Epoch: 26 	Loss: 0.003993 	 Training Acc: 92.49
+[2018-06-08 03:20:00,382] Validation Acc: 20.83%
+[2018-06-08 03:20:13,830] Train Epoch: 27 	Loss: 0.004044 	 Training Acc: 92.94
+[2018-06-08 03:20:25,631] Validation Acc: 24.46%
+[2018-06-08 03:20:25,647] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428025.647243-best-24.pkl
+[2018-06-08 03:20:39,610] Train Epoch: 28 	Loss: 0.004346 	 Training Acc: 91.53
+[2018-06-08 03:20:48,700] Validation Acc: 24.09%
+[2018-06-08 03:21:01,960] Train Epoch: 29 	Loss: 0.003852 	 Training Acc: 92.96
+[2018-06-08 03:21:14,000] Validation Acc: 25.72%
+[2018-06-08 03:21:14,008] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428074.0085475-best-25.pkl
+[2018-06-08 03:21:29,926] Train Epoch: 30 	Loss: 0.004074 	 Training Acc: 92.62
+[2018-06-08 03:21:41,679] Validation Acc: 25.54%
+[2018-06-08 03:21:41,680] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428101.680585.pkl
+[2018-06-08 03:21:51,618] Test Acc: 32.95%.
+[2018-06-08 03:21:51,620] ===== HYPERPARAMETER SWEEP 2/3 =====
+[2018-06-08 03:21:51,620] Hyperparameters swept: {'learning_rate': 0.004, 'weight_decay': 0.001, 'dropout': 0.05}
+[2018-06-08 03:21:51,641] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.05) using xavier.
+[2018-06-08 03:21:51,651] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.05) using xavier.
+[2018-06-08 03:21:51,653] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 03:21:51,655] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:21:51,655] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 03:21:51,658] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:21:51,658] Initializing weight Linear(in_features=512, out_features=10, bias=True) using xavier.
+[2018-06-08 03:21:51,658] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:21:51,658] Running the model using GPUs. (--use_cuda)
+[2018-06-08 03:21:51,661] Model will now begin training.
+[2018-06-08 03:22:04,945] Train Epoch: 1 	Loss: 0.045143 	 Training Acc: 19.90
+[2018-06-08 03:22:16,860] Validation Acc: 22.64%
+[2018-06-08 03:22:16,875] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428136.8750215-best-22.pkl
+[2018-06-08 03:22:33,064] Train Epoch: 2 	Loss: 0.043114 	 Training Acc: 21.19
+[2018-06-08 03:22:44,929] Validation Acc: 12.32%
+[2018-06-08 03:22:58,407] Train Epoch: 3 	Loss: 0.039654 	 Training Acc: 26.10
+[2018-06-08 03:23:07,640] Validation Acc: 15.40%
+[2018-06-08 03:23:21,775] Train Epoch: 4 	Loss: 0.038699 	 Training Acc: 27.48
+[2018-06-08 03:23:33,426] Validation Acc: 17.39%
+[2018-06-08 03:23:47,095] Train Epoch: 5 	Loss: 0.038995 	 Training Acc: 27.53
+[2018-06-08 03:23:59,001] Validation Acc: 15.04%
+[2018-06-08 03:24:15,190] Train Epoch: 6 	Loss: 0.038647 	 Training Acc: 27.78
+[2018-06-08 03:24:27,127] Validation Acc: 18.30%
+[2018-06-08 03:24:43,301] Train Epoch: 7 	Loss: 0.037786 	 Training Acc: 29.75
+[2018-06-08 03:24:55,056] Validation Acc: 19.75%
+[2018-06-08 03:25:11,133] Train Epoch: 8 	Loss: 0.036727 	 Training Acc: 30.91
+[2018-06-08 03:25:22,993] Validation Acc: 20.47%
+[2018-06-08 03:25:38,961] Train Epoch: 9 	Loss: 0.036138 	 Training Acc: 33.06
+[2018-06-08 03:25:50,833] Validation Acc: 19.93%
+[2018-06-08 03:26:06,740] Train Epoch: 10 	Loss: 0.035316 	 Training Acc: 34.86
+[2018-06-08 03:26:18,539] Validation Acc: 19.57%
+[2018-06-08 03:26:32,227] Train Epoch: 11 	Loss: 0.034811 	 Training Acc: 36.59
+[2018-06-08 03:26:43,571] Validation Acc: 22.83%
+[2018-06-08 03:26:43,572] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428403.5720482-best-22.pkl
+[2018-06-08 03:26:56,992] Train Epoch: 12 	Loss: 0.034683 	 Training Acc: 36.22
+[2018-06-08 03:27:08,873] Validation Acc: 23.19%
+[2018-06-08 03:27:08,874] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428428.8745952-best-23.pkl
+[2018-06-08 03:27:24,820] Train Epoch: 13 	Loss: 0.033822 	 Training Acc: 38.40
+[2018-06-08 03:27:36,616] Validation Acc: 17.03%
+[2018-06-08 03:27:50,028] Train Epoch: 14 	Loss: 0.034229 	 Training Acc: 37.85
+[2018-06-08 03:28:01,900] Validation Acc: 20.47%
+[2018-06-08 03:28:17,971] Train Epoch: 15 	Loss: 0.034544 	 Training Acc: 36.91
+[2018-06-08 03:28:29,836] Validation Acc: 19.75%
+[2018-06-08 03:28:45,709] Train Epoch: 16 	Loss: 0.037792 	 Training Acc: 29.33
+[2018-06-08 03:28:57,779] Validation Acc: 20.83%
+[2018-06-08 03:29:11,370] Train Epoch: 17 	Loss: 0.036420 	 Training Acc: 31.16
+[2018-06-08 03:29:21,056] Validation Acc: 19.57%
+[2018-06-08 03:29:34,474] Train Epoch: 18 	Loss: 0.035604 	 Training Acc: 34.52
+[2018-06-08 03:29:43,471] Validation Acc: 18.12%
+[2018-06-08 03:29:57,628] Train Epoch: 19 	Loss: 0.034614 	 Training Acc: 37.38
+[2018-06-08 03:30:08,500] Validation Acc: 20.47%
+[2018-06-08 03:30:21,830] Train Epoch: 20 	Loss: 0.034354 	 Training Acc: 37.48
+[2018-06-08 03:30:33,581] Validation Acc: 22.46%
+[2018-06-08 03:30:46,886] Train Epoch: 21 	Loss: 0.033121 	 Training Acc: 39.14
+[2018-06-08 03:30:58,617] Validation Acc: 21.74%
+[2018-06-08 03:31:12,689] Train Epoch: 22 	Loss: 0.033549 	 Training Acc: 38.35
+[2018-06-08 03:31:21,759] Validation Acc: 22.83%
+[2018-06-08 03:31:34,937] Train Epoch: 23 	Loss: 0.033710 	 Training Acc: 38.54
+[2018-06-08 03:31:46,928] Validation Acc: 20.47%
+[2018-06-08 03:32:02,715] Train Epoch: 24 	Loss: 0.032894 	 Training Acc: 39.19
+[2018-06-08 03:32:14,454] Validation Acc: 19.02%
+[2018-06-08 03:32:27,972] Train Epoch: 25 	Loss: 0.033054 	 Training Acc: 39.63
+[2018-06-08 03:32:39,854] Validation Acc: 22.83%
+[2018-06-08 03:32:56,110] Train Epoch: 26 	Loss: 0.032596 	 Training Acc: 40.44
+[2018-06-08 03:33:08,021] Validation Acc: 22.83%
+[2018-06-08 03:33:24,158] Train Epoch: 27 	Loss: 0.031764 	 Training Acc: 42.20
+[2018-06-08 03:33:36,080] Validation Acc: 24.64%
+[2018-06-08 03:33:36,081] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428816.0816407-best-24.pkl
+[2018-06-08 03:33:52,338] Train Epoch: 28 	Loss: 0.030555 	 Training Acc: 43.75
+[2018-06-08 03:34:04,176] Validation Acc: 21.20%
+[2018-06-08 03:34:20,288] Train Epoch: 29 	Loss: 0.029878 	 Training Acc: 44.15
+[2018-06-08 03:34:32,186] Validation Acc: 21.38%
+[2018-06-08 03:34:48,241] Train Epoch: 30 	Loss: 0.030578 	 Training Acc: 43.65
+[2018-06-08 03:35:00,096] Validation Acc: 20.83%
+[2018-06-08 03:35:00,097] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428900.097485.pkl
+[2018-06-08 03:35:12,607] Test Acc: 30.84%.
+[2018-06-08 03:35:12,609] ===== HYPERPARAMETER SWEEP 3/3 =====
+[2018-06-08 03:35:12,610] Hyperparameters swept: {'learning_rate': 0.0006, 'weight_decay': 0.002, 'dropout': 0.02}
+[2018-06-08 03:35:12,672] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.02) using xavier.
+[2018-06-08 03:35:12,704] Initializing weight LSTM(1000, 256, bias=False, batch_first=True, dropout=0.02) using xavier.
+[2018-06-08 03:35:12,709] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 03:35:12,711] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:35:12,711] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 03:35:12,730] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:35:12,730] Initializing weight Linear(in_features=512, out_features=10, bias=True) using xavier.
+[2018-06-08 03:35:12,731] Initializing bias Linear.bias with zeros.
+[2018-06-08 03:35:12,731] Running the model using GPUs. (--use_cuda)
+[2018-06-08 03:35:12,735] Model will now begin training.
+[2018-06-08 03:35:26,067] Train Epoch: 1 	Loss: 0.042228 	 Training Acc: 22.86
+[2018-06-08 03:35:38,071] Validation Acc: 11.23%
+[2018-06-08 03:35:38,071] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428938.0719068-best-11.pkl
+[2018-06-08 03:35:54,151] Train Epoch: 2 	Loss: 0.034648 	 Training Acc: 35.36
+[2018-06-08 03:36:05,948] Validation Acc: 13.41%
+[2018-06-08 03:36:05,949] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428965.9493132-best-13.pkl
+[2018-06-08 03:36:22,130] Train Epoch: 3 	Loss: 0.027382 	 Training Acc: 47.83
+[2018-06-08 03:36:34,061] Validation Acc: 17.93%
+[2018-06-08 03:36:34,062] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528428994.0627074-best-17.pkl
+[2018-06-08 03:36:50,155] Train Epoch: 4 	Loss: 0.022897 	 Training Acc: 56.86
+[2018-06-08 03:37:01,996] Validation Acc: 22.83%
+[2018-06-08 03:37:01,996] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429021.9966922-best-22.pkl
+[2018-06-08 03:37:17,657] Train Epoch: 5 	Loss: 0.018682 	 Training Acc: 65.51
+[2018-06-08 03:37:28,834] Validation Acc: 20.29%
+[2018-06-08 03:37:44,639] Train Epoch: 6 	Loss: 0.015626 	 Training Acc: 70.17
+[2018-06-08 03:37:55,654] Validation Acc: 21.20%
+[2018-06-08 03:38:09,579] Train Epoch: 7 	Loss: 0.014447 	 Training Acc: 73.11
+[2018-06-08 03:38:18,783] Validation Acc: 22.10%
+[2018-06-08 03:38:32,048] Train Epoch: 8 	Loss: 0.012399 	 Training Acc: 77.19
+[2018-06-08 03:38:43,870] Validation Acc: 22.10%
+[2018-06-08 03:38:59,741] Train Epoch: 9 	Loss: 0.011397 	 Training Acc: 78.35
+[2018-06-08 03:39:11,719] Validation Acc: 23.91%
+[2018-06-08 03:39:11,720] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429151.7207038-best-23.pkl
+[2018-06-08 03:39:25,069] Train Epoch: 10 	Loss: 0.010455 	 Training Acc: 80.84
+[2018-06-08 03:39:36,973] Validation Acc: 22.46%
+[2018-06-08 03:39:53,108] Train Epoch: 11 	Loss: 0.009647 	 Training Acc: 82.44
+[2018-06-08 03:40:05,028] Validation Acc: 25.18%
+[2018-06-08 03:40:05,028] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429205.0289502-best-25.pkl
+[2018-06-08 03:40:21,075] Train Epoch: 12 	Loss: 0.008994 	 Training Acc: 83.93
+[2018-06-08 03:40:33,126] Validation Acc: 22.28%
+[2018-06-08 03:40:49,152] Train Epoch: 13 	Loss: 0.008139 	 Training Acc: 85.19
+[2018-06-08 03:41:00,823] Validation Acc: 22.46%
+[2018-06-08 03:41:16,768] Train Epoch: 14 	Loss: 0.008111 	 Training Acc: 85.56
+[2018-06-08 03:41:28,619] Validation Acc: 20.11%
+[2018-06-08 03:41:41,956] Train Epoch: 15 	Loss: 0.007687 	 Training Acc: 86.00
+[2018-06-08 03:41:53,984] Validation Acc: 19.02%
+[2018-06-08 03:42:07,578] Train Epoch: 16 	Loss: 0.007027 	 Training Acc: 87.16
+[2018-06-08 03:42:17,577] Validation Acc: 19.57%
+[2018-06-08 03:42:30,896] Train Epoch: 17 	Loss: 0.006595 	 Training Acc: 88.20
+[2018-06-08 03:42:42,819] Validation Acc: 25.18%
+[2018-06-08 03:42:56,117] Train Epoch: 18 	Loss: 0.006477 	 Training Acc: 88.74
+[2018-06-08 03:43:07,988] Validation Acc: 19.38%
+[2018-06-08 03:43:23,929] Train Epoch: 19 	Loss: 0.005703 	 Training Acc: 89.60
+[2018-06-08 03:43:35,805] Validation Acc: 24.28%
+[2018-06-08 03:43:49,035] Train Epoch: 20 	Loss: 0.005667 	 Training Acc: 89.78
+[2018-06-08 03:44:00,825] Validation Acc: 24.64%
+[2018-06-08 03:44:14,228] Train Epoch: 21 	Loss: 0.005722 	 Training Acc: 89.95
+[2018-06-08 03:44:26,143] Validation Acc: 27.54%
+[2018-06-08 03:44:26,143] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429466.1438608-best-27.pkl
+[2018-06-08 03:44:41,980] Train Epoch: 22 	Loss: 0.005431 	 Training Acc: 90.57
+[2018-06-08 03:44:53,812] Validation Acc: 23.01%
+[2018-06-08 03:45:07,529] Train Epoch: 23 	Loss: 0.005003 	 Training Acc: 91.14
+[2018-06-08 03:45:17,069] Validation Acc: 26.63%
+[2018-06-08 03:45:30,535] Train Epoch: 24 	Loss: 0.004490 	 Training Acc: 91.98
+[2018-06-08 03:45:39,400] Validation Acc: 25.18%
+[2018-06-08 03:45:55,092] Train Epoch: 25 	Loss: 0.004666 	 Training Acc: 91.98
+[2018-06-08 03:46:06,931] Validation Acc: 23.01%
+[2018-06-08 03:46:22,771] Train Epoch: 26 	Loss: 0.004606 	 Training Acc: 91.75
+[2018-06-08 03:46:34,714] Validation Acc: 25.36%
+[2018-06-08 03:46:48,587] Train Epoch: 27 	Loss: 0.004502 	 Training Acc: 92.79
+[2018-06-08 03:46:58,275] Validation Acc: 28.80%
+[2018-06-08 03:46:58,275] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429618.2758653-best-28.pkl
+[2018-06-08 03:47:11,647] Train Epoch: 28 	Loss: 0.004210 	 Training Acc: 92.57
+[2018-06-08 03:47:22,421] Validation Acc: 25.72%
+[2018-06-08 03:47:38,607] Train Epoch: 29 	Loss: 0.004459 	 Training Acc: 92.00
+[2018-06-08 03:47:48,712] Validation Acc: 24.64%
+[2018-06-08 03:48:02,110] Train Epoch: 30 	Loss: 0.004214 	 Training Acc: 92.59
+[2018-06-08 03:48:14,056] Validation Acc: 25.54%
+[2018-06-08 03:48:14,057] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/checkpoints/LSTM_RGB_final_10_gestures-1528429694.05743.pkl
+[2018-06-08 03:48:26,110] Test Acc: 36.85%.
+[2018-06-08 03:48:26,139] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_loss.learning_rate.LSTM_RGB_final_10_gestures.1528429706.1398861.png
+[2018-06-08 03:48:26,500] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/valid_acc.learning_rate.LSTM_RGB_final_10_gestures.1528429706.499923.png
+[2018-06-08 03:48:26,735] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_acc.learning_rate.LSTM_RGB_final_10_gestures.1528429706.735373.png
+[2018-06-08 03:48:26,863] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_loss.weight_decay.LSTM_RGB_final_10_gestures.1528429706.8638852.png
+[2018-06-08 03:48:26,980] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/valid_acc.weight_decay.LSTM_RGB_final_10_gestures.1528429706.9801388.png
+[2018-06-08 03:48:27,110] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_acc.weight_decay.LSTM_RGB_final_10_gestures.1528429707.1103923.png
+[2018-06-08 03:48:27,238] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_loss.dropout.LSTM_RGB_final_10_gestures.1528429707.2382643.png
+[2018-06-08 03:48:27,353] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/valid_acc.dropout.LSTM_RGB_final_10_gestures.1528429707.3535442.png
+[2018-06-08 03:48:27,574] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/plots/train_acc.dropout.LSTM_RGB_final_10_gestures.1528429707.5742877.png
+[2018-06-08 03:48:27,690] 
+====== Experiment: {'learning_rate': 0.0006, 'weight_decay': 0.0005, 'dropout': 0.13} ======
+[2018-06-08 03:48:27,690] training loss - min:0.0	max:0.04	avg:0.01
+[2018-06-08 03:48:27,690] training accuracy - min:23.40999984741211	max:92.95999908447266	avg:80.25
+[2018-06-08 03:48:27,690] validation accuracy - min:13.770000457763672	max:25.719999313354492	avg:20.95
+[2018-06-08 03:48:27,690] 
+====== Experiment: {'learning_rate': 0.004, 'weight_decay': 0.001, 'dropout': 0.05} ======
+[2018-06-08 03:48:27,690] training loss - min:0.03	max:0.04	avg:0.04
+[2018-06-08 03:48:27,690] training accuracy - min:19.899999618530273	max:44.150001525878906	avg:34.78
+[2018-06-08 03:48:27,690] validation accuracy - min:12.319999694824219	max:24.639999389648438	avg:20.11
+[2018-06-08 03:48:27,690] 
+====== Experiment: {'learning_rate': 0.0006, 'weight_decay': 0.002, 'dropout': 0.02} ======
+[2018-06-08 03:48:27,691] training loss - min:0.0	max:0.04	avg:0.01
+[2018-06-08 03:48:27,691] training accuracy - min:22.860000610351562	max:92.79000091552734	avg:79.73
+[2018-06-08 03:48:27,691] validation accuracy - min:11.229999542236328	max:28.799999237060547	avg:22.5
+[2018-06-08 03:48:29,637] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.05_learning_rate=0.004_weight_decay=0.001.train_acc
+[2018-06-08 03:48:29,638] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.05_learning_rate=0.004_weight_decay=0.001.valid_acc
+[2018-06-08 03:48:29,638] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.05_learning_rate=0.004_weight_decay=0.001.train_loss
+[2018-06-08 03:48:29,638] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.05_learning_rate=0.004_weight_decay=0.001.preds
+[2018-06-08 03:48:29,639] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.13_learning_rate=0.0006_weight_decay=0.0005.train_acc
+[2018-06-08 03:48:29,639] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.13_learning_rate=0.0006_weight_decay=0.0005.valid_acc
+[2018-06-08 03:48:29,640] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.13_learning_rate=0.0006_weight_decay=0.0005.train_loss
+[2018-06-08 03:48:29,640] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.13_learning_rate=0.0006_weight_decay=0.0005.preds
+[2018-06-08 03:48:29,643] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.02_learning_rate=0.0006_weight_decay=0.002.train_acc
+[2018-06-08 03:48:29,643] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.02_learning_rate=0.0006_weight_decay=0.002.valid_acc
+[2018-06-08 03:48:29,643] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.02_learning_rate=0.0006_weight_decay=0.002.train_loss
+[2018-06-08 03:48:29,643] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_final_10_gestures/metrics/dropout=0.02_learning_rate=0.0006_weight_decay=0.002.preds
