@@ -84,6 +84,7 @@ class PretrainedResNetClassifier(BaseModel):
 	def forward(self, X):
 		""" Feeds frames into the ResNet"""
 		logging.debug('Feeding input through pretrained resnet.')
+		# TODO: Remove debugging line to speed things up.
 		X = self._resnet(X)
 
 		if self.generate_encoding and not self._model_config.load:
