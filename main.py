@@ -168,6 +168,7 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 
 def main():
 	logging.info('Cmd: python {0}'.format(' '.join(sys.argv)))
+	MODEL_CONFIG.learning_rate = 0.0
 	logging.info('Config:\n {0}'.format(MODEL_CONFIG))
 	logging.info('Running experiment <{0}> in {1} mode.\n'
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
