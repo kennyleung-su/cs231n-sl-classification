@@ -17,7 +17,7 @@ def pickle_encoding(model, dataloader, use_cuda=False):
 	# loop through data batches
 	for batch_idx, (X, video_path) in enumerate(tqdm(dataloader)):
 		# Utilize GPU if enabled
-		X = X.squeeze()
+		X = X[0]
 		video_path = video_path[0]
 
 		if use_cuda:

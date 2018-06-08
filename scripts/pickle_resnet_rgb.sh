@@ -5,4 +5,4 @@ set -e
 experiment='RN18_RGB_final'
 
 set -x
-python main.py --mode pickle --experiment ${experiment} --num_workers 0 --max_example_per_label 2
+python main.py --mode pickle --experiment ${experiment} --use_cuda --num_workers 32 

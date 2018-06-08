@@ -79,22 +79,6 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 		logging.info("Model will now begin test on training, validation and test set.")
 
 		with torch.no_grad():
-			train_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=train_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
-			logging.info('Training Acc: {:.2f}%'
-					.format(train_acc))
-
-			val_acc = train_utils.validate_model(model=parallel_model,
-													dataloader=valid_dataloader,
-													loss_fn=loss_fn,
-													is_lstm=model_config.is_lstm,
-													use_cuda=model_config.use_cuda)
-			logging.info('Valid Acc: {:.2f}%'
-					.format(val_acc))
-
 			test_acc = train_utils.validate_model(model=parallel_model,
 													dataloader=test_dataloader,
 													loss_fn=loss_fn,
@@ -106,7 +90,7 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 	# Train the model.
 	if model_config.mode == 'train':
 		logging.info("Model will now begin training.")
-		checkpoint_epoch = 0
+		checkpoint_epoch = 1
 		if model_config.checkpoint_to_load:
 			checkpoint_epoch = model.training_epoch
 
@@ -184,6 +168,7 @@ def run_experiment_with_config(model_config, train_dataloader=False, valid_datal
 
 def main():
 	logging.info('Cmd: python {0}'.format(' '.join(sys.argv)))
+	MODEL_CONFIG.learning_rate = 0.0
 	logging.info('Config:\n {0}'.format(MODEL_CONFIG))
 	logging.info('Running experiment <{0}> in {1} mode.\n'
 		'Description of model: {2}'.format(MODEL_CONFIG.name,
@@ -194,9 +179,11 @@ def main():
 		# TODO: Initialize this from the configs.
 		config_options = {
 			'learning_rate': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -1), round_to=4),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=4),
 			'weight_decay': sweeper.HyperparameterOption(
-				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=2),
+				sweeper.ValueType.CONTINUOUS, exp_range=(-4, -2), round_to=4),
+			'dropout': sweeper.HyperparameterOption(
+				sweeper.ValueType.PROBABILITY, value_range=(0, 0.2), round_to=2),
 		},
 		model_config = MODEL_CONFIG,
 		metrics_dir = config.METRICS,
@@ -221,6 +208,7 @@ def main():
 
 		hyp_sweeper.analyze_hyperparameter('learning_rate')
 		hyp_sweeper.analyze_hyperparameter('weight_decay')
+		hyp_sweeper.analyze_hyperparameter('dropout')
 
 	# TODO: Analyze the performance across different sweeps.
 	if MODEL_CONFIG.mode != 'pickle':

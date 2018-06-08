@@ -24,9 +24,10 @@ class CombinationDataset(ResnetEncodingDataset):
 			video_dir = os.path.join(self._data_dir, video_dir)
 			data_type = self._data_types[idx]
 			frames_list.append(self.read_frame_tensors_from_dir(video_dir, data_type))
-
-		item['frames'] = torch.cat(frames_list, 1)
-		print(item['frames'].shape)
+		#try:
+		item['frames'] = torch.cat(frames_list, 0)
+		#except RuntimeError:
+		#	return self.__getitem__(0)
 
 		return item
 
@@ -55,13 +56,10 @@ class CombinationDataset(ResnetEncodingDataset):
 
 			for data_type in data_types:
 				video_dirs = self.get_video_dirs(label_dir, data_type)
-				print(video_dirs)
 
 				# cap the number of images per label
 				if self._max_example_per_label:
 					video_dirs = video_dirs[:self._max_example_per_label]
-
-				print(video_dirs)
 
 				video_dirs_list.append(video_dirs)
 
