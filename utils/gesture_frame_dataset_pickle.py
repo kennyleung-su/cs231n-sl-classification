@@ -99,7 +99,7 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 			file_prefix = 'K'
 
 		if file_prefix == 'OF':
-			filenames = glob.glob(os.path.join(video_dir, '{0}_stride1.png'.format(file_prefix)))
+			filenames = glob.glob(os.path.join(video_dir, '{0}_*_stride1.png'.format(file_prefix)))
 			matches = [re.match(r'.*_(\d+)_stride1\.png', name) for name in filenames]
 		else:
 			filenames = glob.glob(os.path.join(video_dir, '{0}_*.png'.format(file_prefix)))
@@ -110,6 +110,7 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 		frames_list = []
 		for frame_file in sorted_filenames:
 			# Read an (H, W, C) shaped tensor.
+			logging.debug('Reading: {0}'.format(frame_file))
 			frame_ndarray = imageio.imread(frame_file)
 			# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
 			frame_ndarray = transform(frame_ndarray)
@@ -118,6 +119,7 @@ class GestureFrameDatasetPickle(GestureFrameDataset):
 		
 		if duplicate_last_frame:
 			frames_list.append(last_frame)
+
 		# Stacks up to a (T, C, H, W) tensor.
 		tensor = torch.stack(frames_list, dim=0)
 
