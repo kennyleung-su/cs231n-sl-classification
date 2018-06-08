@@ -1,0 +1,682 @@
+[2018-06-08 00:36:03,439] Cmd: python main.py --experiment LSTM_RGB_RGBD_final --use_cuda --mode train --num_workers 32 --num_sweeps 3 --epoch 50 --validate_every 1 --starting_from 224 --save_every_epoch
+[2018-06-08 00:36:03,440] Config:
+ name: LSTM_RGB_RGBD_final
+ arch: EncodingLSTMClassifier
+ dataloader_type: (RN18RGB+TRN18RGBD)-combination
+ shuffle: True
+ description: Applies a LSTM architecture to all labels of RGB + RGBD video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+ loss: cross-entropy
+ initializer: xavier
+ optimizer: adam
+ lstm_hidden_size: 256
+ lstm_hidden_fc_size: 512
+ lstm_num_layers: 1
+ lstm_bias: False
+ lstm_batch_first: True
+ lstm_bidirectional: False
+ use_full_dataset: True
+ epochs: 50
+ batch_size: 50
+ learning_rate: 0.001
+ weight_decay: 0.0
+ dropout: 0.0
+ num_sweeps: 3
+ mode: train
+ experiment: LSTM_RGB_RGBD_final
+ starting_from: 224
+ use_cuda: True
+ save_every_epoch: True
+ validate_every: 1
+ num_workers: 32
+ model: <class 'models.LSTM.EncodingLSTMClassifier'>
+ is_lstm: True
+ gesture_labels: range(224, 250)
+ encoding_input_size: 2000
+ transform: <torchvision.transforms.transforms.Compose object at 0x7ff9548ebcc0>
+ optimizer_fn: <class 'torch.optim.adam.Adam'>
+ initializer_fn: <function xavier_normal_ at 0x7ff9e7428268>
+ loss_fn: CrossEntropyLoss()
+ seed: 1
+ checkpoint_path: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints
+
+[2018-06-08 00:36:03,440] Running experiment <LSTM_RGB_RGBD_final> in train mode.
+Description of model: Applies a LSTM architecture to all labels of RGB + RGBD video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+[2018-06-08 00:36:03,440] Reindexed labels: {224: 0, 225: 1, 226: 2, 227: 3, 228: 4, 229: 5, 230: 6, 231: 7, 232: 8, 233: 9, 234: 10, 235: 11, 236: 12, 237: 13, 238: 14, 239: 15, 240: 16, 241: 17, 242: 18, 243: 19, 244: 20, 245: 21, 246: 22, 247: 23, 248: 24, 249: 25}
+[2018-06-08 00:36:03,440] Populating frame tensors for 26 specified labels in data dir /home/shared/dataset/train: range(224, 250)
+[2018-06-08 00:36:03,444] Assigning frame tensor locations for label: 224 (159 videos)
+[2018-06-08 00:36:03,474] Assigning frame tensor locations for label: 225 (166 videos)
+[2018-06-08 00:36:03,500] Assigning frame tensor locations for label: 226 (162 videos)
+[2018-06-08 00:36:03,523] Assigning frame tensor locations for label: 227 (161 videos)
+[2018-06-08 00:36:03,549] Assigning frame tensor locations for label: 228 (165 videos)
+[2018-06-08 00:36:03,573] Assigning frame tensor locations for label: 229 (159 videos)
+[2018-06-08 00:36:03,595] Assigning frame tensor locations for label: 230 (82 videos)
+[2018-06-08 00:36:03,609] Assigning frame tensor locations for label: 231 (93 videos)
+[2018-06-08 00:36:03,625] Assigning frame tensor locations for label: 232 (85 videos)
+[2018-06-08 00:36:03,639] Assigning frame tensor locations for label: 233 (92 videos)
+[2018-06-08 00:36:03,655] Assigning frame tensor locations for label: 234 (87 videos)
+[2018-06-08 00:36:03,668] Assigning frame tensor locations for label: 235 (85 videos)
+[2018-06-08 00:36:03,682] Assigning frame tensor locations for label: 236 (87 videos)
+[2018-06-08 00:36:03,699] Assigning frame tensor locations for label: 237 (204 videos)
+[2018-06-08 00:36:03,733] Assigning frame tensor locations for label: 238 (188 videos)
+[2018-06-08 00:36:03,765] Assigning frame tensor locations for label: 239 (190 videos)
+[2018-06-08 00:36:03,797] Assigning frame tensor locations for label: 240 (200 videos)
+[2018-06-08 00:36:03,830] Assigning frame tensor locations for label: 241 (256 videos)
+[2018-06-08 00:36:03,873] Assigning frame tensor locations for label: 242 (79 videos)
+[2018-06-08 00:36:03,890] Assigning frame tensor locations for label: 243 (79 videos)
+[2018-06-08 00:36:03,904] Assigning frame tensor locations for label: 244 (85 videos)
+[2018-06-08 00:36:03,920] Assigning frame tensor locations for label: 245 (90 videos)
+[2018-06-08 00:36:03,937] Assigning frame tensor locations for label: 246 (77 videos)
+[2018-06-08 00:36:03,949] Assigning frame tensor locations for label: 247 (82 videos)
+[2018-06-08 00:36:03,964] Assigning frame tensor locations for label: 248 (83 videos)
+[2018-06-08 00:36:03,976] Assigning frame tensor locations for label: 249 (82 videos)
+[2018-06-08 00:36:03,989] Initialized a ResnetEncodingDataset of size 3278.
+[2018-06-08 00:36:03,989] Reindexed labels: {224: 0, 225: 1, 226: 2, 227: 3, 228: 4, 229: 5, 230: 6, 231: 7, 232: 8, 233: 9, 234: 10, 235: 11, 236: 12, 237: 13, 238: 14, 239: 15, 240: 16, 241: 17, 242: 18, 243: 19, 244: 20, 245: 21, 246: 22, 247: 23, 248: 24, 249: 25}
+[2018-06-08 00:36:03,989] Populating frame tensors for 26 specified labels in data dir /home/shared/dataset/valid: range(224, 250)
+[2018-06-08 00:36:03,990] Assigning frame tensor locations for label: 224 (24 videos)
+[2018-06-08 00:36:03,994] Assigning frame tensor locations for label: 225 (25 videos)
+[2018-06-08 00:36:03,998] Assigning frame tensor locations for label: 226 (27 videos)
+[2018-06-08 00:36:04,002] Assigning frame tensor locations for label: 227 (18 videos)
+[2018-06-08 00:36:04,005] Assigning frame tensor locations for label: 228 (24 videos)
+[2018-06-08 00:36:04,010] Assigning frame tensor locations for label: 229 (30 videos)
+[2018-06-08 00:36:04,014] Assigning frame tensor locations for label: 230 (25 videos)
+[2018-06-08 00:36:04,018] Assigning frame tensor locations for label: 231 (24 videos)
+[2018-06-08 00:36:04,022] Assigning frame tensor locations for label: 232 (29 videos)
+[2018-06-08 00:36:04,027] Assigning frame tensor locations for label: 233 (22 videos)
+[2018-06-08 00:36:04,031] Assigning frame tensor locations for label: 234 (27 videos)
+[2018-06-08 00:36:04,036] Assigning frame tensor locations for label: 235 (26 videos)
+[2018-06-08 00:36:04,040] Assigning frame tensor locations for label: 236 (23 videos)
+[2018-06-08 00:36:04,044] Assigning frame tensor locations for label: 237 (19 videos)
+[2018-06-08 00:36:04,049] Assigning frame tensor locations for label: 238 (19 videos)
+[2018-06-08 00:36:04,053] Assigning frame tensor locations for label: 239 (24 videos)
+[2018-06-08 00:36:04,058] Assigning frame tensor locations for label: 240 (17 videos)
+[2018-06-08 00:36:04,061] Assigning frame tensor locations for label: 241 (37 videos)
+[2018-06-08 00:36:04,070] Assigning frame tensor locations for label: 242 (13 videos)
+[2018-06-08 00:36:04,073] Assigning frame tensor locations for label: 243 (21 videos)
+[2018-06-08 00:36:04,078] Assigning frame tensor locations for label: 244 (19 videos)
+[2018-06-08 00:36:04,081] Assigning frame tensor locations for label: 245 (17 videos)
+[2018-06-08 00:36:04,086] Assigning frame tensor locations for label: 246 (23 videos)
+[2018-06-08 00:36:04,091] Assigning frame tensor locations for label: 247 (18 videos)
+[2018-06-08 00:36:04,096] Assigning frame tensor locations for label: 248 (18 videos)
+[2018-06-08 00:36:04,099] Assigning frame tensor locations for label: 249 (19 videos)
+[2018-06-08 00:36:04,103] Initialized a ResnetEncodingDataset of size 588.
+[2018-06-08 00:36:04,103] Remove max_example_per_label for test dataset
+[2018-06-08 00:36:04,104] Reindexed labels: {224: 0, 225: 1, 226: 2, 227: 3, 228: 4, 229: 5, 230: 6, 231: 7, 232: 8, 233: 9, 234: 10, 235: 11, 236: 12, 237: 13, 238: 14, 239: 15, 240: 16, 241: 17, 242: 18, 243: 19, 244: 20, 245: 21, 246: 22, 247: 23, 248: 24, 249: 25}
+[2018-06-08 00:36:04,104] Populating frame tensors for 26 specified labels in data dir /home/shared/dataset/test: range(224, 250)
+[2018-06-08 00:36:04,105] Assigning frame tensor locations for label: 224 (26 videos)
+[2018-06-08 00:36:04,110] Assigning frame tensor locations for label: 225 (29 videos)
+[2018-06-08 00:36:04,115] Assigning frame tensor locations for label: 226 (23 videos)
+[2018-06-08 00:36:04,119] Assigning frame tensor locations for label: 227 (24 videos)
+[2018-06-08 00:36:04,124] Assigning frame tensor locations for label: 228 (21 videos)
+[2018-06-08 00:36:04,128] Assigning frame tensor locations for label: 229 (24 videos)
+[2018-06-08 00:36:04,133] Assigning frame tensor locations for label: 230 (25 videos)
+[2018-06-08 00:36:04,138] Assigning frame tensor locations for label: 231 (21 videos)
+[2018-06-08 00:36:04,142] Assigning frame tensor locations for label: 232 (26 videos)
+[2018-06-08 00:36:04,148] Assigning frame tensor locations for label: 233 (23 videos)
+[2018-06-08 00:36:04,152] Assigning frame tensor locations for label: 234 (25 videos)
+[2018-06-08 00:36:04,156] Assigning frame tensor locations for label: 235 (22 videos)
+[2018-06-08 00:36:04,160] Assigning frame tensor locations for label: 236 (28 videos)
+[2018-06-08 00:36:04,166] Assigning frame tensor locations for label: 237 (26 videos)
+[2018-06-08 00:36:04,172] Assigning frame tensor locations for label: 238 (34 videos)
+[2018-06-08 00:36:04,180] Assigning frame tensor locations for label: 239 (28 videos)
+[2018-06-08 00:36:04,186] Assigning frame tensor locations for label: 240 (32 videos)
+[2018-06-08 00:36:04,193] Assigning frame tensor locations for label: 241 (46 videos)
+[2018-06-08 00:36:04,203] Assigning frame tensor locations for label: 242 (16 videos)
+[2018-06-08 00:36:04,207] Assigning frame tensor locations for label: 243 (20 videos)
+[2018-06-08 00:36:04,211] Assigning frame tensor locations for label: 244 (22 videos)
+[2018-06-08 00:36:04,215] Assigning frame tensor locations for label: 245 (19 videos)
+[2018-06-08 00:36:04,219] Assigning frame tensor locations for label: 246 (24 videos)
+[2018-06-08 00:36:04,224] Assigning frame tensor locations for label: 247 (17 videos)
+[2018-06-08 00:36:04,227] Assigning frame tensor locations for label: 248 (14 videos)
+[2018-06-08 00:36:04,230] Assigning frame tensor locations for label: 249 (13 videos)
+[2018-06-08 00:36:04,232] Initialized a ResnetEncodingDataset of size 628.
+[2018-06-08 00:36:04,233] ===== HYPERPARAMETER SWEEP 1/3 =====
+[2018-06-08 00:36:04,233] Hyperparameters swept: {'learning_rate': 0.0003, 'weight_decay': 0.001, 'dropout': 0.09}
+[2018-06-08 00:36:04,262] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.09) using xavier.
+[2018-06-08 00:36:04,281] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.09) using xavier.
+[2018-06-08 00:36:04,284] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 00:36:04,286] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:36:04,286] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 00:36:04,289] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:36:04,289] Initializing weight Linear(in_features=512, out_features=26, bias=True) using xavier.
+[2018-06-08 00:36:04,289] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:36:04,358] Running the model using GPUs. (--use_cuda)
+[2018-06-08 00:36:08,546] Model will now begin training.
+[2018-06-08 00:36:30,221] Train Epoch: 1 	Loss: 0.046699 	 Training Acc: 20.29
+[2018-06-08 00:36:30,222] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418190.2220821.pkl
+[2018-06-08 00:36:35,504] Validation Acc: 7.65%
+[2018-06-08 00:36:35,505] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418195.5050874-best-7.pkl
+[2018-06-08 00:36:46,271] Train Epoch: 2 	Loss: 0.031736 	 Training Acc: 36.82
+[2018-06-08 00:36:46,272] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418206.272383.pkl
+[2018-06-08 00:36:51,679] Validation Acc: 11.90%
+[2018-06-08 00:36:51,679] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418211.679815-best-11.pkl
+[2018-06-08 00:37:02,511] Train Epoch: 3 	Loss: 0.024702 	 Training Acc: 49.39
+[2018-06-08 00:37:02,511] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418222.511892.pkl
+[2018-06-08 00:37:07,891] Validation Acc: 13.10%
+[2018-06-08 00:37:07,892] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418227.8922892-best-13.pkl
+[2018-06-08 00:37:18,849] Train Epoch: 4 	Loss: 0.020407 	 Training Acc: 56.86
+[2018-06-08 00:37:18,850] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418238.8504274.pkl
+[2018-06-08 00:37:23,596] Validation Acc: 12.93%
+[2018-06-08 00:37:34,895] Train Epoch: 5 	Loss: 0.017989 	 Training Acc: 61.93
+[2018-06-08 00:37:34,895] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418254.8957982.pkl
+[2018-06-08 00:37:39,688] Validation Acc: 13.78%
+[2018-06-08 00:37:39,689] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418259.689152-best-13.pkl
+[2018-06-08 00:37:50,387] Train Epoch: 6 	Loss: 0.016831 	 Training Acc: 63.70
+[2018-06-08 00:37:50,388] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418270.3882987.pkl
+[2018-06-08 00:37:55,780] Validation Acc: 14.97%
+[2018-06-08 00:37:55,781] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418275.7815335-best-14.pkl
+[2018-06-08 00:38:06,328] Train Epoch: 7 	Loss: 0.015449 	 Training Acc: 67.39
+[2018-06-08 00:38:06,328] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418286.3289437.pkl
+[2018-06-08 00:38:11,543] Validation Acc: 8.33%
+[2018-06-08 00:38:21,957] Train Epoch: 8 	Loss: 0.013430 	 Training Acc: 72.24
+[2018-06-08 00:38:21,958] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418301.9581106.pkl
+[2018-06-08 00:38:27,411] Validation Acc: 13.27%
+[2018-06-08 00:38:38,531] Train Epoch: 9 	Loss: 0.013008 	 Training Acc: 72.97
+[2018-06-08 00:38:38,532] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418318.5321522.pkl
+[2018-06-08 00:38:43,406] Validation Acc: 16.16%
+[2018-06-08 00:38:43,407] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418323.4077396-best-16.pkl
+[2018-06-08 00:38:54,758] Train Epoch: 10 	Loss: 0.011889 	 Training Acc: 75.72
+[2018-06-08 00:38:54,759] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418334.7595334.pkl
+[2018-06-08 00:39:00,129] Validation Acc: 13.27%
+[2018-06-08 00:39:10,973] Train Epoch: 11 	Loss: 0.010816 	 Training Acc: 78.00
+[2018-06-08 00:39:10,974] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418350.974584.pkl
+[2018-06-08 00:39:16,360] Validation Acc: 13.95%
+[2018-06-08 00:39:26,869] Train Epoch: 12 	Loss: 0.010194 	 Training Acc: 79.10
+[2018-06-08 00:39:26,870] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418366.870111.pkl
+[2018-06-08 00:39:31,568] Validation Acc: 14.63%
+[2018-06-08 00:39:42,072] Train Epoch: 13 	Loss: 0.010046 	 Training Acc: 79.59
+[2018-06-08 00:39:42,073] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418382.073713.pkl
+[2018-06-08 00:39:46,907] Validation Acc: 12.41%
+[2018-06-08 00:39:57,971] Train Epoch: 14 	Loss: 0.009202 	 Training Acc: 82.12
+[2018-06-08 00:39:57,972] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418397.972033.pkl
+[2018-06-08 00:40:02,802] Validation Acc: 15.65%
+[2018-06-08 00:40:13,520] Train Epoch: 15 	Loss: 0.008653 	 Training Acc: 83.34
+[2018-06-08 00:40:13,520] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418413.5207803.pkl
+[2018-06-08 00:40:18,375] Validation Acc: 15.14%
+[2018-06-08 00:40:28,973] Train Epoch: 16 	Loss: 0.007918 	 Training Acc: 84.62
+[2018-06-08 00:40:28,974] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418428.9745212.pkl
+[2018-06-08 00:40:34,468] Validation Acc: 16.50%
+[2018-06-08 00:40:34,468] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418434.468581-best-16.pkl
+[2018-06-08 00:40:45,282] Train Epoch: 17 	Loss: 0.007417 	 Training Acc: 85.81
+[2018-06-08 00:40:45,283] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418445.283744.pkl
+[2018-06-08 00:40:50,059] Validation Acc: 17.35%
+[2018-06-08 00:40:50,060] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418450.0602632-best-17.pkl
+[2018-06-08 00:41:00,778] Train Epoch: 18 	Loss: 0.007484 	 Training Acc: 86.39
+[2018-06-08 00:41:00,779] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418460.7792852.pkl
+[2018-06-08 00:41:06,165] Validation Acc: 13.27%
+[2018-06-08 00:41:16,493] Train Epoch: 19 	Loss: 0.007553 	 Training Acc: 85.11
+[2018-06-08 00:41:16,494] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418476.4944415.pkl
+[2018-06-08 00:41:21,940] Validation Acc: 10.71%
+[2018-06-08 00:41:32,357] Train Epoch: 20 	Loss: 0.007229 	 Training Acc: 85.91
+[2018-06-08 00:41:32,358] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418492.3585572.pkl
+[2018-06-08 00:41:37,809] Validation Acc: 15.48%
+[2018-06-08 00:41:49,026] Train Epoch: 21 	Loss: 0.006115 	 Training Acc: 88.62
+[2018-06-08 00:41:49,027] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418509.0275602.pkl
+[2018-06-08 00:41:54,436] Validation Acc: 13.95%
+[2018-06-08 00:42:05,505] Train Epoch: 22 	Loss: 0.006047 	 Training Acc: 88.68
+[2018-06-08 00:42:05,506] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418525.506547.pkl
+[2018-06-08 00:42:10,879] Validation Acc: 11.90%
+[2018-06-08 00:42:21,869] Train Epoch: 23 	Loss: 0.005963 	 Training Acc: 89.38
+[2018-06-08 00:42:21,869] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418541.869693.pkl
+[2018-06-08 00:42:27,182] Validation Acc: 15.99%
+[2018-06-08 00:42:38,113] Train Epoch: 24 	Loss: 0.005011 	 Training Acc: 90.76
+[2018-06-08 00:42:38,114] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418558.11443.pkl
+[2018-06-08 00:42:42,846] Validation Acc: 11.73%
+[2018-06-08 00:42:53,320] Train Epoch: 25 	Loss: 0.005281 	 Training Acc: 90.51
+[2018-06-08 00:42:53,321] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418573.3216252.pkl
+[2018-06-08 00:42:58,119] Validation Acc: 13.95%
+[2018-06-08 00:43:09,027] Train Epoch: 26 	Loss: 0.005197 	 Training Acc: 91.03
+[2018-06-08 00:43:09,028] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418589.0281084.pkl
+[2018-06-08 00:43:13,827] Validation Acc: 15.82%
+[2018-06-08 00:43:24,231] Train Epoch: 27 	Loss: 0.004610 	 Training Acc: 91.79
+[2018-06-08 00:43:24,232] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418604.2320926.pkl
+[2018-06-08 00:43:29,031] Validation Acc: 14.46%
+[2018-06-08 00:43:39,940] Train Epoch: 28 	Loss: 0.004587 	 Training Acc: 91.61
+[2018-06-08 00:43:39,941] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418619.9417713.pkl
+[2018-06-08 00:43:45,400] Validation Acc: 15.99%
+[2018-06-08 00:43:55,952] Train Epoch: 29 	Loss: 0.004352 	 Training Acc: 92.46
+[2018-06-08 00:43:55,953] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418635.953351.pkl
+[2018-06-08 00:44:01,313] Validation Acc: 16.50%
+[2018-06-08 00:44:12,150] Train Epoch: 30 	Loss: 0.004363 	 Training Acc: 92.28
+[2018-06-08 00:44:12,151] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418652.1513913.pkl
+[2018-06-08 00:44:17,482] Validation Acc: 15.14%
+[2018-06-08 00:44:28,406] Train Epoch: 31 	Loss: 0.003989 	 Training Acc: 92.98
+[2018-06-08 00:44:28,407] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418668.4074633.pkl
+[2018-06-08 00:44:33,919] Validation Acc: 12.41%
+[2018-06-08 00:44:44,345] Train Epoch: 32 	Loss: 0.003565 	 Training Acc: 93.69
+[2018-06-08 00:44:44,346] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418684.3465474.pkl
+[2018-06-08 00:44:49,670] Validation Acc: 14.80%
+[2018-06-08 00:45:00,507] Train Epoch: 33 	Loss: 0.003803 	 Training Acc: 93.35
+[2018-06-08 00:45:00,508] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418700.5080864.pkl
+[2018-06-08 00:45:05,819] Validation Acc: 14.80%
+[2018-06-08 00:45:16,282] Train Epoch: 34 	Loss: 0.003902 	 Training Acc: 93.08
+[2018-06-08 00:45:16,283] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418716.283678.pkl
+[2018-06-08 00:45:21,578] Validation Acc: 15.14%
+[2018-06-08 00:45:32,309] Train Epoch: 35 	Loss: 0.003829 	 Training Acc: 92.89
+[2018-06-08 00:45:32,310] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418732.3101516.pkl
+[2018-06-08 00:45:37,672] Validation Acc: 16.67%
+[2018-06-08 00:45:48,593] Train Epoch: 36 	Loss: 0.003172 	 Training Acc: 94.81
+[2018-06-08 00:45:48,594] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418748.5944252.pkl
+[2018-06-08 00:45:54,031] Validation Acc: 15.31%
+[2018-06-08 00:46:04,787] Train Epoch: 37 	Loss: 0.003253 	 Training Acc: 94.66
+[2018-06-08 00:46:04,787] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418764.787878.pkl
+[2018-06-08 00:46:10,179] Validation Acc: 11.05%
+[2018-06-08 00:46:20,615] Train Epoch: 38 	Loss: 0.003134 	 Training Acc: 94.75
+[2018-06-08 00:46:20,616] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418780.6160338.pkl
+[2018-06-08 00:46:25,916] Validation Acc: 14.80%
+[2018-06-08 00:46:36,758] Train Epoch: 39 	Loss: 0.002546 	 Training Acc: 95.45
+[2018-06-08 00:46:36,760] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418796.7599487.pkl
+[2018-06-08 00:46:42,175] Validation Acc: 14.97%
+[2018-06-08 00:46:53,003] Train Epoch: 40 	Loss: 0.003061 	 Training Acc: 94.91
+[2018-06-08 00:46:53,004] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418813.0041382.pkl
+[2018-06-08 00:46:58,278] Validation Acc: 16.50%
+[2018-06-08 00:47:08,955] Train Epoch: 41 	Loss: 0.002714 	 Training Acc: 95.73
+[2018-06-08 00:47:08,955] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418828.9558673.pkl
+[2018-06-08 00:47:14,156] Validation Acc: 16.16%
+[2018-06-08 00:47:24,596] Train Epoch: 42 	Loss: 0.002620 	 Training Acc: 95.67
+[2018-06-08 00:47:24,596] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418844.5969167.pkl
+[2018-06-08 00:47:29,831] Validation Acc: 16.50%
+[2018-06-08 00:47:40,402] Train Epoch: 43 	Loss: 0.002905 	 Training Acc: 95.39
+[2018-06-08 00:47:40,403] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418860.4034255.pkl
+[2018-06-08 00:47:45,604] Validation Acc: 17.86%
+[2018-06-08 00:47:45,605] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418865.6051097-best-17.pkl
+[2018-06-08 00:47:56,886] Train Epoch: 44 	Loss: 0.002149 	 Training Acc: 96.40
+[2018-06-08 00:47:56,887] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418876.887059.pkl
+[2018-06-08 00:48:02,188] Validation Acc: 16.67%
+[2018-06-08 00:48:12,824] Train Epoch: 45 	Loss: 0.002598 	 Training Acc: 95.91
+[2018-06-08 00:48:12,825] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418892.825687.pkl
+[2018-06-08 00:48:18,092] Validation Acc: 17.01%
+[2018-06-08 00:48:28,803] Train Epoch: 46 	Loss: 0.002052 	 Training Acc: 96.71
+[2018-06-08 00:48:28,804] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418908.804078.pkl
+[2018-06-08 00:48:34,098] Validation Acc: 15.65%
+[2018-06-08 00:48:44,703] Train Epoch: 47 	Loss: 0.002274 	 Training Acc: 96.10
+[2018-06-08 00:48:44,704] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418924.70462.pkl
+[2018-06-08 00:48:49,936] Validation Acc: 15.65%
+[2018-06-08 00:49:00,637] Train Epoch: 48 	Loss: 0.002447 	 Training Acc: 95.97
+[2018-06-08 00:49:00,638] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418940.6384199.pkl
+[2018-06-08 00:49:05,854] Validation Acc: 15.48%
+[2018-06-08 00:49:16,492] Train Epoch: 49 	Loss: 0.002488 	 Training Acc: 95.64
+[2018-06-08 00:49:16,493] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418956.4936795.pkl
+[2018-06-08 00:49:21,771] Validation Acc: 15.48%
+[2018-06-08 00:49:32,358] Train Epoch: 50 	Loss: 0.001866 	 Training Acc: 96.80
+[2018-06-08 00:49:32,358] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418972.3588672.pkl
+[2018-06-08 00:49:37,101] Validation Acc: 18.03%
+[2018-06-08 00:49:37,102] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418977.102656-best-18.pkl
+[2018-06-08 00:49:37,127] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418977.1275396.pkl
+[2018-06-08 00:49:42,603] Test Acc: 29.94%.
+[2018-06-08 00:49:42,605] ===== HYPERPARAMETER SWEEP 2/3 =====
+[2018-06-08 00:49:42,605] Hyperparameters swept: {'learning_rate': 0.008, 'weight_decay': 0.0001, 'dropout': 0.1}
+[2018-06-08 00:49:42,637] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.1) using xavier.
+[2018-06-08 00:49:42,659] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.1) using xavier.
+[2018-06-08 00:49:42,662] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 00:49:42,664] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:49:42,664] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 00:49:42,667] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:49:42,667] Initializing weight Linear(in_features=512, out_features=26, bias=True) using xavier.
+[2018-06-08 00:49:42,667] Initializing bias Linear.bias with zeros.
+[2018-06-08 00:49:42,668] Running the model using GPUs. (--use_cuda)
+[2018-06-08 00:49:42,672] Model will now begin training.
+[2018-06-08 00:49:53,237] Train Epoch: 1 	Loss: 0.049438 	 Training Acc: 14.73
+[2018-06-08 00:49:53,238] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418993.23829.pkl
+[2018-06-08 00:49:58,700] Validation Acc: 6.80%
+[2018-06-08 00:49:58,701] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528418998.7014477-best-6.pkl
+[2018-06-08 00:50:09,808] Train Epoch: 2 	Loss: 0.047262 	 Training Acc: 15.28
+[2018-06-08 00:50:09,808] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419009.80891.pkl
+[2018-06-08 00:50:14,562] Validation Acc: 7.48%
+[2018-06-08 00:50:14,562] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419014.562683-best-7.pkl
+[2018-06-08 00:50:25,181] Train Epoch: 3 	Loss: 0.045659 	 Training Acc: 16.56
+[2018-06-08 00:50:25,182] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419025.1821675.pkl
+[2018-06-08 00:50:30,234] Validation Acc: 4.42%
+[2018-06-08 00:50:41,391] Train Epoch: 4 	Loss: 0.047802 	 Training Acc: 15.89
+[2018-06-08 00:50:41,392] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419041.3924348.pkl
+[2018-06-08 00:50:46,677] Validation Acc: 7.48%
+[2018-06-08 00:50:57,687] Train Epoch: 5 	Loss: 0.041621 	 Training Acc: 17.57
+[2018-06-08 00:50:57,687] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419057.6877706.pkl
+[2018-06-08 00:51:02,553] Validation Acc: 5.27%
+[2018-06-08 00:51:14,028] Train Epoch: 6 	Loss: 0.042116 	 Training Acc: 17.27
+[2018-06-08 00:51:14,029] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419074.0290892.pkl
+[2018-06-08 00:51:18,903] Validation Acc: 3.74%
+[2018-06-08 00:51:29,642] Train Epoch: 7 	Loss: 0.039858 	 Training Acc: 18.82
+[2018-06-08 00:51:29,643] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419089.643496.pkl
+[2018-06-08 00:51:34,396] Validation Acc: 6.29%
+[2018-06-08 00:51:45,352] Train Epoch: 8 	Loss: 0.039314 	 Training Acc: 18.55
+[2018-06-08 00:51:45,353] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419105.3534591.pkl
+[2018-06-08 00:51:50,199] Validation Acc: 6.63%
+[2018-06-08 00:52:01,259] Train Epoch: 9 	Loss: 0.040465 	 Training Acc: 18.15
+[2018-06-08 00:52:01,260] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419121.2607062.pkl
+[2018-06-08 00:52:06,036] Validation Acc: 7.65%
+[2018-06-08 00:52:06,036] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419126.0366051-best-7.pkl
+[2018-06-08 00:52:16,762] Train Epoch: 10 	Loss: 0.040833 	 Training Acc: 18.27
+[2018-06-08 00:52:16,763] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419136.7634046.pkl
+[2018-06-08 00:52:21,562] Validation Acc: 7.14%
+[2018-06-08 00:52:32,689] Train Epoch: 11 	Loss: 0.039810 	 Training Acc: 19.28
+[2018-06-08 00:52:32,690] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419152.690252.pkl
+[2018-06-08 00:52:38,072] Validation Acc: 6.46%
+[2018-06-08 00:52:48,629] Train Epoch: 12 	Loss: 0.041879 	 Training Acc: 18.76
+[2018-06-08 00:52:48,630] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419168.6301658.pkl
+[2018-06-08 00:52:54,033] Validation Acc: 9.52%
+[2018-06-08 00:52:54,033] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419174.0337203-best-9.pkl
+[2018-06-08 00:53:04,993] Train Epoch: 13 	Loss: 0.046977 	 Training Acc: 15.16
+[2018-06-08 00:53:04,993] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419184.9938538.pkl
+[2018-06-08 00:53:10,333] Validation Acc: 4.93%
+[2018-06-08 00:53:21,213] Train Epoch: 14 	Loss: 0.040289 	 Training Acc: 17.82
+[2018-06-08 00:53:21,214] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419201.2139828.pkl
+[2018-06-08 00:53:26,548] Validation Acc: 7.65%
+[2018-06-08 00:53:37,098] Train Epoch: 15 	Loss: 0.038617 	 Training Acc: 23.73
+[2018-06-08 00:53:37,099] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419217.0991461.pkl
+[2018-06-08 00:53:42,487] Validation Acc: 9.18%
+[2018-06-08 00:53:53,168] Train Epoch: 16 	Loss: 0.043536 	 Training Acc: 21.05
+[2018-06-08 00:53:53,169] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419233.169307.pkl
+[2018-06-08 00:53:58,538] Validation Acc: 9.01%
+[2018-06-08 00:54:09,282] Train Epoch: 17 	Loss: 0.039155 	 Training Acc: 20.50
+[2018-06-08 00:54:09,282] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419249.2828841.pkl
+[2018-06-08 00:54:14,597] Validation Acc: 7.14%
+[2018-06-08 00:54:25,252] Train Epoch: 18 	Loss: 0.038565 	 Training Acc: 23.00
+[2018-06-08 00:54:25,253] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419265.2531464.pkl
+[2018-06-08 00:54:30,082] Validation Acc: 9.18%
+[2018-06-08 00:54:40,666] Train Epoch: 19 	Loss: 0.045857 	 Training Acc: 18.49
+[2018-06-08 00:54:40,667] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419280.6676333.pkl
+[2018-06-08 00:54:45,427] Validation Acc: 5.78%
+[2018-06-08 00:54:55,836] Train Epoch: 20 	Loss: 0.037457 	 Training Acc: 24.13
+[2018-06-08 00:54:55,837] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419295.8377314.pkl
+[2018-06-08 00:55:00,636] Validation Acc: 4.25%
+[2018-06-08 00:55:11,194] Train Epoch: 21 	Loss: 0.039608 	 Training Acc: 18.46
+[2018-06-08 00:55:11,195] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419311.1951494.pkl
+[2018-06-08 00:55:16,020] Validation Acc: 5.95%
+[2018-06-08 00:55:26,571] Train Epoch: 22 	Loss: 0.038924 	 Training Acc: 19.89
+[2018-06-08 00:55:26,572] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419326.5720997.pkl
+[2018-06-08 00:55:31,442] Validation Acc: 8.33%
+[2018-06-08 00:55:42,077] Train Epoch: 23 	Loss: 0.042200 	 Training Acc: 19.83
+[2018-06-08 00:55:42,078] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419342.0781524.pkl
+[2018-06-08 00:55:46,923] Validation Acc: 5.44%
+[2018-06-08 00:55:57,467] Train Epoch: 24 	Loss: 0.040222 	 Training Acc: 17.91
+[2018-06-08 00:55:57,468] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419357.4679651.pkl
+[2018-06-08 00:56:02,285] Validation Acc: 4.93%
+[2018-06-08 00:56:12,708] Train Epoch: 25 	Loss: 0.039103 	 Training Acc: 20.47
+[2018-06-08 00:56:12,709] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419372.7092278.pkl
+[2018-06-08 00:56:17,468] Validation Acc: 5.78%
+[2018-06-08 00:56:27,738] Train Epoch: 26 	Loss: 0.042023 	 Training Acc: 19.01
+[2018-06-08 00:56:27,739] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419387.7395935.pkl
+[2018-06-08 00:56:32,457] Validation Acc: 7.82%
+[2018-06-08 00:56:42,697] Train Epoch: 27 	Loss: 0.040880 	 Training Acc: 17.79
+[2018-06-08 00:56:42,698] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419402.6982734.pkl
+[2018-06-08 00:56:47,513] Validation Acc: 6.97%
+[2018-06-08 00:56:57,765] Train Epoch: 28 	Loss: 0.038315 	 Training Acc: 23.22
+[2018-06-08 00:56:57,766] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419417.7662463.pkl
+[2018-06-08 00:57:02,531] Validation Acc: 4.42%
+[2018-06-08 00:57:12,952] Train Epoch: 29 	Loss: 0.036175 	 Training Acc: 25.32
+[2018-06-08 00:57:12,953] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419432.953578.pkl
+[2018-06-08 00:57:17,778] Validation Acc: 5.44%
+[2018-06-08 00:57:28,888] Train Epoch: 30 	Loss: 0.036449 	 Training Acc: 24.68
+[2018-06-08 00:57:28,889] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419448.8892822.pkl
+[2018-06-08 00:57:33,680] Validation Acc: 8.67%
+[2018-06-08 00:57:44,572] Train Epoch: 31 	Loss: 0.037562 	 Training Acc: 25.17
+[2018-06-08 00:57:44,573] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419464.5733998.pkl
+[2018-06-08 00:57:49,351] Validation Acc: 6.80%
+[2018-06-08 00:58:00,469] Train Epoch: 32 	Loss: 0.039172 	 Training Acc: 19.10
+[2018-06-08 00:58:00,470] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419480.4703934.pkl
+[2018-06-08 00:58:05,614] Validation Acc: 6.97%
+[2018-06-08 00:58:16,905] Train Epoch: 33 	Loss: 0.039637 	 Training Acc: 19.37
+[2018-06-08 00:58:16,906] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419496.9065292.pkl
+[2018-06-08 00:58:21,774] Validation Acc: 3.91%
+[2018-06-08 00:58:32,700] Train Epoch: 34 	Loss: 0.039118 	 Training Acc: 19.92
+[2018-06-08 00:58:32,700] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419512.700797.pkl
+[2018-06-08 00:58:37,511] Validation Acc: 2.55%
+[2018-06-08 00:58:48,604] Train Epoch: 35 	Loss: 0.040212 	 Training Acc: 20.04
+[2018-06-08 00:58:48,605] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419528.60511.pkl
+[2018-06-08 00:58:53,353] Validation Acc: 6.63%
+[2018-06-08 00:59:03,842] Train Epoch: 36 	Loss: 0.040184 	 Training Acc: 19.16
+[2018-06-08 00:59:03,842] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419543.8427458.pkl
+[2018-06-08 00:59:08,643] Validation Acc: 5.44%
+[2018-06-08 00:59:19,185] Train Epoch: 37 	Loss: 0.039399 	 Training Acc: 20.44
+[2018-06-08 00:59:19,186] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419559.1864483.pkl
+[2018-06-08 00:59:24,068] Validation Acc: 4.08%
+[2018-06-08 00:59:34,440] Train Epoch: 38 	Loss: 0.039003 	 Training Acc: 21.75
+[2018-06-08 00:59:34,441] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419574.4414701.pkl
+[2018-06-08 00:59:39,206] Validation Acc: 10.37%
+[2018-06-08 00:59:39,206] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419579.2068515-best-10.pkl
+[2018-06-08 00:59:50,162] Train Epoch: 39 	Loss: 0.038435 	 Training Acc: 19.83
+[2018-06-08 00:59:50,163] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419590.1636636.pkl
+[2018-06-08 00:59:55,005] Validation Acc: 4.42%
+[2018-06-08 01:00:06,119] Train Epoch: 40 	Loss: 0.037414 	 Training Acc: 24.13
+[2018-06-08 01:00:06,120] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419606.1203265.pkl
+[2018-06-08 01:00:10,912] Validation Acc: 3.91%
+[2018-06-08 01:00:21,363] Train Epoch: 41 	Loss: 0.038934 	 Training Acc: 25.23
+[2018-06-08 01:00:21,364] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419621.3646083.pkl
+[2018-06-08 01:00:26,791] Validation Acc: 3.23%
+[2018-06-08 01:00:37,912] Train Epoch: 42 	Loss: 0.034964 	 Training Acc: 29.53
+[2018-06-08 01:00:37,913] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419637.9136097.pkl
+[2018-06-08 01:00:43,322] Validation Acc: 4.76%
+[2018-06-08 01:00:53,955] Train Epoch: 43 	Loss: 0.035922 	 Training Acc: 28.07
+[2018-06-08 01:00:53,955] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419653.9558687.pkl
+[2018-06-08 01:00:59,357] Validation Acc: 4.08%
+[2018-06-08 01:01:10,316] Train Epoch: 44 	Loss: 0.039411 	 Training Acc: 21.29
+[2018-06-08 01:01:10,317] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419670.317608.pkl
+[2018-06-08 01:01:15,702] Validation Acc: 5.27%
+[2018-06-08 01:01:26,491] Train Epoch: 45 	Loss: 0.036148 	 Training Acc: 25.93
+[2018-06-08 01:01:26,492] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419686.491956.pkl
+[2018-06-08 01:01:31,885] Validation Acc: 6.80%
+[2018-06-08 01:01:42,571] Train Epoch: 46 	Loss: 0.038396 	 Training Acc: 27.21
+[2018-06-08 01:01:42,572] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419702.5720284.pkl
+[2018-06-08 01:01:47,771] Validation Acc: 6.80%
+[2018-06-08 01:01:59,187] Train Epoch: 47 	Loss: 0.035499 	 Training Acc: 28.46
+[2018-06-08 01:01:59,188] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419719.188708.pkl
+[2018-06-08 01:02:04,001] Validation Acc: 4.42%
+[2018-06-08 01:02:15,180] Train Epoch: 48 	Loss: 0.034993 	 Training Acc: 27.91
+[2018-06-08 01:02:15,181] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419735.1814334.pkl
+[2018-06-08 01:02:20,071] Validation Acc: 4.76%
+[2018-06-08 01:02:31,560] Train Epoch: 49 	Loss: 0.036486 	 Training Acc: 27.79
+[2018-06-08 01:02:31,561] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419751.5617654.pkl
+[2018-06-08 01:02:36,335] Validation Acc: 9.35%
+[2018-06-08 01:02:47,309] Train Epoch: 50 	Loss: 0.037118 	 Training Acc: 24.31
+[2018-06-08 01:02:47,309] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419767.3099232.pkl
+[2018-06-08 01:02:52,076] Validation Acc: 7.65%
+[2018-06-08 01:02:52,077] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419772.077416.pkl
+[2018-06-08 01:02:57,399] Test Acc: 11.46%.
+[2018-06-08 01:02:57,401] ===== HYPERPARAMETER SWEEP 3/3 =====
+[2018-06-08 01:02:57,401] Hyperparameters swept: {'learning_rate': 0.005, 'weight_decay': 0.0004, 'dropout': 0.2}
+[2018-06-08 01:02:57,436] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.2) using xavier.
+[2018-06-08 01:02:57,459] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.2) using xavier.
+[2018-06-08 01:02:57,462] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 01:02:57,464] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:02:57,464] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 01:02:57,467] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:02:57,468] Initializing weight Linear(in_features=512, out_features=26, bias=True) using xavier.
+[2018-06-08 01:02:57,468] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:02:57,468] Running the model using GPUs. (--use_cuda)
+[2018-06-08 01:02:57,472] Model will now begin training.
+[2018-06-08 01:03:08,313] Train Epoch: 1 	Loss: 0.048723 	 Training Acc: 13.79
+[2018-06-08 01:03:08,313] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419788.3138366.pkl
+[2018-06-08 01:03:13,116] Validation Acc: 8.33%
+[2018-06-08 01:03:13,116] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419793.116887-best-8.pkl
+[2018-06-08 01:03:24,449] Train Epoch: 2 	Loss: 0.038194 	 Training Acc: 19.80
+[2018-06-08 01:03:24,450] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419804.4504368.pkl
+[2018-06-08 01:03:29,279] Validation Acc: 10.20%
+[2018-06-08 01:03:29,280] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419809.2799346-best-10.pkl
+[2018-06-08 01:03:40,644] Train Epoch: 3 	Loss: 0.038291 	 Training Acc: 22.15
+[2018-06-08 01:03:40,644] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419820.6449075.pkl
+[2018-06-08 01:03:45,421] Validation Acc: 11.05%
+[2018-06-08 01:03:45,422] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419825.4219692-best-11.pkl
+[2018-06-08 01:03:55,979] Train Epoch: 4 	Loss: 0.037934 	 Training Acc: 22.82
+[2018-06-08 01:03:55,980] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419835.980676.pkl
+[2018-06-08 01:04:00,832] Validation Acc: 7.48%
+[2018-06-08 01:04:11,682] Train Epoch: 5 	Loss: 0.040220 	 Training Acc: 19.65
+[2018-06-08 01:04:11,683] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419851.6829934.pkl
+[2018-06-08 01:04:16,560] Validation Acc: 6.29%
+[2018-06-08 01:04:27,517] Train Epoch: 6 	Loss: 0.041021 	 Training Acc: 17.85
+[2018-06-08 01:04:27,518] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419867.5184605.pkl
+[2018-06-08 01:04:32,399] Validation Acc: 4.42%
+[2018-06-08 01:04:43,766] Train Epoch: 7 	Loss: 0.037245 	 Training Acc: 21.93
+[2018-06-08 01:04:43,767] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419883.767397.pkl
+[2018-06-08 01:04:48,600] Validation Acc: 9.69%
+[2018-06-08 01:05:00,132] Train Epoch: 8 	Loss: 0.039204 	 Training Acc: 20.32
+[2018-06-08 01:05:00,133] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419900.133754.pkl
+[2018-06-08 01:05:05,514] Validation Acc: 10.20%
+[2018-06-08 01:05:16,525] Train Epoch: 9 	Loss: 0.038572 	 Training Acc: 21.48
+[2018-06-08 01:05:16,526] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419916.5263426.pkl
+[2018-06-08 01:05:21,983] Validation Acc: 8.16%
+[2018-06-08 01:05:33,187] Train Epoch: 10 	Loss: 0.043416 	 Training Acc: 21.51
+[2018-06-08 01:05:33,188] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419933.1880412.pkl
+[2018-06-08 01:05:38,562] Validation Acc: 5.95%
+[2018-06-08 01:05:49,441] Train Epoch: 11 	Loss: 0.039022 	 Training Acc: 19.59
+[2018-06-08 01:05:49,442] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419949.4426558.pkl
+[2018-06-08 01:05:54,876] Validation Acc: 5.95%
+[2018-06-08 01:06:05,890] Train Epoch: 12 	Loss: 0.038020 	 Training Acc: 21.05
+[2018-06-08 01:06:05,891] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419965.891054.pkl
+[2018-06-08 01:06:11,334] Validation Acc: 7.31%
+[2018-06-08 01:06:22,095] Train Epoch: 13 	Loss: 0.040632 	 Training Acc: 21.38
+[2018-06-08 01:06:22,096] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419982.0961106.pkl
+[2018-06-08 01:06:27,506] Validation Acc: 10.88%
+[2018-06-08 01:06:38,892] Train Epoch: 14 	Loss: 0.034980 	 Training Acc: 31.57
+[2018-06-08 01:06:38,893] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528419998.893747.pkl
+[2018-06-08 01:06:44,274] Validation Acc: 6.97%
+[2018-06-08 01:06:55,455] Train Epoch: 15 	Loss: 0.038902 	 Training Acc: 25.41
+[2018-06-08 01:06:55,456] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420015.4560237.pkl
+[2018-06-08 01:07:00,870] Validation Acc: 8.84%
+[2018-06-08 01:07:12,178] Train Epoch: 16 	Loss: 0.032912 	 Training Acc: 32.37
+[2018-06-08 01:07:12,179] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420032.17899.pkl
+[2018-06-08 01:07:17,544] Validation Acc: 6.46%
+[2018-06-08 01:07:28,257] Train Epoch: 17 	Loss: 0.041008 	 Training Acc: 29.04
+[2018-06-08 01:07:28,257] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420048.2578537.pkl
+[2018-06-08 01:07:33,672] Validation Acc: 7.65%
+[2018-06-08 01:07:44,494] Train Epoch: 18 	Loss: 0.036050 	 Training Acc: 29.62
+[2018-06-08 01:07:44,495] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420064.4949841.pkl
+[2018-06-08 01:07:49,281] Validation Acc: 9.52%
+[2018-06-08 01:07:59,591] Train Epoch: 19 	Loss: 0.033779 	 Training Acc: 31.57
+[2018-06-08 01:07:59,592] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420079.592004.pkl
+[2018-06-08 01:08:05,019] Validation Acc: 5.44%
+[2018-06-08 01:08:15,708] Train Epoch: 20 	Loss: 0.035077 	 Training Acc: 30.99
+[2018-06-08 01:08:15,709] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420095.7092144.pkl
+[2018-06-08 01:08:21,055] Validation Acc: 9.69%
+[2018-06-08 01:08:32,243] Train Epoch: 21 	Loss: 0.033786 	 Training Acc: 32.25
+[2018-06-08 01:08:32,244] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420112.2447252.pkl
+[2018-06-08 01:08:37,661] Validation Acc: 13.10%
+[2018-06-08 01:08:37,662] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420117.662254-best-13.pkl
+[2018-06-08 01:08:48,608] Train Epoch: 22 	Loss: 0.032855 	 Training Acc: 33.59
+[2018-06-08 01:08:48,609] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420128.6090136.pkl
+[2018-06-08 01:08:53,958] Validation Acc: 6.29%
+[2018-06-08 01:09:04,525] Train Epoch: 23 	Loss: 0.033205 	 Training Acc: 33.34
+[2018-06-08 01:09:04,526] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420144.5265408.pkl
+[2018-06-08 01:09:09,964] Validation Acc: 5.78%
+[2018-06-08 01:09:20,902] Train Epoch: 24 	Loss: 0.035766 	 Training Acc: 30.02
+[2018-06-08 01:09:20,903] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420160.9033732.pkl
+[2018-06-08 01:09:26,243] Validation Acc: 8.33%
+[2018-06-08 01:09:37,066] Train Epoch: 25 	Loss: 0.036812 	 Training Acc: 29.41
+[2018-06-08 01:09:37,066] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420177.066797.pkl
+[2018-06-08 01:09:42,364] Validation Acc: 9.35%
+[2018-06-08 01:09:53,270] Train Epoch: 26 	Loss: 0.032297 	 Training Acc: 31.57
+[2018-06-08 01:09:53,271] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420193.2713437.pkl
+[2018-06-08 01:09:58,699] Validation Acc: 9.52%
+[2018-06-08 01:10:09,381] Train Epoch: 27 	Loss: 0.034864 	 Training Acc: 28.80
+[2018-06-08 01:10:09,381] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420209.3818169.pkl
+[2018-06-08 01:10:14,849] Validation Acc: 6.29%
+[2018-06-08 01:10:25,197] Train Epoch: 28 	Loss: 0.036774 	 Training Acc: 28.98
+[2018-06-08 01:10:25,198] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420225.198628.pkl
+[2018-06-08 01:10:30,049] Validation Acc: 6.63%
+[2018-06-08 01:10:41,436] Train Epoch: 29 	Loss: 0.035457 	 Training Acc: 28.83
+[2018-06-08 01:10:41,437] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420241.4375706.pkl
+[2018-06-08 01:10:46,787] Validation Acc: 5.61%
+[2018-06-08 01:10:58,212] Train Epoch: 30 	Loss: 0.032874 	 Training Acc: 31.24
+[2018-06-08 01:10:58,213] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420258.2129831.pkl
+[2018-06-08 01:11:03,541] Validation Acc: 9.01%
+[2018-06-08 01:11:14,074] Train Epoch: 31 	Loss: 0.032857 	 Training Acc: 31.36
+[2018-06-08 01:11:14,075] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420274.075292.pkl
+[2018-06-08 01:11:19,362] Validation Acc: 9.01%
+[2018-06-08 01:11:30,743] Train Epoch: 32 	Loss: 0.032895 	 Training Acc: 31.24
+[2018-06-08 01:11:30,744] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420290.7440965.pkl
+[2018-06-08 01:11:36,096] Validation Acc: 7.48%
+[2018-06-08 01:11:46,538] Train Epoch: 33 	Loss: 0.036250 	 Training Acc: 27.15
+[2018-06-08 01:11:46,539] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420306.5394993.pkl
+[2018-06-08 01:11:51,939] Validation Acc: 9.86%
+[2018-06-08 01:12:03,310] Train Epoch: 34 	Loss: 0.033058 	 Training Acc: 31.06
+[2018-06-08 01:12:03,310] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420323.3108244.pkl
+[2018-06-08 01:12:08,571] Validation Acc: 13.61%
+[2018-06-08 01:12:08,572] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420328.5721908-best-13.pkl
+[2018-06-08 01:12:19,229] Train Epoch: 35 	Loss: 0.034195 	 Training Acc: 31.30
+[2018-06-08 01:12:19,230] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420339.2304647.pkl
+[2018-06-08 01:12:24,671] Validation Acc: 12.41%
+[2018-06-08 01:12:35,401] Train Epoch: 36 	Loss: 0.033647 	 Training Acc: 30.57
+[2018-06-08 01:12:35,401] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420355.4019141.pkl
+[2018-06-08 01:12:40,753] Validation Acc: 14.63%
+[2018-06-08 01:12:40,753] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420360.7538679-best-14.pkl
+[2018-06-08 01:12:51,750] Train Epoch: 37 	Loss: 0.040057 	 Training Acc: 20.50
+[2018-06-08 01:12:51,751] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420371.7514215.pkl
+[2018-06-08 01:12:57,016] Validation Acc: 5.61%
+[2018-06-08 01:13:07,692] Train Epoch: 38 	Loss: 0.038089 	 Training Acc: 19.83
+[2018-06-08 01:13:07,693] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420387.6939394.pkl
+[2018-06-08 01:13:13,105] Validation Acc: 5.61%
+[2018-06-08 01:13:23,898] Train Epoch: 39 	Loss: 0.039211 	 Training Acc: 19.86
+[2018-06-08 01:13:23,899] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420403.8994706.pkl
+[2018-06-08 01:13:28,653] Validation Acc: 6.63%
+[2018-06-08 01:13:39,264] Train Epoch: 40 	Loss: 0.037162 	 Training Acc: 24.83
+[2018-06-08 01:13:39,265] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420419.2651374.pkl
+[2018-06-08 01:13:44,210] Validation Acc: 6.12%
+[2018-06-08 01:13:54,917] Train Epoch: 41 	Loss: 0.036210 	 Training Acc: 27.61
+[2018-06-08 01:13:54,918] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420434.9181328.pkl
+[2018-06-08 01:14:00,312] Validation Acc: 9.69%
+[2018-06-08 01:14:11,164] Train Epoch: 42 	Loss: 0.033729 	 Training Acc: 30.05
+[2018-06-08 01:14:11,165] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420451.1649978.pkl
+[2018-06-08 01:14:16,608] Validation Acc: 9.69%
+[2018-06-08 01:14:27,031] Train Epoch: 43 	Loss: 0.033415 	 Training Acc: 31.24
+[2018-06-08 01:14:27,031] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420467.0319386.pkl
+[2018-06-08 01:14:32,460] Validation Acc: 1.36%
+[2018-06-08 01:14:43,269] Train Epoch: 44 	Loss: 0.034683 	 Training Acc: 30.14
+[2018-06-08 01:14:43,270] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420483.2707014.pkl
+[2018-06-08 01:14:48,685] Validation Acc: 5.27%
+[2018-06-08 01:14:59,164] Train Epoch: 45 	Loss: 0.036446 	 Training Acc: 29.53
+[2018-06-08 01:14:59,165] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420499.1653254.pkl
+[2018-06-08 01:15:04,587] Validation Acc: 5.44%
+[2018-06-08 01:15:15,332] Train Epoch: 46 	Loss: 0.033936 	 Training Acc: 30.51
+[2018-06-08 01:15:15,333] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420515.3329742.pkl
+[2018-06-08 01:15:20,766] Validation Acc: 8.67%
+[2018-06-08 01:15:31,484] Train Epoch: 47 	Loss: 0.031990 	 Training Acc: 32.89
+[2018-06-08 01:15:31,485] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420531.4855175.pkl
+[2018-06-08 01:15:36,879] Validation Acc: 5.61%
+[2018-06-08 01:15:47,635] Train Epoch: 48 	Loss: 0.032451 	 Training Acc: 32.76
+[2018-06-08 01:15:47,636] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420547.6367805.pkl
+[2018-06-08 01:15:53,057] Validation Acc: 11.22%
+[2018-06-08 01:16:03,879] Train Epoch: 49 	Loss: 0.031677 	 Training Acc: 32.98
+[2018-06-08 01:16:03,879] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420563.879834.pkl
+[2018-06-08 01:16:09,224] Validation Acc: 7.14%
+[2018-06-08 01:16:19,923] Train Epoch: 50 	Loss: 0.031951 	 Training Acc: 32.28
+[2018-06-08 01:16:19,924] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420579.9245224.pkl
+[2018-06-08 01:16:25,338] Validation Acc: 4.42%
+[2018-06-08 01:16:25,338] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528420585.3389287.pkl
+[2018-06-08 01:16:30,946] Test Acc: 10.19%.
+[2018-06-08 01:16:30,976] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_loss.learning_rate.LSTM_RGB_RGBD_final.1528420590.9769254.png
+[2018-06-08 01:16:31,167] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/valid_acc.learning_rate.LSTM_RGB_RGBD_final.1528420591.1670136.png
+[2018-06-08 01:16:31,310] Saving learning_rate hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_acc.learning_rate.LSTM_RGB_RGBD_final.1528420591.3100836.png
+[2018-06-08 01:16:31,433] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_loss.weight_decay.LSTM_RGB_RGBD_final.1528420591.4329813.png
+[2018-06-08 01:16:31,621] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/valid_acc.weight_decay.LSTM_RGB_RGBD_final.1528420591.6211545.png
+[2018-06-08 01:16:31,766] Saving weight_decay hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_acc.weight_decay.LSTM_RGB_RGBD_final.1528420591.7659836.png
+[2018-06-08 01:16:31,899] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_loss.dropout.LSTM_RGB_RGBD_final.1528420591.8999367.png
+[2018-06-08 01:16:32,036] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/valid_acc.dropout.LSTM_RGB_RGBD_final.1528420592.0360215.png
+[2018-06-08 01:16:32,185] Saving dropout hyperparameter comparison plot to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/plots/train_acc.dropout.LSTM_RGB_RGBD_final.1528420592.1853807.png
+[2018-06-08 01:16:32,309] 
+====== Experiment: {'learning_rate': 0.0003, 'weight_decay': 0.001, 'dropout': 0.09} ======
+[2018-06-08 01:16:32,309] training loss - min:0.0	max:0.05	avg:0.01
+[2018-06-08 01:16:32,310] training accuracy - min:20.290000915527344	max:96.80000305175781	avg:84.31
+[2018-06-08 01:16:32,310] validation accuracy - min:7.650000095367432	max:18.030000686645508	avg:14.53
+[2018-06-08 01:16:32,310] 
+====== Experiment: {'learning_rate': 0.008, 'weight_decay': 0.0001, 'dropout': 0.1} ======
+[2018-06-08 01:16:32,310] training loss - min:0.04	max:0.05	avg:0.04
+[2018-06-08 01:16:32,310] training accuracy - min:14.739999771118164	max:29.530000686645508	avg:21.08
+[2018-06-08 01:16:32,310] validation accuracy - min:2.549999952316284	max:10.369999885559082	avg:6.24
+[2018-06-08 01:16:32,310] 
+====== Experiment: {'learning_rate': 0.005, 'weight_decay': 0.0004, 'dropout': 0.2} ======
+[2018-06-08 01:16:32,310] training loss - min:0.03	max:0.05	avg:0.04
+[2018-06-08 01:16:32,311] training accuracy - min:13.789999961853027	max:33.59000015258789	avg:27.19
+[2018-06-08 01:16:32,311] validation accuracy - min:1.3600000143051147	max:14.630000114440918	avg:8.0
+[2018-06-08 01:16:36,227] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.1_learning_rate=0.008_weight_decay=0.0001.train_acc
+[2018-06-08 01:16:36,227] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.1_learning_rate=0.008_weight_decay=0.0001.valid_acc
+[2018-06-08 01:16:36,227] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.1_learning_rate=0.008_weight_decay=0.0001.train_loss
+[2018-06-08 01:16:36,228] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.1_learning_rate=0.008_weight_decay=0.0001.preds
+[2018-06-08 01:16:36,229] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.09_learning_rate=0.0003_weight_decay=0.001.train_acc
+[2018-06-08 01:16:36,230] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.09_learning_rate=0.0003_weight_decay=0.001.valid_acc
+[2018-06-08 01:16:36,230] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.09_learning_rate=0.0003_weight_decay=0.001.train_loss
+[2018-06-08 01:16:36,230] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.09_learning_rate=0.0003_weight_decay=0.001.preds
+[2018-06-08 01:16:36,233] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.2_learning_rate=0.005_weight_decay=0.0004.train_acc
+[2018-06-08 01:16:36,233] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.2_learning_rate=0.005_weight_decay=0.0004.valid_acc
+[2018-06-08 01:16:36,234] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.2_learning_rate=0.005_weight_decay=0.0004.train_loss
+[2018-06-08 01:16:36,234] Saving metrics file to: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/metrics/dropout=0.2_learning_rate=0.005_weight_decay=0.0004.preds
