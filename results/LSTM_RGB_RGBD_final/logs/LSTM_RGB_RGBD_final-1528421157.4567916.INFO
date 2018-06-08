@@ -1,0 +1,715 @@
+[2018-06-08 01:25:58,062] Cmd: python main.py --experiment LSTM_RGB_RGBD_final --use_cuda --mode train --num_workers 32 --num_sweeps 3 --epoch 50 --validate_every 1 --starting_from 149 --save_every_epoch
+[2018-06-08 01:25:58,063] Config:
+ name: LSTM_RGB_RGBD_final
+ arch: EncodingLSTMClassifier
+ dataloader_type: (RN18RGB+TRN18RGBD)-combination
+ shuffle: True
+ description: Applies a LSTM architecture to all labels of RGB + RGBD video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+ loss: cross-entropy
+ initializer: xavier
+ optimizer: adam
+ lstm_hidden_size: 256
+ lstm_hidden_fc_size: 512
+ lstm_num_layers: 1
+ lstm_bias: False
+ lstm_batch_first: True
+ lstm_bidirectional: False
+ use_full_dataset: True
+ epochs: 50
+ batch_size: 50
+ learning_rate: 0.001
+ weight_decay: 0.0
+ dropout: 0.0
+ num_sweeps: 3
+ mode: train
+ experiment: LSTM_RGB_RGBD_final
+ starting_from: 149
+ use_cuda: True
+ save_every_epoch: True
+ validate_every: 1
+ num_workers: 32
+ model: <class 'models.LSTM.EncodingLSTMClassifier'>
+ is_lstm: True
+ gesture_labels: range(149, 250)
+ encoding_input_size: 2000
+ transform: <torchvision.transforms.transforms.Compose object at 0x7fe90caa0d30>
+ optimizer_fn: <class 'torch.optim.adam.Adam'>
+ initializer_fn: <function xavier_normal_ at 0x7fe99f5a3268>
+ loss_fn: CrossEntropyLoss()
+ seed: 1
+ checkpoint_path: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints
+
+[2018-06-08 01:25:58,063] Running experiment <LSTM_RGB_RGBD_final> in train mode.
+Description of model: Applies a LSTM architecture to all labels of RGB + RGBD video training data.
+Uses an LSTM network to process these frame embeddings as input to a softmax classifier.
+[2018-06-08 01:25:58,063] Reindexed labels: {149: 0, 150: 1, 151: 2, 152: 3, 153: 4, 154: 5, 155: 6, 156: 7, 157: 8, 158: 9, 159: 10, 160: 11, 161: 12, 162: 13, 163: 14, 164: 15, 165: 16, 166: 17, 167: 18, 168: 19, 169: 20, 170: 21, 171: 22, 172: 23, 173: 24, 174: 25, 175: 26, 176: 27, 177: 28, 178: 29, 179: 30, 180: 31, 181: 32, 182: 33, 183: 34, 184: 35, 185: 36, 186: 37, 187: 38, 188: 39, 189: 40, 190: 41, 191: 42, 192: 43, 193: 44, 194: 45, 195: 46, 196: 47, 197: 48, 198: 49, 199: 50, 200: 51, 201: 52, 202: 53, 203: 54, 204: 55, 205: 56, 206: 57, 207: 58, 208: 59, 209: 60, 210: 61, 211: 62, 212: 63, 213: 64, 214: 65, 215: 66, 216: 67, 217: 68, 218: 69, 219: 70, 220: 71, 221: 72, 222: 73, 223: 74, 224: 75, 225: 76, 226: 77, 227: 78, 228: 79, 229: 80, 230: 81, 231: 82, 232: 83, 233: 84, 234: 85, 235: 86, 236: 87, 237: 88, 238: 89, 239: 90, 240: 91, 241: 92, 242: 93, 243: 94, 244: 95, 245: 96, 246: 97, 247: 98, 248: 99, 249: 100}
+[2018-06-08 01:25:58,063] Populating frame tensors for 101 specified labels in data dir /home/shared/dataset/train: range(149, 250)
+[2018-06-08 01:25:58,066] Assigning frame tensor locations for label: 149 (124 videos)
+[2018-06-08 01:25:58,086] Assigning frame tensor locations for label: 150 (123 videos)
+[2018-06-08 01:25:58,102] Assigning frame tensor locations for label: 151 (129 videos)
+[2018-06-08 01:25:58,121] Assigning frame tensor locations for label: 152 (124 videos)
+[2018-06-08 01:25:58,139] Assigning frame tensor locations for label: 153 (119 videos)
+[2018-06-08 01:25:58,158] Assigning frame tensor locations for label: 154 (215 videos)
+[2018-06-08 01:25:58,188] Assigning frame tensor locations for label: 155 (221 videos)
+[2018-06-08 01:25:58,219] Assigning frame tensor locations for label: 156 (203 videos)
+[2018-06-08 01:25:58,259] Assigning frame tensor locations for label: 157 (227 videos)
+[2018-06-08 01:25:58,303] Assigning frame tensor locations for label: 158 (200 videos)
+[2018-06-08 01:25:58,336] Assigning frame tensor locations for label: 159 (209 videos)
+[2018-06-08 01:25:58,369] Assigning frame tensor locations for label: 160 (212 videos)
+[2018-06-08 01:25:58,402] Assigning frame tensor locations for label: 161 (132 videos)
+[2018-06-08 01:25:58,430] Assigning frame tensor locations for label: 162 (122 videos)
+[2018-06-08 01:25:58,450] Assigning frame tensor locations for label: 163 (130 videos)
+[2018-06-08 01:25:58,468] Assigning frame tensor locations for label: 164 (124 videos)
+[2018-06-08 01:25:58,488] Assigning frame tensor locations for label: 165 (118 videos)
+[2018-06-08 01:25:58,503] Assigning frame tensor locations for label: 166 (121 videos)
+[2018-06-08 01:25:58,521] Assigning frame tensor locations for label: 167 (133 videos)
+[2018-06-08 01:25:58,539] Assigning frame tensor locations for label: 168 (112 videos)
+[2018-06-08 01:25:58,557] Assigning frame tensor locations for label: 169 (109 videos)
+[2018-06-08 01:25:58,572] Assigning frame tensor locations for label: 170 (110 videos)
+[2018-06-08 01:25:58,595] Assigning frame tensor locations for label: 171 (111 videos)
+[2018-06-08 01:25:58,614] Assigning frame tensor locations for label: 172 (110 videos)
+[2018-06-08 01:25:58,631] Assigning frame tensor locations for label: 173 (107 videos)
+[2018-06-08 01:25:58,647] Assigning frame tensor locations for label: 174 (123 videos)
+[2018-06-08 01:25:58,667] Assigning frame tensor locations for label: 175 (162 videos)
+[2018-06-08 01:25:58,690] Assigning frame tensor locations for label: 176 (163 videos)
+[2018-06-08 01:25:58,711] Assigning frame tensor locations for label: 177 (167 videos)
+[2018-06-08 01:25:58,734] Assigning frame tensor locations for label: 178 (158 videos)
+[2018-06-08 01:25:58,762] Assigning frame tensor locations for label: 179 (151 videos)
+[2018-06-08 01:25:58,787] Assigning frame tensor locations for label: 180 (146 videos)
+[2018-06-08 01:25:58,814] Assigning frame tensor locations for label: 181 (143 videos)
+[2018-06-08 01:25:58,840] Assigning frame tensor locations for label: 182 (155 videos)
+[2018-06-08 01:25:58,867] Assigning frame tensor locations for label: 183 (154 videos)
+[2018-06-08 01:25:58,891] Assigning frame tensor locations for label: 184 (114 videos)
+[2018-06-08 01:25:58,907] Assigning frame tensor locations for label: 185 (125 videos)
+[2018-06-08 01:25:58,926] Assigning frame tensor locations for label: 186 (123 videos)
+[2018-06-08 01:25:58,943] Assigning frame tensor locations for label: 187 (122 videos)
+[2018-06-08 01:25:58,963] Assigning frame tensor locations for label: 188 (224 videos)
+[2018-06-08 01:25:59,033] Assigning frame tensor locations for label: 189 (135 videos)
+[2018-06-08 01:25:59,054] Assigning frame tensor locations for label: 190 (151 videos)
+[2018-06-08 01:25:59,074] Assigning frame tensor locations for label: 191 (137 videos)
+[2018-06-08 01:25:59,091] Assigning frame tensor locations for label: 192 (133 videos)
+[2018-06-08 01:25:59,108] Assigning frame tensor locations for label: 193 (128 videos)
+[2018-06-08 01:25:59,124] Assigning frame tensor locations for label: 194 (130 videos)
+[2018-06-08 01:25:59,141] Assigning frame tensor locations for label: 195 (125 videos)
+[2018-06-08 01:25:59,157] Assigning frame tensor locations for label: 196 (144 videos)
+[2018-06-08 01:25:59,176] Assigning frame tensor locations for label: 197 (147 videos)
+[2018-06-08 01:25:59,194] Assigning frame tensor locations for label: 198 (83 videos)
+[2018-06-08 01:25:59,206] Assigning frame tensor locations for label: 199 (98 videos)
+[2018-06-08 01:25:59,218] Assigning frame tensor locations for label: 200 (91 videos)
+[2018-06-08 01:25:59,231] Assigning frame tensor locations for label: 201 (87 videos)
+[2018-06-08 01:25:59,244] Assigning frame tensor locations for label: 202 (85 videos)
+[2018-06-08 01:25:59,257] Assigning frame tensor locations for label: 203 (86 videos)
+[2018-06-08 01:25:59,272] Assigning frame tensor locations for label: 204 (101 videos)
+[2018-06-08 01:25:59,288] Assigning frame tensor locations for label: 205 (86 videos)
+[2018-06-08 01:25:59,300] Assigning frame tensor locations for label: 206 (67 videos)
+[2018-06-08 01:25:59,310] Assigning frame tensor locations for label: 207 (69 videos)
+[2018-06-08 01:25:59,322] Assigning frame tensor locations for label: 208 (78 videos)
+[2018-06-08 01:25:59,338] Assigning frame tensor locations for label: 209 (217 videos)
+[2018-06-08 01:25:59,368] Assigning frame tensor locations for label: 210 (146 videos)
+[2018-06-08 01:25:59,388] Assigning frame tensor locations for label: 211 (80 videos)
+[2018-06-08 01:25:59,401] Assigning frame tensor locations for label: 212 (148 videos)
+[2018-06-08 01:25:59,423] Assigning frame tensor locations for label: 213 (257 videos)
+[2018-06-08 01:25:59,460] Assigning frame tensor locations for label: 214 (75 videos)
+[2018-06-08 01:25:59,474] Assigning frame tensor locations for label: 215 (70 videos)
+[2018-06-08 01:25:59,484] Assigning frame tensor locations for label: 216 (170 videos)
+[2018-06-08 01:25:59,509] Assigning frame tensor locations for label: 217 (160 videos)
+[2018-06-08 01:25:59,533] Assigning frame tensor locations for label: 218 (162 videos)
+[2018-06-08 01:25:59,559] Assigning frame tensor locations for label: 219 (152 videos)
+[2018-06-08 01:25:59,584] Assigning frame tensor locations for label: 220 (174 videos)
+[2018-06-08 01:25:59,608] Assigning frame tensor locations for label: 221 (169 videos)
+[2018-06-08 01:25:59,631] Assigning frame tensor locations for label: 222 (177 videos)
+[2018-06-08 01:25:59,655] Assigning frame tensor locations for label: 223 (179 videos)
+[2018-06-08 01:25:59,685] Assigning frame tensor locations for label: 224 (159 videos)
+[2018-06-08 01:25:59,709] Assigning frame tensor locations for label: 225 (166 videos)
+[2018-06-08 01:25:59,731] Assigning frame tensor locations for label: 226 (162 videos)
+[2018-06-08 01:25:59,750] Assigning frame tensor locations for label: 227 (161 videos)
+[2018-06-08 01:25:59,773] Assigning frame tensor locations for label: 228 (165 videos)
+[2018-06-08 01:25:59,798] Assigning frame tensor locations for label: 229 (159 videos)
+[2018-06-08 01:25:59,820] Assigning frame tensor locations for label: 230 (82 videos)
+[2018-06-08 01:25:59,833] Assigning frame tensor locations for label: 231 (93 videos)
+[2018-06-08 01:25:59,848] Assigning frame tensor locations for label: 232 (85 videos)
+[2018-06-08 01:25:59,860] Assigning frame tensor locations for label: 233 (92 videos)
+[2018-06-08 01:25:59,872] Assigning frame tensor locations for label: 234 (87 videos)
+[2018-06-08 01:25:59,882] Assigning frame tensor locations for label: 235 (85 videos)
+[2018-06-08 01:25:59,894] Assigning frame tensor locations for label: 236 (87 videos)
+[2018-06-08 01:25:59,908] Assigning frame tensor locations for label: 237 (204 videos)
+[2018-06-08 01:25:59,936] Assigning frame tensor locations for label: 238 (188 videos)
+[2018-06-08 01:25:59,965] Assigning frame tensor locations for label: 239 (190 videos)
+[2018-06-08 01:25:59,990] Assigning frame tensor locations for label: 240 (200 videos)
+[2018-06-08 01:26:00,018] Assigning frame tensor locations for label: 241 (256 videos)
+[2018-06-08 01:26:00,056] Assigning frame tensor locations for label: 242 (79 videos)
+[2018-06-08 01:26:00,074] Assigning frame tensor locations for label: 243 (79 videos)
+[2018-06-08 01:26:00,088] Assigning frame tensor locations for label: 244 (85 videos)
+[2018-06-08 01:26:00,102] Assigning frame tensor locations for label: 245 (90 videos)
+[2018-06-08 01:26:00,118] Assigning frame tensor locations for label: 246 (77 videos)
+[2018-06-08 01:26:00,130] Assigning frame tensor locations for label: 247 (82 videos)
+[2018-06-08 01:26:00,144] Assigning frame tensor locations for label: 248 (83 videos)
+[2018-06-08 01:26:00,154] Assigning frame tensor locations for label: 249 (82 videos)
+[2018-06-08 01:26:00,165] Initialized a ResnetEncodingDataset of size 13650.
+[2018-06-08 01:26:00,166] Reindexed labels: {149: 0, 150: 1, 151: 2, 152: 3, 153: 4, 154: 5, 155: 6, 156: 7, 157: 8, 158: 9, 159: 10, 160: 11, 161: 12, 162: 13, 163: 14, 164: 15, 165: 16, 166: 17, 167: 18, 168: 19, 169: 20, 170: 21, 171: 22, 172: 23, 173: 24, 174: 25, 175: 26, 176: 27, 177: 28, 178: 29, 179: 30, 180: 31, 181: 32, 182: 33, 183: 34, 184: 35, 185: 36, 186: 37, 187: 38, 188: 39, 189: 40, 190: 41, 191: 42, 192: 43, 193: 44, 194: 45, 195: 46, 196: 47, 197: 48, 198: 49, 199: 50, 200: 51, 201: 52, 202: 53, 203: 54, 204: 55, 205: 56, 206: 57, 207: 58, 208: 59, 209: 60, 210: 61, 211: 62, 212: 63, 213: 64, 214: 65, 215: 66, 216: 67, 217: 68, 218: 69, 219: 70, 220: 71, 221: 72, 222: 73, 223: 74, 224: 75, 225: 76, 226: 77, 227: 78, 228: 79, 229: 80, 230: 81, 231: 82, 232: 83, 233: 84, 234: 85, 235: 86, 236: 87, 237: 88, 238: 89, 239: 90, 240: 91, 241: 92, 242: 93, 243: 94, 244: 95, 245: 96, 246: 97, 247: 98, 248: 99, 249: 100}
+[2018-06-08 01:26:00,166] Populating frame tensors for 101 specified labels in data dir /home/shared/dataset/valid: range(149, 250)
+[2018-06-08 01:26:00,166] Assigning frame tensor locations for label: 149 (17 videos)
+[2018-06-08 01:26:00,169] Assigning frame tensor locations for label: 150 (23 videos)
+[2018-06-08 01:26:00,173] Assigning frame tensor locations for label: 151 (17 videos)
+[2018-06-08 01:26:00,176] Assigning frame tensor locations for label: 152 (20 videos)
+[2018-06-08 01:26:00,179] Assigning frame tensor locations for label: 153 (19 videos)
+[2018-06-08 01:26:00,182] Assigning frame tensor locations for label: 154 (23 videos)
+[2018-06-08 01:26:00,186] Assigning frame tensor locations for label: 155 (28 videos)
+[2018-06-08 01:26:00,191] Assigning frame tensor locations for label: 156 (27 videos)
+[2018-06-08 01:26:00,196] Assigning frame tensor locations for label: 157 (24 videos)
+[2018-06-08 01:26:00,200] Assigning frame tensor locations for label: 158 (19 videos)
+[2018-06-08 01:26:00,203] Assigning frame tensor locations for label: 159 (25 videos)
+[2018-06-08 01:26:00,207] Assigning frame tensor locations for label: 160 (25 videos)
+[2018-06-08 01:26:00,212] Assigning frame tensor locations for label: 161 (22 videos)
+[2018-06-08 01:26:00,216] Assigning frame tensor locations for label: 162 (26 videos)
+[2018-06-08 01:26:00,220] Assigning frame tensor locations for label: 163 (30 videos)
+[2018-06-08 01:26:00,224] Assigning frame tensor locations for label: 164 (24 videos)
+[2018-06-08 01:26:00,228] Assigning frame tensor locations for label: 165 (28 videos)
+[2018-06-08 01:26:00,231] Assigning frame tensor locations for label: 166 (23 videos)
+[2018-06-08 01:26:00,235] Assigning frame tensor locations for label: 167 (23 videos)
+[2018-06-08 01:26:00,239] Assigning frame tensor locations for label: 168 (26 videos)
+[2018-06-08 01:26:00,243] Assigning frame tensor locations for label: 169 (26 videos)
+[2018-06-08 01:26:00,248] Assigning frame tensor locations for label: 170 (27 videos)
+[2018-06-08 01:26:00,255] Assigning frame tensor locations for label: 171 (20 videos)
+[2018-06-08 01:26:00,259] Assigning frame tensor locations for label: 172 (24 videos)
+[2018-06-08 01:26:00,263] Assigning frame tensor locations for label: 173 (23 videos)
+[2018-06-08 01:26:00,267] Assigning frame tensor locations for label: 174 (28 videos)
+[2018-06-08 01:26:00,272] Assigning frame tensor locations for label: 175 (22 videos)
+[2018-06-08 01:26:00,276] Assigning frame tensor locations for label: 176 (24 videos)
+[2018-06-08 01:26:00,282] Assigning frame tensor locations for label: 177 (21 videos)
+[2018-06-08 01:26:00,286] Assigning frame tensor locations for label: 178 (23 videos)
+[2018-06-08 01:26:00,293] Assigning frame tensor locations for label: 179 (23 videos)
+[2018-06-08 01:26:00,299] Assigning frame tensor locations for label: 180 (21 videos)
+[2018-06-08 01:26:00,306] Assigning frame tensor locations for label: 181 (21 videos)
+[2018-06-08 01:26:00,312] Assigning frame tensor locations for label: 182 (22 videos)
+[2018-06-08 01:26:00,319] Assigning frame tensor locations for label: 183 (23 videos)
+[2018-06-08 01:26:00,325] Assigning frame tensor locations for label: 184 (22 videos)
+[2018-06-08 01:26:00,329] Assigning frame tensor locations for label: 185 (20 videos)
+[2018-06-08 01:26:00,333] Assigning frame tensor locations for label: 186 (23 videos)
+[2018-06-08 01:26:00,336] Assigning frame tensor locations for label: 187 (21 videos)
+[2018-06-08 01:26:00,340] Assigning frame tensor locations for label: 188 (45 videos)
+[2018-06-08 01:26:00,347] Assigning frame tensor locations for label: 189 (20 videos)
+[2018-06-08 01:26:00,350] Assigning frame tensor locations for label: 190 (25 videos)
+[2018-06-08 01:26:00,354] Assigning frame tensor locations for label: 191 (27 videos)
+[2018-06-08 01:26:00,358] Assigning frame tensor locations for label: 192 (24 videos)
+[2018-06-08 01:26:00,362] Assigning frame tensor locations for label: 193 (26 videos)
+[2018-06-08 01:26:00,366] Assigning frame tensor locations for label: 194 (24 videos)
+[2018-06-08 01:26:00,370] Assigning frame tensor locations for label: 195 (27 videos)
+[2018-06-08 01:26:00,374] Assigning frame tensor locations for label: 196 (22 videos)
+[2018-06-08 01:26:00,377] Assigning frame tensor locations for label: 197 (25 videos)
+[2018-06-08 01:26:00,381] Assigning frame tensor locations for label: 198 (23 videos)
+[2018-06-08 01:26:00,385] Assigning frame tensor locations for label: 199 (19 videos)
+[2018-06-08 01:26:00,388] Assigning frame tensor locations for label: 200 (21 videos)
+[2018-06-08 01:26:00,391] Assigning frame tensor locations for label: 201 (21 videos)
+[2018-06-08 01:26:00,394] Assigning frame tensor locations for label: 202 (15 videos)
+[2018-06-08 01:26:00,396] Assigning frame tensor locations for label: 203 (17 videos)
+[2018-06-08 01:26:00,399] Assigning frame tensor locations for label: 204 (22 videos)
+[2018-06-08 01:26:00,403] Assigning frame tensor locations for label: 205 (20 videos)
+[2018-06-08 01:26:00,405] Assigning frame tensor locations for label: 206 (17 videos)
+[2018-06-08 01:26:00,407] Assigning frame tensor locations for label: 207 (20 videos)
+[2018-06-08 01:26:00,411] Assigning frame tensor locations for label: 208 (25 videos)
+[2018-06-08 01:26:00,414] Assigning frame tensor locations for label: 209 (40 videos)
+[2018-06-08 01:26:00,419] Assigning frame tensor locations for label: 210 (38 videos)
+[2018-06-08 01:26:00,426] Assigning frame tensor locations for label: 211 (21 videos)
+[2018-06-08 01:26:00,429] Assigning frame tensor locations for label: 212 (38 videos)
+[2018-06-08 01:26:00,434] Assigning frame tensor locations for label: 213 (37 videos)
+[2018-06-08 01:26:00,439] Assigning frame tensor locations for label: 214 (16 videos)
+[2018-06-08 01:26:00,443] Assigning frame tensor locations for label: 215 (24 videos)
+[2018-06-08 01:26:00,446] Assigning frame tensor locations for label: 216 (21 videos)
+[2018-06-08 01:26:00,450] Assigning frame tensor locations for label: 217 (21 videos)
+[2018-06-08 01:26:00,454] Assigning frame tensor locations for label: 218 (22 videos)
+[2018-06-08 01:26:00,458] Assigning frame tensor locations for label: 219 (17 videos)
+[2018-06-08 01:26:00,463] Assigning frame tensor locations for label: 220 (24 videos)
+[2018-06-08 01:26:00,467] Assigning frame tensor locations for label: 221 (25 videos)
+[2018-06-08 01:26:00,471] Assigning frame tensor locations for label: 222 (24 videos)
+[2018-06-08 01:26:00,475] Assigning frame tensor locations for label: 223 (22 videos)
+[2018-06-08 01:26:00,479] Assigning frame tensor locations for label: 224 (24 videos)
+[2018-06-08 01:26:00,483] Assigning frame tensor locations for label: 225 (25 videos)
+[2018-06-08 01:26:00,487] Assigning frame tensor locations for label: 226 (27 videos)
+[2018-06-08 01:26:00,490] Assigning frame tensor locations for label: 227 (18 videos)
+[2018-06-08 01:26:00,493] Assigning frame tensor locations for label: 228 (24 videos)
+[2018-06-08 01:26:00,498] Assigning frame tensor locations for label: 229 (30 videos)
+[2018-06-08 01:26:00,502] Assigning frame tensor locations for label: 230 (25 videos)
+[2018-06-08 01:26:00,506] Assigning frame tensor locations for label: 231 (24 videos)
+[2018-06-08 01:26:00,510] Assigning frame tensor locations for label: 232 (29 videos)
+[2018-06-08 01:26:00,515] Assigning frame tensor locations for label: 233 (22 videos)
+[2018-06-08 01:26:00,519] Assigning frame tensor locations for label: 234 (27 videos)
+[2018-06-08 01:26:00,523] Assigning frame tensor locations for label: 235 (26 videos)
+[2018-06-08 01:26:00,527] Assigning frame tensor locations for label: 236 (23 videos)
+[2018-06-08 01:26:00,530] Assigning frame tensor locations for label: 237 (19 videos)
+[2018-06-08 01:26:00,534] Assigning frame tensor locations for label: 238 (19 videos)
+[2018-06-08 01:26:00,538] Assigning frame tensor locations for label: 239 (24 videos)
+[2018-06-08 01:26:00,542] Assigning frame tensor locations for label: 240 (17 videos)
+[2018-06-08 01:26:00,545] Assigning frame tensor locations for label: 241 (37 videos)
+[2018-06-08 01:26:00,552] Assigning frame tensor locations for label: 242 (13 videos)
+[2018-06-08 01:26:00,555] Assigning frame tensor locations for label: 243 (21 videos)
+[2018-06-08 01:26:00,559] Assigning frame tensor locations for label: 244 (19 videos)
+[2018-06-08 01:26:00,563] Assigning frame tensor locations for label: 245 (17 videos)
+[2018-06-08 01:26:00,567] Assigning frame tensor locations for label: 246 (23 videos)
+[2018-06-08 01:26:00,571] Assigning frame tensor locations for label: 247 (18 videos)
+[2018-06-08 01:26:00,575] Assigning frame tensor locations for label: 248 (18 videos)
+[2018-06-08 01:26:00,577] Assigning frame tensor locations for label: 249 (19 videos)
+[2018-06-08 01:26:00,581] Initialized a ResnetEncodingDataset of size 2366.
+[2018-06-08 01:26:00,581] Remove max_example_per_label for test dataset
+[2018-06-08 01:26:00,581] Reindexed labels: {149: 0, 150: 1, 151: 2, 152: 3, 153: 4, 154: 5, 155: 6, 156: 7, 157: 8, 158: 9, 159: 10, 160: 11, 161: 12, 162: 13, 163: 14, 164: 15, 165: 16, 166: 17, 167: 18, 168: 19, 169: 20, 170: 21, 171: 22, 172: 23, 173: 24, 174: 25, 175: 26, 176: 27, 177: 28, 178: 29, 179: 30, 180: 31, 181: 32, 182: 33, 183: 34, 184: 35, 185: 36, 186: 37, 187: 38, 188: 39, 189: 40, 190: 41, 191: 42, 192: 43, 193: 44, 194: 45, 195: 46, 196: 47, 197: 48, 198: 49, 199: 50, 200: 51, 201: 52, 202: 53, 203: 54, 204: 55, 205: 56, 206: 57, 207: 58, 208: 59, 209: 60, 210: 61, 211: 62, 212: 63, 213: 64, 214: 65, 215: 66, 216: 67, 217: 68, 218: 69, 219: 70, 220: 71, 221: 72, 222: 73, 223: 74, 224: 75, 225: 76, 226: 77, 227: 78, 228: 79, 229: 80, 230: 81, 231: 82, 232: 83, 233: 84, 234: 85, 235: 86, 236: 87, 237: 88, 238: 89, 239: 90, 240: 91, 241: 92, 242: 93, 243: 94, 244: 95, 245: 96, 246: 97, 247: 98, 248: 99, 249: 100}
+[2018-06-08 01:26:00,581] Populating frame tensors for 101 specified labels in data dir /home/shared/dataset/test: range(149, 250)
+[2018-06-08 01:26:00,582] Assigning frame tensor locations for label: 149 (22 videos)
+[2018-06-08 01:26:00,586] Assigning frame tensor locations for label: 150 (16 videos)
+[2018-06-08 01:26:00,589] Assigning frame tensor locations for label: 151 (20 videos)
+[2018-06-08 01:26:00,592] Assigning frame tensor locations for label: 152 (22 videos)
+[2018-06-08 01:26:00,595] Assigning frame tensor locations for label: 153 (20 videos)
+[2018-06-08 01:26:00,599] Assigning frame tensor locations for label: 154 (24 videos)
+[2018-06-08 01:26:00,603] Assigning frame tensor locations for label: 155 (25 videos)
+[2018-06-08 01:26:00,609] Assigning frame tensor locations for label: 156 (30 videos)
+[2018-06-08 01:26:00,615] Assigning frame tensor locations for label: 157 (26 videos)
+[2018-06-08 01:26:00,620] Assigning frame tensor locations for label: 158 (24 videos)
+[2018-06-08 01:26:00,625] Assigning frame tensor locations for label: 159 (21 videos)
+[2018-06-08 01:26:00,629] Assigning frame tensor locations for label: 160 (23 videos)
+[2018-06-08 01:26:00,634] Assigning frame tensor locations for label: 161 (25 videos)
+[2018-06-08 01:26:00,639] Assigning frame tensor locations for label: 162 (27 videos)
+[2018-06-08 01:26:00,644] Assigning frame tensor locations for label: 163 (30 videos)
+[2018-06-08 01:26:00,649] Assigning frame tensor locations for label: 164 (24 videos)
+[2018-06-08 01:26:00,653] Assigning frame tensor locations for label: 165 (19 videos)
+[2018-06-08 01:26:00,657] Assigning frame tensor locations for label: 166 (25 videos)
+[2018-06-08 01:26:00,662] Assigning frame tensor locations for label: 167 (27 videos)
+[2018-06-08 01:26:00,667] Assigning frame tensor locations for label: 168 (21 videos)
+[2018-06-08 01:26:00,671] Assigning frame tensor locations for label: 169 (20 videos)
+[2018-06-08 01:26:00,674] Assigning frame tensor locations for label: 170 (29 videos)
+[2018-06-08 01:26:00,680] Assigning frame tensor locations for label: 171 (32 videos)
+[2018-06-08 01:26:00,685] Assigning frame tensor locations for label: 172 (21 videos)
+[2018-06-08 01:26:00,688] Assigning frame tensor locations for label: 173 (23 videos)
+[2018-06-08 01:26:00,692] Assigning frame tensor locations for label: 174 (27 videos)
+[2018-06-08 01:26:00,696] Assigning frame tensor locations for label: 175 (30 videos)
+[2018-06-08 01:26:00,701] Assigning frame tensor locations for label: 176 (33 videos)
+[2018-06-08 01:26:00,706] Assigning frame tensor locations for label: 177 (30 videos)
+[2018-06-08 01:26:00,712] Assigning frame tensor locations for label: 178 (37 videos)
+[2018-06-08 01:26:00,718] Assigning frame tensor locations for label: 179 (36 videos)
+[2018-06-08 01:26:00,726] Assigning frame tensor locations for label: 180 (33 videos)
+[2018-06-08 01:26:00,733] Assigning frame tensor locations for label: 181 (38 videos)
+[2018-06-08 01:26:00,740] Assigning frame tensor locations for label: 182 (35 videos)
+[2018-06-08 01:26:00,747] Assigning frame tensor locations for label: 183 (28 videos)
+[2018-06-08 01:26:00,753] Assigning frame tensor locations for label: 184 (33 videos)
+[2018-06-08 01:26:00,758] Assigning frame tensor locations for label: 185 (35 videos)
+[2018-06-08 01:26:00,764] Assigning frame tensor locations for label: 186 (39 videos)
+[2018-06-08 01:26:00,769] Assigning frame tensor locations for label: 187 (30 videos)
+[2018-06-08 01:26:00,774] Assigning frame tensor locations for label: 188 (51 videos)
+[2018-06-08 01:26:00,781] Assigning frame tensor locations for label: 189 (29 videos)
+[2018-06-08 01:26:00,786] Assigning frame tensor locations for label: 190 (28 videos)
+[2018-06-08 01:26:00,790] Assigning frame tensor locations for label: 191 (24 videos)
+[2018-06-08 01:26:00,794] Assigning frame tensor locations for label: 192 (22 videos)
+[2018-06-08 01:26:00,798] Assigning frame tensor locations for label: 193 (25 videos)
+[2018-06-08 01:26:00,802] Assigning frame tensor locations for label: 194 (25 videos)
+[2018-06-08 01:26:00,806] Assigning frame tensor locations for label: 195 (25 videos)
+[2018-06-08 01:26:00,811] Assigning frame tensor locations for label: 196 (25 videos)
+[2018-06-08 01:26:00,816] Assigning frame tensor locations for label: 197 (26 videos)
+[2018-06-08 01:26:00,821] Assigning frame tensor locations for label: 198 (20 videos)
+[2018-06-08 01:26:00,825] Assigning frame tensor locations for label: 199 (21 videos)
+[2018-06-08 01:26:00,828] Assigning frame tensor locations for label: 200 (20 videos)
+[2018-06-08 01:26:00,831] Assigning frame tensor locations for label: 201 (22 videos)
+[2018-06-08 01:26:00,835] Assigning frame tensor locations for label: 202 (15 videos)
+[2018-06-08 01:26:00,838] Assigning frame tensor locations for label: 203 (24 videos)
+[2018-06-08 01:26:00,842] Assigning frame tensor locations for label: 204 (20 videos)
+[2018-06-08 01:26:00,845] Assigning frame tensor locations for label: 205 (16 videos)
+[2018-06-08 01:26:00,848] Assigning frame tensor locations for label: 206 (19 videos)
+[2018-06-08 01:26:00,851] Assigning frame tensor locations for label: 207 (19 videos)
+[2018-06-08 01:26:00,854] Assigning frame tensor locations for label: 208 (19 videos)
+[2018-06-08 01:26:00,858] Assigning frame tensor locations for label: 209 (47 videos)
+[2018-06-08 01:26:00,864] Assigning frame tensor locations for label: 210 (28 videos)
+[2018-06-08 01:26:00,869] Assigning frame tensor locations for label: 211 (18 videos)
+[2018-06-08 01:26:00,872] Assigning frame tensor locations for label: 212 (40 videos)
+[2018-06-08 01:26:00,878] Assigning frame tensor locations for label: 213 (49 videos)
+[2018-06-08 01:26:00,886] Assigning frame tensor locations for label: 214 (21 videos)
+[2018-06-08 01:26:00,890] Assigning frame tensor locations for label: 215 (23 videos)
+[2018-06-08 01:26:00,894] Assigning frame tensor locations for label: 216 (24 videos)
+[2018-06-08 01:26:00,898] Assigning frame tensor locations for label: 217 (21 videos)
+[2018-06-08 01:26:00,901] Assigning frame tensor locations for label: 218 (22 videos)
+[2018-06-08 01:26:00,905] Assigning frame tensor locations for label: 219 (19 videos)
+[2018-06-08 01:26:00,908] Assigning frame tensor locations for label: 220 (22 videos)
+[2018-06-08 01:26:00,911] Assigning frame tensor locations for label: 221 (21 videos)
+[2018-06-08 01:26:00,914] Assigning frame tensor locations for label: 222 (26 videos)
+[2018-06-08 01:26:00,918] Assigning frame tensor locations for label: 223 (17 videos)
+[2018-06-08 01:26:00,921] Assigning frame tensor locations for label: 224 (26 videos)
+[2018-06-08 01:26:00,925] Assigning frame tensor locations for label: 225 (29 videos)
+[2018-06-08 01:26:00,929] Assigning frame tensor locations for label: 226 (23 videos)
+[2018-06-08 01:26:00,932] Assigning frame tensor locations for label: 227 (24 videos)
+[2018-06-08 01:26:00,936] Assigning frame tensor locations for label: 228 (21 videos)
+[2018-06-08 01:26:00,940] Assigning frame tensor locations for label: 229 (24 videos)
+[2018-06-08 01:26:00,944] Assigning frame tensor locations for label: 230 (25 videos)
+[2018-06-08 01:26:00,948] Assigning frame tensor locations for label: 231 (21 videos)
+[2018-06-08 01:26:00,951] Assigning frame tensor locations for label: 232 (26 videos)
+[2018-06-08 01:26:00,956] Assigning frame tensor locations for label: 233 (23 videos)
+[2018-06-08 01:26:00,959] Assigning frame tensor locations for label: 234 (25 videos)
+[2018-06-08 01:26:00,963] Assigning frame tensor locations for label: 235 (22 videos)
+[2018-06-08 01:26:00,967] Assigning frame tensor locations for label: 236 (28 videos)
+[2018-06-08 01:26:00,972] Assigning frame tensor locations for label: 237 (26 videos)
+[2018-06-08 01:26:00,977] Assigning frame tensor locations for label: 238 (34 videos)
+[2018-06-08 01:26:00,984] Assigning frame tensor locations for label: 239 (28 videos)
+[2018-06-08 01:26:00,989] Assigning frame tensor locations for label: 240 (32 videos)
+[2018-06-08 01:26:00,995] Assigning frame tensor locations for label: 241 (46 videos)
+[2018-06-08 01:26:01,002] Assigning frame tensor locations for label: 242 (16 videos)
+[2018-06-08 01:26:01,006] Assigning frame tensor locations for label: 243 (20 videos)
+[2018-06-08 01:26:01,009] Assigning frame tensor locations for label: 244 (22 videos)
+[2018-06-08 01:26:01,012] Assigning frame tensor locations for label: 245 (19 videos)
+[2018-06-08 01:26:01,015] Assigning frame tensor locations for label: 246 (24 videos)
+[2018-06-08 01:26:01,020] Assigning frame tensor locations for label: 247 (17 videos)
+[2018-06-08 01:26:01,022] Assigning frame tensor locations for label: 248 (14 videos)
+[2018-06-08 01:26:01,025] Assigning frame tensor locations for label: 249 (13 videos)
+[2018-06-08 01:26:01,027] Initialized a ResnetEncodingDataset of size 2581.
+[2018-06-08 01:26:01,027] ===== HYPERPARAMETER SWEEP 1/3 =====
+[2018-06-08 01:26:01,027] Hyperparameters swept: {'learning_rate': 0.0004, 'weight_decay': 0.001, 'dropout': 0.13}
+[2018-06-08 01:26:01,051] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 01:26:01,067] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 01:26:01,070] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 01:26:01,071] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:26:01,072] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 01:26:01,074] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:26:01,074] Initializing weight Linear(in_features=512, out_features=101, bias=True) using xavier.
+[2018-06-08 01:26:01,075] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:26:01,144] Running the model using GPUs. (--use_cuda)
+[2018-06-08 01:26:05,353] Model will now begin training.
+[2018-06-08 01:26:46,466] Train Epoch: 1 	Loss: 0.056102 	 Training Acc: 16.21
+[2018-06-08 01:26:46,469] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421206.4692826.pkl
+[2018-06-08 01:26:53,634] Validation Acc: 5.54%
+[2018-06-08 01:26:53,634] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421213.634709-best-5.pkl
+[2018-06-08 01:27:22,806] Train Epoch: 2 	Loss: 0.030909 	 Training Acc: 40.73
+[2018-06-08 01:27:22,807] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421242.807609.pkl
+[2018-06-08 01:27:29,899] Validation Acc: 7.99%
+[2018-06-08 01:27:29,900] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421249.900236-best-7.pkl
+[2018-06-08 01:28:00,385] Train Epoch: 3 	Loss: 0.024121 	 Training Acc: 51.64
+[2018-06-08 01:28:00,386] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421280.3864248.pkl
+[2018-06-08 01:28:07,567] Validation Acc: 8.79%
+[2018-06-08 01:28:07,568] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421287.5680478-best-8.pkl
+[2018-06-08 01:28:37,921] Train Epoch: 4 	Loss: 0.021478 	 Training Acc: 56.61
+[2018-06-08 01:28:37,922] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421317.9226172.pkl
+[2018-06-08 01:28:45,106] Validation Acc: 10.02%
+[2018-06-08 01:28:45,106] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421325.106656-best-10.pkl
+[2018-06-08 01:31:53,109] Train Epoch: 5 	Loss: 0.019455 	 Training Acc: 60.81
+[2018-06-08 01:31:53,110] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421513.110899.pkl
+[2018-06-08 01:32:00,189] Validation Acc: 9.55%
+[2018-06-08 01:32:30,283] Train Epoch: 6 	Loss: 0.018257 	 Training Acc: 63.48
+[2018-06-08 01:32:30,284] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421550.2843814.pkl
+[2018-06-08 01:32:37,537] Validation Acc: 11.88%
+[2018-06-08 01:32:37,537] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421557.5376203-best-11.pkl
+[2018-06-08 01:33:07,022] Train Epoch: 7 	Loss: 0.017194 	 Training Acc: 65.49
+[2018-06-08 01:33:07,023] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421587.0236626.pkl
+[2018-06-08 01:33:14,271] Validation Acc: 9.38%
+[2018-06-08 01:33:43,538] Train Epoch: 8 	Loss: 0.016073 	 Training Acc: 68.40
+[2018-06-08 01:33:43,539] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421623.5391486.pkl
+[2018-06-08 01:33:50,722] Validation Acc: 12.26%
+[2018-06-08 01:33:50,722] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421630.7227185-best-12.pkl
+[2018-06-08 01:34:20,617] Train Epoch: 9 	Loss: 0.015301 	 Training Acc: 70.18
+[2018-06-08 01:34:20,618] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421660.618077.pkl
+[2018-06-08 01:34:27,462] Validation Acc: 12.76%
+[2018-06-08 01:34:27,462] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421667.4627397-best-12.pkl
+[2018-06-08 01:34:56,284] Train Epoch: 10 	Loss: 0.014349 	 Training Acc: 72.21
+[2018-06-08 01:34:56,285] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421696.28581.pkl
+[2018-06-08 01:35:03,362] Validation Acc: 12.38%
+[2018-06-08 01:35:33,120] Train Epoch: 11 	Loss: 0.013787 	 Training Acc: 73.79
+[2018-06-08 01:35:33,121] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421733.120962.pkl
+[2018-06-08 01:35:40,195] Validation Acc: 11.92%
+[2018-06-08 01:36:09,108] Train Epoch: 12 	Loss: 0.012982 	 Training Acc: 74.96
+[2018-06-08 01:36:09,109] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421769.1092832.pkl
+[2018-06-08 01:36:15,585] Validation Acc: 12.89%
+[2018-06-08 01:36:15,585] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421775.585498-best-12.pkl
+[2018-06-08 01:36:44,848] Train Epoch: 13 	Loss: 0.012611 	 Training Acc: 75.95
+[2018-06-08 01:36:44,849] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421804.849177.pkl
+[2018-06-08 01:36:51,947] Validation Acc: 11.54%
+[2018-06-08 01:37:22,297] Train Epoch: 14 	Loss: 0.012216 	 Training Acc: 77.09
+[2018-06-08 01:37:22,297] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421842.2978914.pkl
+[2018-06-08 01:37:29,511] Validation Acc: 13.31%
+[2018-06-08 01:37:29,512] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421849.5122237-best-13.pkl
+[2018-06-08 01:37:59,461] Train Epoch: 15 	Loss: 0.011513 	 Training Acc: 78.31
+[2018-06-08 01:37:59,462] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421879.461999.pkl
+[2018-06-08 01:38:06,458] Validation Acc: 11.79%
+[2018-06-08 01:38:36,293] Train Epoch: 16 	Loss: 0.011364 	 Training Acc: 78.28
+[2018-06-08 01:38:36,294] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421916.2942224.pkl
+[2018-06-08 01:38:43,548] Validation Acc: 12.85%
+[2018-06-08 01:39:13,393] Train Epoch: 17 	Loss: 0.010976 	 Training Acc: 79.22
+[2018-06-08 01:39:13,394] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421953.3941133.pkl
+[2018-06-08 01:39:20,504] Validation Acc: 11.58%
+[2018-06-08 01:39:50,049] Train Epoch: 18 	Loss: 0.010641 	 Training Acc: 79.96
+[2018-06-08 01:39:50,050] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528421990.0504.pkl
+[2018-06-08 01:39:57,266] Validation Acc: 12.00%
+[2018-06-08 01:40:26,774] Train Epoch: 19 	Loss: 0.010522 	 Training Acc: 80.40
+[2018-06-08 01:40:26,775] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422026.7755687.pkl
+[2018-06-08 01:40:33,947] Validation Acc: 12.93%
+[2018-06-08 01:41:03,888] Train Epoch: 20 	Loss: 0.009969 	 Training Acc: 81.66
+[2018-06-08 01:41:03,888] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422063.8888428.pkl
+[2018-06-08 01:41:10,816] Validation Acc: 12.47%
+[2018-06-08 01:41:40,382] Train Epoch: 21 	Loss: 0.009756 	 Training Acc: 81.93
+[2018-06-08 01:41:40,383] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422100.3836403.pkl
+[2018-06-08 01:41:47,542] Validation Acc: 11.45%
+[2018-06-08 01:42:16,519] Train Epoch: 22 	Loss: 0.009725 	 Training Acc: 82.21
+[2018-06-08 01:42:16,520] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422136.5201569.pkl
+[2018-06-08 01:42:23,724] Validation Acc: 13.82%
+[2018-06-08 01:42:23,725] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422143.7255151-best-13.pkl
+[2018-06-08 01:42:53,230] Train Epoch: 23 	Loss: 0.009640 	 Training Acc: 82.18
+[2018-06-08 01:42:53,231] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422173.2315779.pkl
+[2018-06-08 01:43:00,541] Validation Acc: 13.48%
+[2018-06-08 01:43:30,854] Train Epoch: 24 	Loss: 0.009496 	 Training Acc: 82.74
+[2018-06-08 01:43:30,855] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422210.855714.pkl
+[2018-06-08 01:43:38,109] Validation Acc: 13.19%
+[2018-06-08 01:44:06,665] Train Epoch: 25 	Loss: 0.009283 	 Training Acc: 83.19
+[2018-06-08 01:44:06,666] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422246.6663651.pkl
+[2018-06-08 01:44:13,623] Validation Acc: 11.96%
+[2018-06-08 01:44:42,721] Train Epoch: 26 	Loss: 0.009051 	 Training Acc: 83.51
+[2018-06-08 01:44:42,722] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422282.7221384.pkl
+[2018-06-08 01:44:49,727] Validation Acc: 12.72%
+[2018-06-08 01:45:18,983] Train Epoch: 27 	Loss: 0.008812 	 Training Acc: 84.00
+[2018-06-08 01:45:18,984] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422318.9847472.pkl
+[2018-06-08 01:45:26,410] Validation Acc: 12.98%
+[2018-06-08 01:45:55,498] Train Epoch: 28 	Loss: 0.008407 	 Training Acc: 84.61
+[2018-06-08 01:45:55,499] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422355.4997525.pkl
+[2018-06-08 01:46:02,685] Validation Acc: 12.00%
+[2018-06-08 01:46:32,036] Train Epoch: 29 	Loss: 0.008202 	 Training Acc: 84.97
+[2018-06-08 01:46:32,037] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422392.0374994.pkl
+[2018-06-08 01:46:39,379] Validation Acc: 12.34%
+[2018-06-08 01:47:09,564] Train Epoch: 30 	Loss: 0.008163 	 Training Acc: 85.77
+[2018-06-08 01:47:09,565] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422429.5657048.pkl
+[2018-06-08 01:47:16,755] Validation Acc: 12.89%
+[2018-06-08 01:47:46,104] Train Epoch: 31 	Loss: 0.008082 	 Training Acc: 85.25
+[2018-06-08 01:47:46,105] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422466.1052125.pkl
+[2018-06-08 01:47:53,509] Validation Acc: 11.62%
+[2018-06-08 01:48:23,090] Train Epoch: 32 	Loss: 0.007982 	 Training Acc: 85.47
+[2018-06-08 01:48:23,091] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422503.0915027.pkl
+[2018-06-08 01:48:29,858] Validation Acc: 12.81%
+[2018-06-08 01:49:00,513] Train Epoch: 33 	Loss: 0.007850 	 Training Acc: 85.73
+[2018-06-08 01:49:00,514] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422540.5146034.pkl
+[2018-06-08 01:49:07,623] Validation Acc: 13.27%
+[2018-06-08 01:49:36,901] Train Epoch: 34 	Loss: 0.007766 	 Training Acc: 85.96
+[2018-06-08 01:49:36,902] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422576.9019752.pkl
+[2018-06-08 01:49:43,962] Validation Acc: 14.71%
+[2018-06-08 01:49:43,963] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422583.9631739-best-14.pkl
+[2018-06-08 01:50:13,386] Train Epoch: 35 	Loss: 0.007668 	 Training Acc: 86.34
+[2018-06-08 01:50:13,387] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422613.3871021.pkl
+[2018-06-08 01:50:20,859] Validation Acc: 13.36%
+[2018-06-08 01:50:50,504] Train Epoch: 36 	Loss: 0.007408 	 Training Acc: 86.85
+[2018-06-08 01:50:50,505] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422650.5052722.pkl
+[2018-06-08 01:50:57,577] Validation Acc: 12.68%
+[2018-06-08 01:51:26,801] Train Epoch: 37 	Loss: 0.007378 	 Training Acc: 87.01
+[2018-06-08 01:51:26,802] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422686.8025362.pkl
+[2018-06-08 01:51:34,091] Validation Acc: 12.68%
+[2018-06-08 01:52:03,563] Train Epoch: 38 	Loss: 0.007224 	 Training Acc: 87.08
+[2018-06-08 01:52:03,564] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422723.5646796.pkl
+[2018-06-08 01:52:10,732] Validation Acc: 11.88%
+[2018-06-08 01:52:40,418] Train Epoch: 39 	Loss: 0.007234 	 Training Acc: 87.24
+[2018-06-08 01:52:40,418] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422760.4188106.pkl
+[2018-06-08 01:52:47,550] Validation Acc: 12.55%
+[2018-06-08 01:53:18,464] Train Epoch: 40 	Loss: 0.006878 	 Training Acc: 87.68
+[2018-06-08 01:53:18,465] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422798.465593.pkl
+[2018-06-08 01:53:25,729] Validation Acc: 12.55%
+[2018-06-08 01:53:55,389] Train Epoch: 41 	Loss: 0.006714 	 Training Acc: 88.21
+[2018-06-08 01:53:55,390] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422835.3903177.pkl
+[2018-06-08 01:54:02,702] Validation Acc: 12.21%
+[2018-06-08 01:54:32,287] Train Epoch: 42 	Loss: 0.006611 	 Training Acc: 88.21
+[2018-06-08 01:54:32,288] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422872.2881894.pkl
+[2018-06-08 01:54:39,464] Validation Acc: 13.52%
+[2018-06-08 01:55:09,578] Train Epoch: 43 	Loss: 0.006517 	 Training Acc: 88.34
+[2018-06-08 01:55:09,579] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422909.5790975.pkl
+[2018-06-08 01:55:17,164] Validation Acc: 12.47%
+[2018-06-08 01:55:47,909] Train Epoch: 44 	Loss: 0.006552 	 Training Acc: 88.29
+[2018-06-08 01:55:47,910] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422947.9105878.pkl
+[2018-06-08 01:55:54,963] Validation Acc: 12.09%
+[2018-06-08 01:56:24,662] Train Epoch: 45 	Loss: 0.006508 	 Training Acc: 88.73
+[2018-06-08 01:56:24,663] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528422984.663129.pkl
+[2018-06-08 01:56:31,759] Validation Acc: 11.96%
+[2018-06-08 01:57:01,192] Train Epoch: 46 	Loss: 0.006319 	 Training Acc: 89.19
+[2018-06-08 01:57:01,193] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423021.1930788.pkl
+[2018-06-08 01:57:08,181] Validation Acc: 11.62%
+[2018-06-08 01:57:38,567] Train Epoch: 47 	Loss: 0.006289 	 Training Acc: 89.12
+[2018-06-08 01:57:38,568] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423058.568015.pkl
+[2018-06-08 01:57:45,661] Validation Acc: 12.05%
+[2018-06-08 01:58:15,918] Train Epoch: 48 	Loss: 0.006298 	 Training Acc: 88.86
+[2018-06-08 01:58:15,919] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423095.9195292.pkl
+[2018-06-08 01:58:23,220] Validation Acc: 12.64%
+[2018-06-08 01:58:54,020] Train Epoch: 49 	Loss: 0.006345 	 Training Acc: 89.00
+[2018-06-08 01:58:54,021] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423134.021327.pkl
+[2018-06-08 01:59:01,298] Validation Acc: 11.24%
+[2018-06-08 01:59:32,226] Train Epoch: 50 	Loss: 0.006323 	 Training Acc: 89.22
+[2018-06-08 01:59:32,227] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423172.2273011.pkl
+[2018-06-08 01:59:39,427] Validation Acc: 11.03%
+[2018-06-08 01:59:39,428] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423179.4282691.pkl
+[2018-06-08 01:59:47,258] Test Acc: 11.20%.
+[2018-06-08 01:59:47,259] ===== HYPERPARAMETER SWEEP 2/3 =====
+[2018-06-08 01:59:47,260] Hyperparameters swept: {'learning_rate': 0.005, 'weight_decay': 0.006, 'dropout': 0.13}
+[2018-06-08 01:59:47,287] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 01:59:47,309] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.13) using xavier.
+[2018-06-08 01:59:47,313] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 01:59:47,314] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:59:47,314] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 01:59:47,318] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:59:47,318] Initializing weight Linear(in_features=512, out_features=101, bias=True) using xavier.
+[2018-06-08 01:59:47,319] Initializing bias Linear.bias with zeros.
+[2018-06-08 01:59:47,319] Running the model using GPUs. (--use_cuda)
+[2018-06-08 01:59:47,322] Model will now begin training.
+[2018-06-08 02:00:17,472] Train Epoch: 1 	Loss: 0.074991 	 Training Acc: 5.11
+[2018-06-08 02:00:17,474] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423217.474266.pkl
+[2018-06-08 02:00:24,625] Validation Acc: 2.32%
+[2018-06-08 02:00:24,626] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423224.6264384-best-2.pkl
+[2018-06-08 02:00:55,289] Train Epoch: 2 	Loss: 0.060679 	 Training Acc: 10.37
+[2018-06-08 02:00:55,289] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423255.2897143.pkl
+[2018-06-08 02:01:02,911] Validation Acc: 3.04%
+[2018-06-08 02:01:02,912] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423262.9121475-best-3.pkl
+[2018-06-08 02:01:32,096] Train Epoch: 3 	Loss: 0.053490 	 Training Acc: 12.77
+[2018-06-08 02:01:32,096] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423292.0968509.pkl
+[2018-06-08 02:01:39,308] Validation Acc: 2.54%
+[2018-06-08 02:02:09,364] Train Epoch: 4 	Loss: 0.049133 	 Training Acc: 16.07
+[2018-06-08 02:02:09,365] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423329.3654902.pkl
+[2018-06-08 02:02:16,685] Validation Acc: 2.41%
+[2018-06-08 02:02:46,620] Train Epoch: 5 	Loss: 0.046793 	 Training Acc: 18.22
+[2018-06-08 02:02:46,621] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423366.6209967.pkl
+[2018-06-08 02:02:53,764] Validation Acc: 4.14%
+[2018-06-08 02:02:53,765] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423373.7652116-best-4.pkl
+[2018-06-08 02:03:23,599] Train Epoch: 6 	Loss: 0.044688 	 Training Acc: 19.77
+[2018-06-08 02:03:23,600] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423403.6003008.pkl
+[2018-06-08 02:03:30,819] Validation Acc: 3.13%
+[2018-06-08 02:04:00,553] Train Epoch: 7 	Loss: 0.047950 	 Training Acc: 19.05
+[2018-06-08 02:04:00,554] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423440.5541492.pkl
+[2018-06-08 02:04:07,644] Validation Acc: 5.33%
+[2018-06-08 02:04:07,645] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423447.64538-best-5.pkl
+[2018-06-08 02:04:37,724] Train Epoch: 8 	Loss: 0.047527 	 Training Acc: 18.78
+[2018-06-08 02:04:37,725] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423477.7258847.pkl
+[2018-06-08 02:04:45,124] Validation Acc: 4.65%
+[2018-06-08 02:05:14,926] Train Epoch: 9 	Loss: 0.047639 	 Training Acc: 18.03
+[2018-06-08 02:05:14,927] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423514.9276063.pkl
+[2018-06-08 02:05:22,199] Validation Acc: 4.82%
+[2018-06-08 02:05:52,876] Train Epoch: 10 	Loss: 0.042940 	 Training Acc: 21.40
+[2018-06-08 02:05:52,879] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423552.8797016.pkl
+[2018-06-08 02:05:59,978] Validation Acc: 4.82%
+[2018-06-08 02:06:30,204] Train Epoch: 11 	Loss: 0.043956 	 Training Acc: 20.59
+[2018-06-08 02:06:30,206] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423590.2060938.pkl
+[2018-06-08 02:06:37,676] Validation Acc: 4.35%
+[2018-06-08 02:07:08,197] Train Epoch: 12 	Loss: 0.043660 	 Training Acc: 21.09
+[2018-06-08 02:07:08,197] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423628.1976247.pkl
+[2018-06-08 02:07:15,498] Validation Acc: 4.65%
+[2018-06-08 02:07:45,285] Train Epoch: 13 	Loss: 0.042329 	 Training Acc: 21.03
+[2018-06-08 02:07:45,286] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423665.286098.pkl
+[2018-06-08 02:07:52,640] Validation Acc: 4.06%
+[2018-06-08 02:08:23,455] Train Epoch: 14 	Loss: 0.046595 	 Training Acc: 17.24
+[2018-06-08 02:08:23,456] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423703.4560845.pkl
+[2018-06-08 02:08:30,541] Validation Acc: 3.59%
+[2018-06-08 02:09:00,281] Train Epoch: 15 	Loss: 0.044270 	 Training Acc: 20.86
+[2018-06-08 02:09:00,282] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423740.2821867.pkl
+[2018-06-08 02:09:07,366] Validation Acc: 4.48%
+[2018-06-08 02:09:37,297] Train Epoch: 16 	Loss: 0.041739 	 Training Acc: 22.18
+[2018-06-08 02:09:37,298] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423777.2981486.pkl
+[2018-06-08 02:09:44,459] Validation Acc: 3.76%
+[2018-06-08 02:10:14,083] Train Epoch: 17 	Loss: 0.042817 	 Training Acc: 24.72
+[2018-06-08 02:10:14,083] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423814.0838914.pkl
+[2018-06-08 02:10:21,259] Validation Acc: 4.86%
+[2018-06-08 02:10:50,670] Train Epoch: 18 	Loss: 0.039661 	 Training Acc: 28.56
+[2018-06-08 02:10:50,671] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423850.671198.pkl
+[2018-06-08 02:10:57,547] Validation Acc: 5.58%
+[2018-06-08 02:10:57,547] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423857.5477302-best-5.pkl
+[2018-06-08 02:11:27,418] Train Epoch: 19 	Loss: 0.042760 	 Training Acc: 22.84
+[2018-06-08 02:11:27,419] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423887.419664.pkl
+[2018-06-08 02:11:34,553] Validation Acc: 4.23%
+[2018-06-08 02:12:05,189] Train Epoch: 20 	Loss: 0.042077 	 Training Acc: 21.38
+[2018-06-08 02:12:05,190] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423925.1902533.pkl
+[2018-06-08 02:12:12,798] Validation Acc: 3.13%
+[2018-06-08 02:12:43,449] Train Epoch: 21 	Loss: 0.042272 	 Training Acc: 21.36
+[2018-06-08 02:12:43,450] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423963.4505718.pkl
+[2018-06-08 02:12:50,575] Validation Acc: 4.02%
+[2018-06-08 02:13:19,988] Train Epoch: 22 	Loss: 0.043199 	 Training Acc: 21.21
+[2018-06-08 02:13:19,989] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528423999.989442.pkl
+[2018-06-08 02:13:27,257] Validation Acc: 3.59%
+[2018-06-08 02:13:57,901] Train Epoch: 23 	Loss: 0.044514 	 Training Acc: 20.63
+[2018-06-08 02:13:57,902] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424037.9025905.pkl
+[2018-06-08 02:14:05,472] Validation Acc: 4.69%
+[2018-06-08 02:14:35,542] Train Epoch: 24 	Loss: 0.043484 	 Training Acc: 20.93
+[2018-06-08 02:14:35,542] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424075.5429275.pkl
+[2018-06-08 02:14:42,984] Validation Acc: 3.89%
+[2018-06-08 02:15:13,000] Train Epoch: 25 	Loss: 0.042690 	 Training Acc: 21.39
+[2018-06-08 02:15:13,001] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424113.0015419.pkl
+[2018-06-08 02:15:20,372] Validation Acc: 5.45%
+[2018-06-08 02:15:50,089] Train Epoch: 26 	Loss: 0.047936 	 Training Acc: 13.53
+[2018-06-08 02:15:50,090] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424150.0908637.pkl
+[2018-06-08 02:15:57,334] Validation Acc: 2.16%
+[2018-06-08 02:16:26,820] Train Epoch: 27 	Loss: 0.047751 	 Training Acc: 14.42
+[2018-06-08 02:16:26,821] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424186.8219225.pkl
+[2018-06-08 02:16:34,121] Validation Acc: 3.51%
+[2018-06-08 02:17:03,424] Train Epoch: 28 	Loss: 0.048598 	 Training Acc: 15.52
+[2018-06-08 02:17:03,425] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424223.425702.pkl
+[2018-06-08 02:17:10,675] Validation Acc: 2.75%
+[2018-06-08 02:17:40,792] Train Epoch: 29 	Loss: 0.044118 	 Training Acc: 19.68
+[2018-06-08 02:17:40,793] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424260.7938526.pkl
+[2018-06-08 02:17:47,997] Validation Acc: 3.38%
+[2018-06-08 02:18:17,772] Train Epoch: 30 	Loss: 0.042247 	 Training Acc: 21.06
+[2018-06-08 02:18:17,773] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424297.773096.pkl
+[2018-06-08 02:18:25,092] Validation Acc: 3.80%
+[2018-06-08 02:18:55,632] Train Epoch: 31 	Loss: 0.045486 	 Training Acc: 19.48
+[2018-06-08 02:18:55,633] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424335.6333544.pkl
+[2018-06-08 02:19:02,895] Validation Acc: 3.59%
+[2018-06-08 02:19:32,756] Train Epoch: 32 	Loss: 0.045419 	 Training Acc: 19.57
+[2018-06-08 02:19:32,757] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424372.7574208.pkl
+[2018-06-08 02:19:40,004] Validation Acc: 6.68%
+[2018-06-08 02:19:40,005] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424380.0051413-best-6.pkl
+[2018-06-08 02:20:09,332] Train Epoch: 33 	Loss: 0.046477 	 Training Acc: 18.97
+[2018-06-08 02:20:09,333] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424409.333325.pkl
+[2018-06-08 02:20:16,934] Validation Acc: 3.97%
+[2018-06-08 02:20:47,632] Train Epoch: 34 	Loss: 0.041922 	 Training Acc: 21.68
+[2018-06-08 02:20:47,633] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424447.6339102.pkl
+[2018-06-08 02:20:55,255] Validation Acc: 4.61%
+[2018-06-08 02:21:26,098] Train Epoch: 35 	Loss: 0.042813 	 Training Acc: 21.73
+[2018-06-08 02:21:26,099] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424486.099051.pkl
+[2018-06-08 02:21:33,565] Validation Acc: 4.61%
+[2018-06-08 02:22:03,557] Train Epoch: 36 	Loss: 0.041800 	 Training Acc: 22.90
+[2018-06-08 02:22:03,558] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424523.5580804.pkl
+[2018-06-08 02:22:10,920] Validation Acc: 5.28%
+[2018-06-08 02:22:41,212] Train Epoch: 37 	Loss: 0.042711 	 Training Acc: 21.66
+[2018-06-08 02:22:41,213] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424561.2131033.pkl
+[2018-06-08 02:22:48,725] Validation Acc: 3.63%
+[2018-06-08 02:23:18,687] Train Epoch: 38 	Loss: 0.044443 	 Training Acc: 20.52
+[2018-06-08 02:23:18,688] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424598.6879854.pkl
+[2018-06-08 02:23:26,196] Validation Acc: 3.51%
+[2018-06-08 02:23:55,869] Train Epoch: 39 	Loss: 0.043179 	 Training Acc: 21.18
+[2018-06-08 02:23:55,870] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424635.8700888.pkl
+[2018-06-08 02:24:02,973] Validation Acc: 4.44%
+[2018-06-08 02:24:33,384] Train Epoch: 40 	Loss: 0.044061 	 Training Acc: 20.73
+[2018-06-08 02:24:33,385] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424673.3852346.pkl
+[2018-06-08 02:24:40,582] Validation Acc: 4.40%
+[2018-06-08 02:25:10,423] Train Epoch: 41 	Loss: 0.042738 	 Training Acc: 21.05
+[2018-06-08 02:25:10,424] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424710.4243772.pkl
+[2018-06-08 02:25:17,949] Validation Acc: 3.80%
+[2018-06-08 02:25:47,592] Train Epoch: 42 	Loss: 0.046331 	 Training Acc: 17.88
+[2018-06-08 02:25:47,593] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424747.5936377.pkl
+[2018-06-08 02:25:54,846] Validation Acc: 2.62%
+[2018-06-08 02:26:25,237] Train Epoch: 43 	Loss: 0.041750 	 Training Acc: 21.80
+[2018-06-08 02:26:25,238] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424785.238418.pkl
+[2018-06-08 02:26:32,633] Validation Acc: 4.10%
+[2018-06-08 02:27:03,027] Train Epoch: 44 	Loss: 0.044326 	 Training Acc: 21.19
+[2018-06-08 02:27:03,028] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424823.0281599.pkl
+[2018-06-08 02:27:10,225] Validation Acc: 4.23%
+[2018-06-08 02:27:40,512] Train Epoch: 45 	Loss: 0.041516 	 Training Acc: 22.25
+[2018-06-08 02:27:40,512] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424860.5128307.pkl
+[2018-06-08 02:27:47,710] Validation Acc: 2.96%
+[2018-06-08 02:28:17,525] Train Epoch: 46 	Loss: 0.042977 	 Training Acc: 21.95
+[2018-06-08 02:28:17,526] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424897.526086.pkl
+[2018-06-08 02:28:24,780] Validation Acc: 3.59%
+[2018-06-08 02:28:54,529] Train Epoch: 47 	Loss: 0.043455 	 Training Acc: 20.61
+[2018-06-08 02:28:54,530] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424934.53017.pkl
+[2018-06-08 02:29:02,025] Validation Acc: 4.40%
+[2018-06-08 02:29:32,013] Train Epoch: 48 	Loss: 0.043627 	 Training Acc: 20.60
+[2018-06-08 02:29:32,014] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528424972.0142646.pkl
+[2018-06-08 02:29:39,268] Validation Acc: 3.34%
+[2018-06-08 02:30:09,379] Train Epoch: 49 	Loss: 0.043928 	 Training Acc: 20.06
+[2018-06-08 02:30:09,380] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528425009.3802571.pkl
+[2018-06-08 02:30:16,409] Validation Acc: 4.18%
+[2018-06-08 02:30:45,810] Train Epoch: 50 	Loss: 0.045900 	 Training Acc: 18.78
+[2018-06-08 02:30:45,811] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528425045.811122.pkl
+[2018-06-08 02:30:53,041] Validation Acc: 4.18%
+[2018-06-08 02:30:53,042] Model saved to checkpoint: /home/shared/cs231n-sl-classification/experiments/LSTM_RGB_RGBD_final/checkpoints/LSTM_RGB_RGBD_final-1528425053.0426664.pkl
+[2018-06-08 02:31:01,275] Test Acc: 4.92%.
+[2018-06-08 02:31:01,276] ===== HYPERPARAMETER SWEEP 3/3 =====
+[2018-06-08 02:31:01,276] Hyperparameters swept: {'learning_rate': 0.0008, 'weight_decay': 0.008, 'dropout': 0.12}
+[2018-06-08 02:31:01,303] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.12) using xavier.
+[2018-06-08 02:31:01,325] Initializing weight LSTM(2000, 256, bias=False, batch_first=True, dropout=0.12) using xavier.
+[2018-06-08 02:31:01,328] Initializing weight Linear(in_features=256, out_features=512, bias=True) using xavier.
+[2018-06-08 02:31:01,330] Initializing bias Linear.bias with zeros.
+[2018-06-08 02:31:01,330] Initializing weight Linear(in_features=512, out_features=512, bias=True) using xavier.
+[2018-06-08 02:31:01,333] Initializing bias Linear.bias with zeros.
+[2018-06-08 02:31:01,333] Initializing weight Linear(in_features=512, out_features=101, bias=True) using xavier.
+[2018-06-08 02:31:01,334] Initializing bias Linear.bias with zeros.
+[2018-06-08 02:31:01,334] Running the model using GPUs. (--use_cuda)
+[2018-06-08 02:31:01,338] Model will now begin training.
