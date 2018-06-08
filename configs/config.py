@@ -171,6 +171,11 @@ TOTAL_NUMBER_OF_LABELS = 249
 if MODEL_CONFIG.use_full_dataset:
 	MODEL_CONFIG.gesture_labels = range(MODEL_CONFIG.starting_from, TOTAL_NUMBER_OF_LABELS + 1)
 
+# Set LSTM input size
+data_type, _ = MODEL_CONFIG.dataloader_type.split('-')
+data_type_str = data_type[1:-1]
+MODEL_CONFIG.encoding_input_size = len(data_type_str.split('+')) * 1000
+
 ########################
 # Model Hyperparameters
 ########################

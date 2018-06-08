@@ -8,6 +8,9 @@ import re
 import torch
 from torch.utils.data import Dataset
 
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 class GestureFrameDataset(Dataset):
 	"""Dataset of tensors corresponding to gesture video.
@@ -36,7 +39,12 @@ class GestureFrameDataset(Dataset):
 		image_data = self.data[idx]
 		label, image_path = image_data['label'], image_data['image_path']
 		# Read a (H, W, C) shaped tensor
-		image_ndarray = imageio.imread(image_path)
+		logging.debug('Reading image: {0}'.format(image_path))
+		try:
+			image_ndarray = imageio.imread(image_path)
+		except:
+			logging.debug('Could not read image: {0}'.format(image_path))
+			return self.__getitem__(np.random.randint(self.len))
 		# Transform into a (C, H, W) shaped tensor where for Resnet H = W = 224
 		# print('before:', frame_ndarray)
 		image_ndarray = self._transform(image_ndarray)
@@ -83,6 +91,7 @@ class GestureFrameDataset(Dataset):
 
 		if data_type.startswith('OF'):  # optical flow images, which has both RGB and RGBD variants.
 			file_prefix = 'OF'
+			file_suffix = 'stride1'
 			data_type = data_type.lstrip('OF')
 		if data_type == 'RGB':
 			dir_prefix = 'M_'
@@ -91,8 +100,8 @@ class GestureFrameDataset(Dataset):
 		else:
 			raise ValueError('Data type for Gesture Frame Dataloader is invalid')
 
-		return glob.glob(os.path.join(label_dir, '{0}*/{1}*.png'.format(
-			dir_prefix, file_prefix or dir_prefix)))
+		return glob.glob(os.path.join(label_dir, '{0}*/{1}*{2}.png'.format(
+			dir_prefix, file_prefix or dir_prefix, file_suffix or '')))
 
 	@staticmethod
 	def map_labels_to_indices(gesture_labels):

@@ -15,10 +15,11 @@ from utils.metrics import AccuracySaver, LossSaver, PredictionSaver
 class ValueType(Enum):
 		DISCRETE = 1
 		CONTINUOUS = 2
+		PROBABILITY	= 3
 
 
 class HyperparameterOption(object):
-	def __init__(self, value_type, value_range=(0, 10), exp_range=None, round_to=8):
+	def __init__(self, value_type, value_range=(1, 10), exp_range=None, round_to=8):
 		self._value_type = value_type
 		# Values are range^(exp_range) drawn uniformly using (low, high) tuples.
 		self._range = value_range
@@ -38,6 +39,10 @@ class HyperparameterOption(object):
 		elif self._value_type == ValueType.CONTINUOUS:
 			# Sample a continuous value
 			value = np.around(np.random.randint(*self._range) * 10**self.sample_exp(), self._round_to)
+		elif self._value_type == ValueType.PROBABILITY:
+			# Sample uniformly in between the range for a probabilistic value, like dropout
+			print('randuniform', self._range)
+			return np.around(np.random.uniform(*self._range), self._round_to)
 		return max(self._eps, value)
 
 
